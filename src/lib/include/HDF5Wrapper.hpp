@@ -22,8 +22,12 @@ namespace attpcfe {
       READ,
       WRITE
     };
-    std::optional<hid_t> OpenFile(std::string const& filename, IO_MODE mode);
+    std::optional<hid_t> OpenFile(char const* file, IO_MODE mode);
+    std::optional<hid_t> OpenGroup(hid_t fileId, char const* group);
+    std::optional<hid_t> OpenDataset(hid_t locId, char const* dataset);
     void CloseFile(hid_t fileId);
+    void CloseGroup(hid_t groupId);
+    void CloseDataset(hid_t datasetId);
   };
 }
 
