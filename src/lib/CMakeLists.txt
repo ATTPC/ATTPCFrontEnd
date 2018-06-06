@@ -5,7 +5,7 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
-  src/HDF5Wrapper.cpp)
+  src/hdf5_wrapper.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -37,9 +37,9 @@ export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 # ========================================================
 # Unit tests
 # ========================================================
-add_executable(testHDF5Wrapper
-    test/TestHDF5Wrapper.cpp)
-target_link_libraries(testHDF5Wrapper
+add_executable(hdf5_wrapper
+    test/hdf5_wrapper_test.cpp)
+target_link_libraries(hdf5_wrapper
   attpcfelib)
-add_test(NAME test-hdf5wrapper COMMAND testHDF5Wrapper)
+add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
 
