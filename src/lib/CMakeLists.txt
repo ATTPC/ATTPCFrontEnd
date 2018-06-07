@@ -45,3 +45,8 @@ target_link_libraries(hdf5_wrapper
   attpcfelib)
 add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
 
+add_executable(task_system
+    test/task_system_test.cpp)
+target_link_libraries(task_system
+  attpcfelib)
+add_test(NAME task_system_test COMMAND task_system)

@@ -34,24 +34,19 @@ namespace attpcfe {
       _pimpl->condition().wait(lock);
     if (_pimpl->protected_members()._q.empty()) return false;
     task = std::move(_pimpl->protected_members()._q.front());
+    _pimpl->protected_members()._q.pop_front();
     return true;
   }
 
   void notification_queue::push(task_t task)
   {
-    {
-      lock_t lock{_pimpl->protected_members()._mutex};
-      _pimpl->protected_members()._q.push_back(std::move(task));
-    }
+    if(lock_t lock{_pimpl->protected_members()._mutex}; true) _pimpl->protected_members()._q.push_back(std::move(task));
     _pimpl->condition().notify_one();
   }
 
   void notification_queue::done()
   {
-    {
-      lock_t lock{_pimpl->protected_members()._mutex};
-      _pimpl->protected_members()._done = true;
-    }
+    if(lock_t lock{_pimpl->protected_members()._mutex}; true) _pimpl->protected_members()._done = true;
     _pimpl->condition().notify_all();
   }
 }
