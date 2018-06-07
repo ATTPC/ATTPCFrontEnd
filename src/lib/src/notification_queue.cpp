@@ -32,6 +32,8 @@ namespace attpcfe {
     lock_t lock{_pimpl->protected_members()._mutex};
     while (_pimpl->protected_members()._q.empty() && !_pimpl->protected_members()._done)
       _pimpl->condition().wait(lock);
+    //if (_pimpl->protected_members()._done) return false;
+    if (_pimpl->protected_members()._done) return false;
     if (_pimpl->protected_members()._q.empty()) return false;
     task = std::move(_pimpl->protected_members()._q.front());
     _pimpl->protected_members()._q.pop_front();

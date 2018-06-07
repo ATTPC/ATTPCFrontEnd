@@ -37,7 +37,6 @@ namespace attpcfe {
     
   private:
     void run(unsigned int i);
-
   };
 }
 #endif

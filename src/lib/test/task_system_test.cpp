@@ -13,26 +13,23 @@ int main() {
   task_system ts;
   std::vector<std::future<int> > futures;
 
-  try {
-  for (int i = 0; i < 60000; ++i)
+  for (int i = 0; i < 100; ++i)
   {
     auto f = ts.async([i, &sum]()
 		      {
 			sum += i;
+			std::cout << i << '\n';
 			return i;
 		      });
     futures.push_back(std::move(f));
   }
-  }
-  catch (const std::future_error& e) {
-    std::cout << "Caught a future_error with code \"" << e.code()
-	      << "\"\nMessage: \"" << e.what() << "\"\n";
-  }
 
-  for (auto& f :  futures)
-  {
-    std::cout << f.get() << '\n';
-  }
+  assert(futures[42].get() == 42);
+
+  //for (auto& f :  futures)
+  //{
+  //  std::cout << f.get() << '\n';
+  //}
   
   return 0;
 }
