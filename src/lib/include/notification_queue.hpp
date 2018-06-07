@@ -1,3 +1,5 @@
+// Following Sean Parent's implementation in concurrency talk @ NDC 2017
+// Some considerations from Mastering the C++17 STL by Arthur O'Dwyer
 #ifndef NOTIFICATION_QUEUE_HPP
 #define NOTIFICATION_QUEUE_HPP
 
