@@ -5,7 +5,9 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
-  src/hdf5_wrapper.cpp)
+  src/hdf5_wrapper.cpp
+  src/notification_queue.cpp
+  src/task_system.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
