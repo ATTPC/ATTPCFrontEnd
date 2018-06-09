@@ -13,7 +13,6 @@ namespace attpcfe {
 
   task_system::~task_system()
   {
-    //_q.done();
     _q.done();
     for (auto& thread : _threads) thread.join();
   }
@@ -23,10 +22,8 @@ namespace attpcfe {
     while (true)
     {
       task_t task;
-      //_q.pop(task);
       if (_q.pop(task)) task();
       else break;
-      //task();
     }
   }
 

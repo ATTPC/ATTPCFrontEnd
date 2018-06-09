@@ -4,6 +4,7 @@
 #include <deque>
 #include <mutex>
 #include <condition_variable>
+#include <cassert>
 
 namespace attpcfe {
 
@@ -32,9 +33,11 @@ namespace attpcfe {
     lock_t lock{_pimpl->protected_members()._mutex};
     while (_pimpl->protected_members()._q.empty() && !_pimpl->protected_members()._done)
       _pimpl->condition().wait(lock);
-    //if (_pimpl->protected_members()._done) return false;
+
     if (_pimpl->protected_members()._done) return false;
-    if (_pimpl->protected_members()._q.empty()) return false;
+    
+    assert(!_pimpl->protected_members()._q.empty());
+    
     task = std::move(_pimpl->protected_members()._q.front());
     _pimpl->protected_members()._q.pop_front();
     return true;

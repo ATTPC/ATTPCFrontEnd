@@ -4,7 +4,8 @@
 #include <future>
 #include <iostream>
 #include <cassert>
-
+#include <chrono>
+using namespace std::chrono_literals;
 using namespace attpcfe;
 
 int main() {
@@ -18,13 +19,14 @@ int main() {
     auto f = ts.async([i, &sum]()
 		      {
 			sum += i;
+			std::this_thread::sleep_for(0.5s);
 			std::cout << i << '\n';
 			return i;
 		      });
     futures.push_back(std::move(f));
   }
 
-  assert(futures[42].get() == 42);
+  assert(futures[32].get() == 32);
 
   //for (auto& f :  futures)
   //{
