@@ -7,7 +7,11 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 add_library(attpcfelib SHARED
   src/hdf5_wrapper.cpp
   src/notification_queue.cpp
-  src/task_system.cpp)
+  src/task_system.cpp
+  src/state.cpp
+  src/pad.cpp
+  src/raw_event.cpp
+  src/event.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

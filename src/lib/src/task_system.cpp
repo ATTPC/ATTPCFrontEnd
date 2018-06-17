@@ -22,8 +22,8 @@ namespace attpcfe {
     while (true)
     {
       task_t task;
-      if (_q.pop(task)) task();
-      else break;
+      if (!_q.pop(task)) break;
+      task();
     }
   }
 
