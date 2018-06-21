@@ -15,7 +15,7 @@ namespace attpcfe {
     
   public:
     data_handler() {}
-    ~data_handler() { _T.close(); }
+    ~data_handler() { close(); }
 
     void open(char const* file) { _n_raw_events = _T.open(file); }
     std::size_t n_raw_events() const { return _n_raw_events; }

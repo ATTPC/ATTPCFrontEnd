@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
 
   state::instance().reserve_stacks(n_raw_events);
 
+  
   for (std::size_t i_raw_event = 0; i_raw_event < n_raw_events; ++i_raw_event)
   {
     auto n_pads = _data_handler.n_pads(i_raw_event);
@@ -45,8 +46,6 @@ int main(int argc, char* argv[]) {
     _task_system.void_async(print_raw_event);
     _data_handler.end_raw_event();
   }
-
-  _data_handler.close();
   
   auto end = std::chrono::system_clock::now();
   auto duration = std::chrono::duration<double>{end - start};

@@ -137,8 +137,7 @@ namespace attpcfe {
 
   void hdf5_wrapper::close()
   {
-    //close_group(_pimpl->_group);
-    //close_file(_pimpl->_file);
-    H5close();
+    close_group(_pimpl->_group);
+    close_file(_pimpl->_file);
   }
 }
