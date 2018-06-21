@@ -5,7 +5,6 @@
 #include <raw_event.hpp>
 #include <pad.hpp>
 
-#include <cassert>
 #include <chrono>
 #include <iostream>
 
@@ -26,8 +25,11 @@ int main(int argc, char* argv[]) {
 
   data_handler<hdf5_wrapper> _data_handler;
   _data_handler.open("/home/nico/Downloads/perico.h5");
+  auto n_raw_events = _data_handler.n_raw_events();
 
-  for (std::size_t i_raw_event = 0; i_raw_event < _data_handler.n_raw_events(); ++i_raw_event)
+  state::instance().reserve_stacks(n_raw_events);
+
+  for (std::size_t i_raw_event = 0; i_raw_event < n_raw_events; ++i_raw_event)
   {
     auto n_pads = _data_handler.n_pads(i_raw_event);
     raw_event _raw_event{n_pads};
