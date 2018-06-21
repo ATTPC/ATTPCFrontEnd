@@ -5,6 +5,7 @@
 
 namespace attpcfe {
 
+  class pad;
   class raw_event {
 
     class raw_event_impl;
@@ -12,6 +13,10 @@ namespace attpcfe {
 
   public:
     raw_event();
+    raw_event(std::size_t n_pads);
+
+    std::size_t n_pads() const;
+    void add_pad(pad&& pad);
   };
 }
 #endif

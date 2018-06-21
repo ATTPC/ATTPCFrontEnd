@@ -5,19 +5,19 @@ using namespace attpcfe;
 
 int main() {
 
-  hdf5_wrapper h;
-  auto fileId = h.open_file("/home/nico/Downloads/test.h5", hdf5_wrapper::IO_MODE::READ);
-  assert(fileId.has_value());
+  hdf5_wrapper hdf;
+  auto file = hdf.open_file("/home/nico/Downloads/test.h5", hdf5_wrapper::IO_MODE::READ);
+  assert(file.has_value());
 
-  auto groupId = h.open_group(fileId.value(), "get");
-  assert(groupId.has_value());
+  auto [group, n_entries] = hdf.open_group(file.value(), "get");
+  assert(group.has_value());
   
-  auto datasetId = h.open_dataset(groupId.value(), "0");
-  assert(datasetId.has_value());
+  auto [dataset, dims] = hdf.open_dataset(group.value(), "0");
+  assert(dataset.has_value());
 
-  h.close_dataset(datasetId.value());
-  h.close_group(groupId.value());
-  h.close_file(fileId.value());
+  hdf.close_dataset(dataset.value());
+  hdf.close_group(group.value());
+  hdf.close_file(file.value());
   
   return 0;
 }

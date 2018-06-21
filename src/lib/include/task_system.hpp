@@ -34,6 +34,18 @@ namespace attpcfe {
       
       return future;
     }
+
+    template<typename F>
+    void void_async(F&& func)
+    {
+      using result_t = std::invoke_result_t<std::decay_t<F>>;
+
+      std::packaged_task<result_t()> pt{std::forward<F>(func)};
+      
+      task_t task{[pt = std::move(pt)]() mutable { pt(); }};
+      
+      _q.push(std::move(task));
+    }
     
   private:
     void run(unsigned int i);

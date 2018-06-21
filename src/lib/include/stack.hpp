@@ -19,7 +19,11 @@ namespace attpcfe {
   public:
     stack() {};
 
-    auto& protected_members() { return _protected; }
+    void reserve(std::size_t capacity)
+    {
+      lock_t lock{_protected._mutex};
+      _protected._elements.reserve(capacity);
+    }
 
     void pop(T& element)
     {
@@ -28,11 +32,21 @@ namespace attpcfe {
       _protected._elements.pop_back();
     }
 
-    void push(T element)
+    void push(T&& element)
     {
       lock_t lock{_protected._mutex};
       _protected._elements.push_back(std::move(element));
     }
+
+    //std::size_t size()
+    //{
+    //  return _protected._elements.size();
+    //}
+    
+    //T const& operator[](std::size_t pos)
+    //{
+    //  return _protected._elements[pos];
+    //}
   };
 }
 #endif
