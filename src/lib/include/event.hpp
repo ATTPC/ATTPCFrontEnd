@@ -12,6 +12,7 @@ namespace attpcfe {
 
   public:
     event();
+    event(std::size_t n_hit_lists);
   };
 }
 #endif

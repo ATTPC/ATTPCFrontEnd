@@ -11,7 +11,11 @@ add_library(attpcfelib SHARED
   src/state.cpp
   src/pad.cpp
   src/raw_event.cpp
-  src/event.cpp)
+  src/hit.cpp
+  src/hit_list.cpp
+  src/event.cpp
+  src/track.cpp
+  src/pattern_event.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
