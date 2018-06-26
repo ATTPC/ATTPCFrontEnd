@@ -17,6 +17,13 @@ void print_raw_event() {
   std::cout << _raw_event.n_pads() << '\n';
 }
 
+void print_raw_event_with_arg(int n) {
+
+  raw_event _raw_event;
+  state::instance().pop_raw_event(_raw_event);
+  std::cout << n * _raw_event.n_pads() << '\n';
+}
+
 int main(int argc, char* argv[]) {
 
   auto start = std::chrono::system_clock::now();
@@ -29,7 +36,6 @@ int main(int argc, char* argv[]) {
 
   state::instance().reserve_stacks(n_raw_events);
 
-  
   for (std::size_t i_raw_event = 0; i_raw_event < n_raw_events; ++i_raw_event)
   {
     auto n_pads = _data_handler.n_pads(i_raw_event);
@@ -43,7 +49,8 @@ int main(int argc, char* argv[]) {
     }
 
     state::instance().push_raw_event(std::move(_raw_event));
-    _task_system.void_async(print_raw_event);
+    //_task_system.void_async(print_raw_event);
+    _task_system.void_async(print_raw_event_with_arg, 10);
     _data_handler.end_raw_event();
   }
   

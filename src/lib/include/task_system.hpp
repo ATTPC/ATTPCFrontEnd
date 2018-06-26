@@ -3,10 +3,11 @@
 // Not using pimpl idiom because of templated async
 #ifndef TASK_SYSTEM_HPP
 #define TASK_SYSTEM_HPP
+#include <notification_queue.hpp>
 
 #include <thread>
 #include <vector>
-#include <notification_queue.hpp>
+#include <functional>
 
 namespace attpcfe {
 
@@ -20,12 +21,12 @@ namespace attpcfe {
     task_system();
     ~task_system();
 
-    template<typename F>
-    auto async(F&& func)
+    template <typename F, typename... Args>
+    auto async(F&& func, Args&&... args) -> std::future<std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)> >
     {
-      using result_t = std::invoke_result_t<std::decay_t<F>>;
+      using result_t = std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)>;
 
-      std::packaged_task<result_t()> pt{std::forward<F>(func)};
+      std::packaged_task<result_t()> pt{std::bind(std::forward<F>(func), std::forward<Args>(args)...)};
       std::future<result_t> future = pt.get_future();
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
@@ -35,12 +36,13 @@ namespace attpcfe {
       return future;
     }
 
-    template<typename F>
-    void void_async(F&& func)
+    template <typename F, typename... Args>
+    void void_async(F&& func, Args&&... args) 
     {
-      using result_t = std::invoke_result_t<std::decay_t<F>>;
+      using result_t = std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)>;
 
-      std::packaged_task<result_t()> pt{std::forward<F>(func)};
+      std::packaged_task<result_t()> pt{std::bind(std::forward<F>(func), std::forward<Args>(args)...)};
+      std::future<result_t> future = pt.get_future();
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
