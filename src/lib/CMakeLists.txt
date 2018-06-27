@@ -5,22 +5,22 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
-  src/hdf5_wrapper.cpp
-  src/notification_queue.cpp
-  src/task_system.cpp
-  src/state.cpp
-  src/pad.cpp
-  src/raw_event.cpp
-  src/hit.cpp
-  src/hit_list.cpp
-  src/event.cpp
-  src/track.cpp
-  src/pattern_event.cpp)
+  src/core/hdf5_wrapper.cpp
+  src/core/notification_queue.cpp
+  src/core/task_system.cpp
+  src/core/state.cpp
+  src/core/pad.cpp
+  src/core/raw_event.cpp
+  src/core/hit.cpp
+  src/core/hit_list.cpp
+  src/core/event.cpp
+  src/core/track.cpp
+  src/core/pattern_event.cpp)
 
 target_include_directories(attpcfelib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  PRIVATE src)
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/core>
+  $<INSTALL_INTERFACE:include/core>
+  PRIVATE src/core)
 
 target_compile_options(attpcfelib
   PUBLIC -std=c++17 -Wall -O2)
