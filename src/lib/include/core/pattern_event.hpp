@@ -12,6 +12,9 @@ namespace attpcfe {
 
   public:
     pattern_event();
+    pattern_event(std::size_t id);
+    
+    std::size_t id() const;
   };
 }
 #endif

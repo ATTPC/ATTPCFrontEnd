@@ -15,5 +15,7 @@ namespace attpcfe {
   };
 
   hit_list::hit_list() : _pimpl{new hit_list_impl{}, [](hit_list_impl* ptr){ delete ptr; }} {}
+
+  void hit_list::add_hit(hit&& h) { _pimpl->_hits.push_back(std::move(h)); }
 }
 

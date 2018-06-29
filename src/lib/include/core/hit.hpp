@@ -2,6 +2,7 @@
 #define HIT_HPP
 
 #include <memory>
+#include <vector>
 
 namespace attpcfe {
 
@@ -11,7 +12,7 @@ namespace attpcfe {
     std::unique_ptr<hit_impl, void(*)(hit_impl*)> _pimpl;
 
   public:
-    hit();
+    hit(std::vector<double>&& pos, double charge);
   };
 }
 #endif

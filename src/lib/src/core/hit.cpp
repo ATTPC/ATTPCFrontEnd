@@ -10,10 +10,14 @@ namespace attpcfe {
   public:
     hit_impl() {}
 
-    double _charge{0.};
     std::vector<double> _position{0., 0., 0.};
+    double _charge{0.};
   };
 
-  hit::hit() : _pimpl{new hit_impl{}, [](hit_impl* ptr){ delete ptr; }} {}
+  hit::hit(std::vector<double>&& pos, double charge) : _pimpl{new hit_impl{}, [](hit_impl* ptr){ delete ptr; }}
+  {
+    _pimpl->_position = std::move(pos);
+    _pimpl->_charge = charge;
+  }
   
 }

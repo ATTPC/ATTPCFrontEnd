@@ -5,6 +5,7 @@
 
 namespace attpcfe {
 
+  class hit;
   class hit_list {
 
     class hit_list_impl;
@@ -12,6 +13,8 @@ namespace attpcfe {
 
   public:
     hit_list();
+
+    void add_hit(hit&& h);
   };
 }
 #endif

@@ -38,10 +38,11 @@ namespace attpcfe {
       _protected._elements.push_back(std::move(element));
     }
 
-    //std::size_t size()
-    //{
-    //  return _protected._elements.size();
-    //}
+    std::size_t size()
+    {
+      lock_t lock{_protected._mutex};
+      return _protected._elements.size();
+    }
     
     //T const& operator[](std::size_t pos)
     //{

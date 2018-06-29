@@ -2,6 +2,7 @@
 #define RAW_EVENT_HPP
 
 #include <memory>
+#include <vector>
 
 namespace attpcfe {
 
@@ -13,9 +14,11 @@ namespace attpcfe {
 
   public:
     raw_event();
-    raw_event(std::size_t n_pads);
+    raw_event(std::size_t id, std::size_t n_pads);
 
+    std::size_t id() const;
     std::size_t n_pads() const;
+    std::vector<pad> const& pads() const;
     void add_pad(pad&& pad);
   };
 }

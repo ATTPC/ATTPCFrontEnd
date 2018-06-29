@@ -14,8 +14,10 @@ add_library(attpcfelib SHARED
   src/core/hit.cpp
   src/core/hit_list.cpp
   src/core/event.cpp
+  src/core/raw_track.cpp
+  src/core/pattern_event.cpp
   src/core/track.cpp
-  src/core/pattern_event.cpp)
+  src/core/track_event.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/core>
@@ -23,7 +25,7 @@ target_include_directories(attpcfelib PUBLIC
   PRIVATE src/core)
 
 target_compile_options(attpcfelib
-  PUBLIC -std=c++17 -Wall -O2)
+  PUBLIC -std=c++2a -Wall -O2)
 
 target_link_libraries(attpcfelib
   hdf5)

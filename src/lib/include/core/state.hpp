@@ -6,6 +6,9 @@
 namespace attpcfe {
 
   class raw_event;
+  class event;
+  class pattern_event;
+  class track_event;
   class state {
 
     class state_impl;
@@ -25,7 +28,14 @@ namespace attpcfe {
 
     void reserve_stacks(std::size_t capacity);
     void push_raw_event(raw_event&& evt);
-    void pop_raw_event(raw_event& evt); 
+    void pop_raw_event(raw_event& evt);
+    void push_event(event&& evt);
+    void pop_event(event& evt);
+    void push_pattern_event(pattern_event&& evt);
+    void pop_pattern_event(pattern_event& evt);
+    void push_track_event(track_event&& evt);
+    void pop_track_event(track_event& evt);
+    std::size_t n_track_events() const;
   };
 }
 #endif
