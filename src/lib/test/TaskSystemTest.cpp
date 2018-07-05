@@ -1,4 +1,4 @@
-#include <task_system.hpp>
+#include <core/TaskSystem.hpp>
 #include <atomic>
 #include <vector>
 #include <future>
@@ -11,12 +11,12 @@ using namespace attpcfe;
 int main() {
 
   std::atomic<int> sum{0};
-  task_system ts;
+  TaskSystem ts;
   std::vector<std::future<int> > futures;
 
   for (int i = 0; i < 100; ++i)
   {
-    auto f = ts.async([i, &sum]()
+    auto f = ts.Async([i, &sum]()
 		      {
 			sum += i;
 			std::this_thread::sleep_for(0.5s);

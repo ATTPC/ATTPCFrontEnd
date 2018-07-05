@@ -1,14 +1,14 @@
-#include <data_handler.hpp>
-#include <hdf5_wrapper.hpp>
-#include <task_system.hpp>
-#include <state.hpp>
-#include <pad.hpp>
-#include <raw_event.hpp>
-#include <hit.hpp>
-#include <hit_list.hpp>
-#include <event.hpp>
-#include <pattern_event.hpp>
-#include <track_event.hpp>
+#include <core/DataHandler.hpp>
+#include <core/Hdf5Wrapper.hpp>
+#include <core/TaskSystem.hpp>
+#include <core/State.hpp>
+#include <core/Pad.hpp>
+#include <core/RawEvent.hpp>
+#include <core/Hit.hpp>
+#include <core/HitList.hpp>
+#include <core/Event.hpp>
+#include <core/PatternEvent.hpp>
+#include <core/TrackEvent.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -16,54 +16,54 @@
 using namespace std::chrono_literals;
 using namespace attpcfe;
 
-void process_raw_event() {
+void ProcessRawEvent() {
 
-  raw_event _raw_event;
-  state::instance().pop_raw_event(_raw_event);
+  RawEvent rawEvent;
+  State::Instance().PopRawEvent(rawEvent);
   
-  event _event{_raw_event.id(), _raw_event.n_pads()};
+  Event event{rawEvent.Id(), rawEvent.NPads()};
 
-  for (auto const& pad : _raw_event.pads())
+  for (auto const& pad : rawEvent.Pads())
   {
-    hit_list _hits;
+    HitList hits;
 
     double charge = 1.0;
     std::vector<double> pos{0., 0., 0.};
-    hit _hit{std::move(pos), charge};
-    _hits.add_hit(std::move(_hit));
+    Hit hit{std::move(pos), charge};
+    hits.AddHit(std::move(hit));
     
-    _event.add_hit_list(std::move(_hits));
+    event.AddHitList(std::move(hits));
   }
 
-  std::cout << "> process_raw_event: " << _raw_event.id() << ' ' << std::this_thread::get_id() << '\n';
+  std::cout << "> ProcessRawEvent: " << rawEvent.Id() << ' ' << std::this_thread::get_id() << '\n';
 
-  state::instance().push_event(std::move(_event));
+  State::Instance().PushEvent(std::move(event));
 }
 
-void process_event() {
+void ProcessEvent() {
 
-  event _event;
-  state::instance().pop_event(_event);
+  Event event;
+  State::Instance().PopEvent(event);
 
-  pattern_event _pattern_event{_event.id()};
+  PatternEvent patternEvent{event.Id()};
 
-  std::cout << "> process_event: " << _event.id() << ' ' << std::this_thread::get_id() << '\n';
+  std::cout << "> ProcessEvent: " << event.Id() << ' ' << std::this_thread::get_id() << '\n';
   std::this_thread::sleep_for(0.001s);
 
-  state::instance().push_pattern_event(std::move(_pattern_event));
+  State::Instance().PushPatternEvent(std::move(patternEvent));
 }
 
-void process_pattern_event(int n)
+void ProcessPatternEvent(int n)
 {
-  pattern_event _pattern_event;
-  state::instance().pop_pattern_event(_pattern_event);
+  PatternEvent patternEvent;
+  State::Instance().PopPatternEvent(patternEvent);
 
-  track_event _track_event{_pattern_event.id()};
+  TrackEvent trackEvent{patternEvent.Id()};
 
-  std::cout << "> process_pattern_event: " << _pattern_event.id() << ' ' << std::this_thread::get_id() << ' ' << n << '\n';
+  std::cout << "> ProcessPatternEvent: " << patternEvent.Id() << ' ' << std::this_thread::get_id() << ' ' << n << '\n';
   std::this_thread::sleep_for(0.001s);
 
-  state::instance().push_track_event(std::move(_track_event));
+  State::Instance().PushTrackEvent(std::move(trackEvent));
 }
 
 int main(int argc, char* argv[]) {
@@ -72,40 +72,40 @@ int main(int argc, char* argv[]) {
 
   std::vector<std::future<void>> futures;
 
-  task_system _task_system;
+  TaskSystem taskSystem;
 
-  data_handler<hdf5_wrapper> _data_handler;
-  _data_handler.open("/home/nico/Downloads/perico.h5");
-  auto n_raw_events = _data_handler.n_raw_events();
+  DataHandler<Hdf5Wrapper> dataHandler;
+  dataHandler.Open("/home/nico/Downloads/perico.h5");
+  auto nRawEvents = dataHandler.NRawEvents();
 
-  state::instance().reserve_stacks(n_raw_events);
+  State::Instance().ReserveStacks(nRawEvents);
 
-  for (std::size_t i_raw_event = 0; i_raw_event < n_raw_events; ++i_raw_event)
+  for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
   {
-    std::cout << "> read_raw_event: " << i_raw_event << '\n';
+    std::cout << "> read raw event: " << iRawEvent << '\n';
     
-    auto n_pads = _data_handler.n_pads(i_raw_event);
-    raw_event _raw_event{i_raw_event, n_pads};
+    auto nPads = dataHandler.NPads(iRawEvent);
+    RawEvent rawEvent{iRawEvent, nPads};
 
-    for (std::size_t i_pad = 0; i_pad < n_pads; ++i_pad)
+    for (std::size_t iPad = 0; iPad < nPads; ++iPad)
     {
-      pad _pad;
-      _pad.set_raw_data(_data_handler.pad_raw_data(i_pad));
-      _raw_event.add_pad(std::move(_pad));
+      Pad pad;
+      pad.SetRawData(dataHandler.PadRawData(iPad));
+      rawEvent.AddPad(std::move(pad));
     }
-    _data_handler.end_raw_event();
+    dataHandler.EndRawEvent();
     
-    state::instance().push_raw_event(std::move(_raw_event));
+    State::Instance().PushRawEvent(std::move(rawEvent));
 
-    auto f_event = _task_system.async(process_raw_event);
-    auto f_pattern_event = _task_system.then(f_event, process_event);
-    auto f_track_event = _task_system.then(f_pattern_event, process_pattern_event, 2);
-    futures.push_back(std::move(f_track_event));
+    auto fEvent = taskSystem.Async(ProcessRawEvent);
+    auto fPatternEvent = taskSystem.Then(fEvent, ProcessEvent);
+    auto fTrackEvent = taskSystem.Then(fPatternEvent, ProcessPatternEvent, 2);
+    futures.push_back(std::move(fTrackEvent));
   }
 
   for (auto const& f : futures) f.wait();
 
-  std::cout << "> " << state::instance().n_track_events() << " track events on stack\n";
+  std::cout << "> " << State::Instance().NTrackEvents() << " track events on stack\n";
   
   auto end = std::chrono::system_clock::now();
   auto duration = std::chrono::duration<double>{end - start};

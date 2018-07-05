@@ -5,24 +5,24 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
-  src/core/hdf5_wrapper.cpp
-  src/core/notification_queue.cpp
-  src/core/task_system.cpp
-  src/core/state.cpp
-  src/core/pad.cpp
-  src/core/raw_event.cpp
-  src/core/hit.cpp
-  src/core/hit_list.cpp
-  src/core/event.cpp
-  src/core/raw_track.cpp
-  src/core/pattern_event.cpp
-  src/core/track.cpp
-  src/core/track_event.cpp)
+  src/core/Hdf5Wrapper.cpp
+  src/core/NotificationQueue.cpp
+  src/core/TaskSystem.cpp
+  src/core/State.cpp
+  src/core/Pad.cpp
+  src/core/RawEvent.cpp
+  src/core/Hit.cpp
+  src/core/HitList.cpp
+  src/core/Event.cpp
+  src/core/RawTrack.cpp
+  src/core/PatternEvent.cpp
+  src/core/Track.cpp
+  src/core/TrackEvent.cpp)
 
 target_include_directories(attpcfelib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/core>
-  $<INSTALL_INTERFACE:include/core>
-  PRIVATE src/core)
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 
 target_compile_options(attpcfelib
   PUBLIC -std=c++2a -Wall -O2)
@@ -50,13 +50,13 @@ export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 # Unit tests
 # ========================================================
 add_executable(hdf5_wrapper
-    test/hdf5_wrapper_test.cpp)
+    test/Hdf5WrapperTest.cpp)
 target_link_libraries(hdf5_wrapper
   attpcfelib)
 add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
 
 add_executable(task_system
-    test/task_system_test.cpp)
+    test/TaskSystemTest.cpp)
 target_link_libraries(task_system
   attpcfelib)
 add_test(NAME task_system_test COMMAND task_system)

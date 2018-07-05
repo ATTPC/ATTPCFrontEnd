@@ -9,7 +9,7 @@ namespace attpcfe {
   using lock_t = std::unique_lock<std::mutex>;
 
   template<typename T>
-  class stack {
+  class Stack {
 
     struct {
       std::vector<T> _elements;
@@ -17,28 +17,28 @@ namespace attpcfe {
     } _protected;
 
   public:
-    stack() {};
+    Stack() {};
 
-    void reserve(std::size_t capacity)
+    void Reserve(std::size_t capacity)
     {
       lock_t lock{_protected._mutex};
       _protected._elements.reserve(capacity);
     }
 
-    void pop(T& element)
+    void Pop(T& element)
     {
       lock_t lock{_protected._mutex};
       element = std::move(_protected._elements.back());
       _protected._elements.pop_back();
     }
 
-    void push(T&& element)
+    void Push(T&& element)
     {
       lock_t lock{_protected._mutex};
       _protected._elements.push_back(std::move(element));
     }
 
-    std::size_t size()
+    std::size_t Size()
     {
       lock_t lock{_protected._mutex};
       return _protected._elements.size();
