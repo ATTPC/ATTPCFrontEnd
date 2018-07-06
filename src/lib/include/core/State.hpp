@@ -14,17 +14,18 @@ namespace attpcfe {
     class StateImpl;
     std::unique_ptr<StateImpl, void(*)(StateImpl*)> _pImpl;
     
-    State();
+    //State();
 
   public:
+    State();
     State(State const&) = delete;
     State& operator=(State const&) = delete;
 
-    static State& Instance() // Initialization of static local storage variable is thread-safe since C++11
-    {
-      static State _state;
-      return _state;
-    }
+    //static State& Instance() // Initialization of static local storage variable is thread-safe since C++11
+    //{
+    //static State _state;
+    //return _state;
+    //}
 
     void ReserveStacks(std::size_t capacity);
     void PushRawEvent(RawEvent&& evt);

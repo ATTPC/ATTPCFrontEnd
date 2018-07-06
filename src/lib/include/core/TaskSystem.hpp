@@ -49,6 +49,22 @@ namespace attpcfe {
       return future;
     }
 
+    template<typename MemberType, typename Base, typename... Args>
+    auto Async(MemberType Base::* f, Base&& base, Args&&... args)
+      -> std::future<std::result_of_t<std::decay_t<MemberType>(std::decay_t<Args>...)> >
+    {
+      using result_t = std::result_of_t<std::decay_t<MemberType>(std::decay_t<Args>...)>;
+
+      std::packaged_task<result_t()> pt{std::bind(std::forward<Base>(base).*f, std::forward<Args>(args)...)};
+      std::future<result_t> future = pt.get_future();
+      
+      task_t task{[pt = std::move(pt)]() mutable { pt(); }};
+      
+      _q.Push(std::move(task));
+      
+      return future;
+    }
+
     template<typename T, typename F, typename... Args>
     std::future<T> Then(std::future<T>& first, F&& func, Args&&... args) 
     {

@@ -9,6 +9,7 @@
 #include <core/Event.hpp>
 #include <core/PatternEvent.hpp>
 #include <core/TrackEvent.hpp>
+#include <reco/BaselineCorrection.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -16,6 +17,7 @@
 using namespace std::chrono_literals;
 using namespace attpcfe;
 
+/*
 void ProcessRawEvent() {
 
   RawEvent rawEvent;
@@ -65,6 +67,7 @@ void ProcessPatternEvent(int n)
 
   State::Instance().PushTrackEvent(std::move(trackEvent));
 }
+*/
 
 int main(int argc, char* argv[]) {
 
@@ -78,7 +81,14 @@ int main(int argc, char* argv[]) {
   dataHandler.Open("/home/nico/Downloads/perico.h5");
   auto nRawEvents = dataHandler.NRawEvents();
 
-  State::Instance().ReserveStacks(nRawEvents);
+  //State::Instance().ReserveStacks(nRawEvents);
+  auto state = std::make_shared<State>();
+
+
+
+  BLCorrection blCorrection{state};
+
+  
 
   for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
   {
@@ -95,17 +105,21 @@ int main(int argc, char* argv[]) {
     }
     dataHandler.EndRawEvent();
     
-    State::Instance().PushRawEvent(std::move(rawEvent));
+    //State::Instance().PushRawEvent(std::move(rawEvent));
+    state->PushRawEvent(std::move(rawEvent));
 
-    auto fEvent = taskSystem.Async(ProcessRawEvent);
-    auto fPatternEvent = taskSystem.Then(fEvent, ProcessEvent);
-    auto fTrackEvent = taskSystem.Then(fPatternEvent, ProcessPatternEvent, 2);
-    futures.push_back(std::move(fTrackEvent));
+    auto fEvent = taskSystem.Async(&BLCorrection::SubtractBaseline, blCorrection);
+    futures.push_back(std::move(fEvent));
+    
+    //auto fEvent = taskSystem.Async(ProcessRawEvent);
+    //auto fPatternEvent = taskSystem.Then(fEvent, ProcessEvent);
+    //auto fTrackEvent = taskSystem.Then(fPatternEvent, ProcessPatternEvent, 2);
+    //futures.push_back(std::move(fTrackEvent));
   }
 
   for (auto const& f : futures) f.wait();
 
-  std::cout << "> " << State::Instance().NTrackEvents() << " track events on stack\n";
+  //std::cout << "> " << State::Instance().NTrackEvents() << " track events on stack\n";
   
   auto end = std::chrono::system_clock::now();
   auto duration = std::chrono::duration<double>{end - start};
