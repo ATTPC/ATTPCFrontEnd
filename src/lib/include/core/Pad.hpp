@@ -15,14 +15,14 @@ namespace attpcfe {
   public:
     Pad();
 
-    //void set_cobo(int16_t cobo);
-    //void set_asad(int16_t asad);
-    //void set_aget(int16_t aget);
-    //void set_channel(int16_t channel);
-    //void set_number(int16_t number);
-    //void set_adcs(int16_t* f, int16_t* l);
     void SetRawData(std::vector<int16_t>&& rawData);
+    std::vector<int16_t> const& RawData() const;
+    std::vector<double>& Data();
     int16_t Cobo() const;
+    int16_t Asad() const;
+    int16_t Aget() const;
+    int16_t Channel() const;
+    int16_t Number() const;
   };
 }
 #endif

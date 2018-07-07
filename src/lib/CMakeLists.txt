@@ -18,7 +18,8 @@ add_library(attpcfelib SHARED
   src/core/PatternEvent.cpp
   src/core/Track.cpp
   src/core/TrackEvent.cpp
-  src/reco/BaselineCorrection.cpp)
+  src/reco/BaselineCorrection.cpp
+  src/reco/PSATask.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

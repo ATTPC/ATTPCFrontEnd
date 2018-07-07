@@ -26,6 +26,7 @@ namespace attpcfe {
   std::size_t RawEvent::Id() const { return _pImpl->_id; }
   std::size_t RawEvent::NPads() const { return _pImpl->_pads.size(); }
   std::vector<Pad> const& RawEvent::Pads() const { return _pImpl->_pads; }
+  std::vector<Pad>& RawEvent::Pads() { return _pImpl->_pads; }
   void RawEvent::AddPad(Pad&& p)
   {
     _pImpl->_pads.push_back(std::move(p));

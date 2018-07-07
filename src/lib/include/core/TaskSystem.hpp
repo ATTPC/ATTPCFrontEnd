@@ -1,8 +1,8 @@
 // Following Sean Parent's implementation in concurrency talk @ NDC 2017
 // Some considerations from Mastering the C++17 STL by Arthur O'Dwyer
 // Not using pimpl idiom because of templated async
-#ifndef TASK_SYSTEM_HPP
-#define TASK_SYSTEM_HPP
+#ifndef TASKSYSTEM_HPP
+#define TASKSYSTEM_HPP
 #include <core/NotificationQueue.hpp>
 
 #include <thread>

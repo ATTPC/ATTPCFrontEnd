@@ -19,6 +19,7 @@ namespace attpcfe {
     std::size_t Id() const;
     std::size_t NPads() const;
     std::vector<Pad> const& Pads() const;
+    std::vector<Pad>& Pads();
     void AddPad(Pad&& pad);
   };
 }
