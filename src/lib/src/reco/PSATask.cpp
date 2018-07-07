@@ -10,6 +10,10 @@
 
 #include <iostream>
 
+#include <thread>
+#include <chrono>
+using namespace std::chrono_literals;
+
 namespace attpcfe {
 
   PSATask::PSATask(std::shared_ptr<State> pState) : _pState{pState} {}
@@ -21,7 +25,7 @@ namespace attpcfe {
 
     Event event{rawEvent.Id(), rawEvent.NPads()};
 
-    std::cout << "> run psa event: " << event.Id() << '\n';
+    std::cout << "> run psa, event: " << event.Id() << '\n';
 
     for (auto& pad : rawEvent.Pads())
     {
@@ -40,6 +44,9 @@ namespace attpcfe {
       
       event.AddHitList(std::move(hits));
     }
+
+    std::this_thread::sleep_for(0.001s);
+    
     _pState->PushEvent(std::move(event));
   }
   

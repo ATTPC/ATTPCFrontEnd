@@ -5,6 +5,7 @@
 
 namespace attpcfe {
 
+  class Track;
   class TrackEvent {
 
     class TrackEventImpl;
@@ -15,6 +16,7 @@ namespace attpcfe {
     TrackEvent(std::size_t id);
 
     std::size_t Id() const;
+    void AddTrack(Track&& track);
   };
 }
 #endif

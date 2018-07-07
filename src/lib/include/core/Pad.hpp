@@ -15,7 +15,7 @@ namespace attpcfe {
   public:
     Pad();
 
-    void SetRawData(std::vector<int16_t>&& rawData);
+    void SetRawData(std::vector<int16_t> rawData);
     std::vector<int16_t> const& RawData() const;
     std::vector<double>& Data();
     int16_t Cobo() const;

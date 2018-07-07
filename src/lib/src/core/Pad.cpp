@@ -18,7 +18,7 @@ namespace attpcfe {
     _pImpl->_data.reserve(512);
   }
 
-  void Pad::SetRawData(std::vector<int16_t>&& data) { _pImpl->_rawData = std::move(data); }
+  void Pad::SetRawData(std::vector<int16_t> data) { _pImpl->_rawData = std::move(data); }
   std::vector<double>& Pad::Data() { return _pImpl->_data; }
 
   std::vector<int16_t> const& Pad::RawData() const { return _pImpl->_rawData; }

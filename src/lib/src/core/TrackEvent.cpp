@@ -23,4 +23,9 @@ namespace attpcfe {
   }
 
   std::size_t TrackEvent::Id() const { return _pImpl->_id; }
+
+  void TrackEvent::AddTrack(Track&& track) {
+    
+    _pImpl->_tracks.push_back(std::move(track));
+  }
 }

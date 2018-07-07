@@ -23,4 +23,9 @@ namespace attpcfe {
   }
 
   std::size_t PatternEvent::Id() const { return _pImpl->_id; }
+
+  void PatternEvent::AddRawTrack(RawTrack&& rawTrack) {
+
+    _pImpl->_rawTracks.push_back(std::move(rawTrack));
+  }
 }

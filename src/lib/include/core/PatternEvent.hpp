@@ -5,6 +5,7 @@
 
 namespace attpcfe {
 
+  class RawTrack;
   class PatternEvent {
 
     class PatternEventImpl;
@@ -15,6 +16,7 @@ namespace attpcfe {
     PatternEvent(std::size_t id);
     
     std::size_t Id() const;
+    void AddRawTrack(RawTrack&& rawTrack);
   };
 }
 #endif
