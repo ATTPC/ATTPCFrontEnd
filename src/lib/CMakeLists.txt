@@ -49,6 +49,43 @@ install(EXPORT ATTPCFELibConfig DESTINATION share/ATTPCFELib/cmake)
 # This makes the project importable from the build directory
 export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 
+# ========================================================
+# Define the gui library
+# (include all headers with the Q_OBJECT macro)
+# ========================================================
+add_library(attpcguilib SHARED
+  src/gui/GuiMainWindow.cpp
+  src/gui/GuiDisplay.cpp
+  src/gui/GuiChartView.cpp
+  src/gui/GuiState.cpp
+  include/gui/GuiMainWindow.hpp
+  include/gui/GuiDisplay.hpp
+  include/gui/GuiChartView.hpp
+  include/gui/GuiState.hpp)
+
+target_include_directories(attpcguilib PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
+
+target_compile_options(attpcguilib
+  PUBLIC -std=c++2a -Wall -O2 -fPIC)
+
+target_link_libraries(attpcguilib
+   Qt5::Widgets
+   Qt5::Charts
+   Qt5::Gui
+   Qt5::Core)
+
+install(TARGETS attpcguilib EXPORT ATTPCGUILibConfig
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # this is for Windows
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(EXPORT ATTPCGUILibConfig DESTINATION share/ATTPCGUILib/cmake)
+
+export(TARGETS attpcguilib FILE ATTPCGUILibConfig.cmake)
 
 # ========================================================
 # Unit tests
