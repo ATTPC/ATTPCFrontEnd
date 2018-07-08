@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 namespace attpcfe {
 
-  PatRecTask::PatRecTask(std::shared_ptr<State> pState) : _pState{pState} {}
+  PatRecTask::PatRecTask(State* state) : _pState{state} {}
 
   void PatRecTask::run()
   {

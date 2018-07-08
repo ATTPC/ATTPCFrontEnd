@@ -8,10 +8,10 @@ namespace attpcfe
   class State;
   class TrackRecTask {
 
-    std::shared_ptr<State> _pState;
+    State* _pState;
 
   public:
-    TrackRecTask(std::shared_ptr<State> pState);
+    TrackRecTask(State* pState);
  
     void run();
   };

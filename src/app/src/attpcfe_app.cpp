@@ -19,22 +19,6 @@
 using namespace std::chrono_literals;
 using namespace attpcfe;
 
-/*
-
-void ProcessPatternEvent(int n)
-{
-  PatternEvent patternEvent;
-  State::Instance().PopPatternEvent(patternEvent);
-
-  TrackEvent trackEvent{patternEvent.Id()};
-
-  std::cout << "> ProcessPatternEvent: " << patternEvent.Id() << ' ' << std::this_thread::get_id() << ' ' << n << '\n';
-  std::this_thread::sleep_for(0.001s);
-
-  State::Instance().PushTrackEvent(std::move(trackEvent));
-}
-*/
-
 int main(int argc, char* argv[]) {
 
   auto start = std::chrono::system_clock::now();
@@ -49,13 +33,13 @@ int main(int argc, char* argv[]) {
   auto nRawEvents = dataHandler.nRawEvents();
 
   // Reserve memory for event stacks
-  auto state = std::make_shared<State>();
+  auto state = std::make_unique<State>();
   state->reserveStacks(nRawEvents);
 
   // Create tasks
-  PSATask psa{state};
-  PatRecTask patRec{state};
-  TrackRecTask trackRec{state};
+  PSATask psa{state.get()};
+  PatRecTask patRec{state.get()};
+  TrackRecTask trackRec{state.get()};
 
   auto count = 0;
 

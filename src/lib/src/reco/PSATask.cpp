@@ -9,14 +9,13 @@
 #include <core/Hit.hpp>
 
 #include <iostream>
-
 #include <thread>
 #include <chrono>
 using namespace std::chrono_literals;
 
 namespace attpcfe {
 
-  PSATask::PSATask(std::shared_ptr<State> pState) : _pState{pState} {}
+  PSATask::PSATask(State* state) : _pState{state} {}
 
   void PSATask::run(MODE mode)
   {

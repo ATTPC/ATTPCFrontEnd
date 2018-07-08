@@ -8,10 +8,10 @@ namespace attpcfe
   class State;
   class PSATask {
 
-    std::shared_ptr<State> _pState;
+    State* _pState;
 
   public:
-    PSATask(std::shared_ptr<State> pState);
+    PSATask(State* state);
     enum class MODE {
       BLSUB
     };

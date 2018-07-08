@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 namespace attpcfe {
 
-  TrackRecTask::TrackRecTask(std::shared_ptr<State> pState) : _pState{pState} {}
+  TrackRecTask::TrackRecTask(State* state) : _pState{state} {}
 
   void TrackRecTask::run()
   {

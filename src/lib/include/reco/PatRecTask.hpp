@@ -8,10 +8,10 @@ namespace attpcfe
   class State;
   class PatRecTask {
 
-    std::shared_ptr<State> _pState;
+    State* _pState;
 
   public:
-    PatRecTask(std::shared_ptr<State> pState);
+    PatRecTask(State* state);
  
     void run();
   };
