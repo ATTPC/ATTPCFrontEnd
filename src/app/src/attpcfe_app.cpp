@@ -45,12 +45,12 @@ int main(int argc, char* argv[]) {
 
   // Open input file with data handler
   DataHandler<Hdf5Wrapper> dataHandler;
-  dataHandler.Open("/home/nico/Downloads/perico.h5");
-  auto nRawEvents = dataHandler.NRawEvents();
+  dataHandler.open("/home/nico/Downloads/perico.h5");
+  auto nRawEvents = dataHandler.nRawEvents();
 
   // Reserve memory for event stacks
   auto state = std::make_shared<State>();
-  state->ReserveStacks(nRawEvents);
+  state->reserveStacks(nRawEvents);
 
   // Create tasks
   PSATask psa{state};
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
   // Loop over raw events in main thread
   for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
   {
-    auto nPads = dataHandler.NPads(iRawEvent); if (nPads == 0) continue;
+    auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;
     RawEvent rawEvent{iRawEvent, nPads};
     ++count;
     std::cout << "> read raw event: " << iRawEvent << " with " << nPads << "pads\n";
@@ -70,25 +70,25 @@ int main(int argc, char* argv[]) {
     for (std::size_t iPad = 0; iPad < nPads; ++iPad)
     {
       Pad pad;
-      pad.SetRawData(dataHandler.PadRawData(iPad));
-      rawEvent.AddPad(std::move(pad));
+      pad.setRawData(dataHandler.padRawData(iPad));
+      rawEvent.addPad(std::move(pad));
     }
-    dataHandler.EndRawEvent();
+    dataHandler.endRawEvent();
 
     // Push raw event on stack
-    state->PushRawEvent(std::move(rawEvent));
+    state->pushRawEvent(std::move(rawEvent));
 
     // Run tasks in parallel
-    auto fEvent = taskSystem.Async(&PSATask::Execute, psa, PSATask::MODE::BLSUB);
-    auto fPatternEvent = taskSystem.Then(fEvent, &PatRecTask::Execute, patRec);
-    auto fTrackEvent = taskSystem.Then(fPatternEvent, &TrackRecTask::Execute, trackRec);
+    auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
+    auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, patRec);
+    auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, trackRec);
     futures.push_back(std::move(fTrackEvent));
   }
 
   // Wait for all continuations to finish
   for (auto const& f : futures) f.wait();
 
-  std::cout << "> " << state->NTrackEvents() << " track events on stack\n";
+  std::cout << "> " << state->nTrackEvents() << " track events on stack\n";
 
   std::cout << "> " << count << " raw events\n";
   

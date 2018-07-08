@@ -18,9 +18,9 @@ namespace attpcfe {
   public:
     NotificationQueue();
     
-    bool Pop(task_t& task);
-    void Push(task_t task);
-    void Done();
+    bool pop(task_t& task);
+    void push(task_t task);
+    void done();
   };
 }
 #endif

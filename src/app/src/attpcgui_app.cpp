@@ -1,4 +1,4 @@
-#include <gui/GuiMainWindow.hpp>
+#include <gui/MainWindow.hpp>
 #include <QtWidgets/QApplication>
 #include <QtGui/QSurfaceFormat>
 
@@ -13,8 +13,8 @@ int main(int argc, char* argv[]) {
   format.setSamples(2);
   QSurfaceFormat::setDefaultFormat(format);
 
-  attpcfe::GuiMainWindow MainWindow;
-  MainWindow.show();
+  attpcfe::MainWindow mainWindow;
+  mainWindow.show();
   
   return app.exec();
 }

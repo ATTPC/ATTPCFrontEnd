@@ -19,35 +19,30 @@ namespace attpcfe {
   public:
     Stack() {};
 
-    void Reserve(std::size_t capacity)
+    void reserve(std::size_t capacity)
     {
       lock_t lock{_protected._mutex};
       _protected._elements.reserve(capacity);
     }
 
-    void Pop(T& element)
+    void pop(T& element)
     {
       lock_t lock{_protected._mutex};
       element = std::move(_protected._elements.back());
       _protected._elements.pop_back();
     }
 
-    void Push(T&& element)
+    void push(T&& element)
     {
       lock_t lock{_protected._mutex};
       _protected._elements.push_back(std::move(element));
     }
 
-    std::size_t Size()
+    std::size_t size()
     {
       lock_t lock{_protected._mutex};
       return _protected._elements.size();
     }
-    
-    //T const& operator[](std::size_t pos)
-    //{
-    //  return _protected._elements[pos];
-    //}
   };
 }
 #endif

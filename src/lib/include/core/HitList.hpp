@@ -14,7 +14,7 @@ namespace attpcfe {
   public:
     HitList();
 
-    void AddHit(Hit&& h);
+    void addHit(Hit&& h);
   };
 }
 #endif

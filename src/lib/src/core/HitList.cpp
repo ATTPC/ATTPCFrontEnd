@@ -16,6 +16,6 @@ namespace attpcfe {
 
   HitList::HitList() : _pImpl{new HitListImpl{}, [](HitListImpl* ptr){ delete ptr; }} {}
 
-  void HitList::AddHit(Hit&& h) { _pImpl->_hits.push_back(std::move(h)); }
+  void HitList::addHit(Hit&& h) { _pImpl->_hits.push_back(std::move(h)); }
 }
 

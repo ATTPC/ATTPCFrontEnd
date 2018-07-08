@@ -15,21 +15,21 @@ namespace attpcfe {
 
   PatRecTask::PatRecTask(std::shared_ptr<State> pState) : _pState{pState} {}
 
-  void PatRecTask::Execute()
+  void PatRecTask::run()
   {
     Event event;
-    _pState->PopEvent(event);
+    _pState->popEvent(event);
 
-    PatternEvent patternEvent{event.Id()};
+    PatternEvent patternEvent{event.id()};
 
-    std::cout << "> run pat rec, event: " << patternEvent.Id() << '\n';
+    std::cout << "> run pat rec, event: " << patternEvent.id() << '\n';
 
     RawTrack rawTrack;
-    patternEvent.AddRawTrack(std::move(rawTrack));
+    patternEvent.addRawTrack(std::move(rawTrack));
 
     std::this_thread::sleep_for(0.001s);
     
-    _pState->PushPatternEvent(std::move(patternEvent));
+    _pState->pushPatternEvent(std::move(patternEvent));
   }
   
 }

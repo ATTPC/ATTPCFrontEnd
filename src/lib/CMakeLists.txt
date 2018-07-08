@@ -29,7 +29,7 @@ target_include_directories(attpcfelib PUBLIC
   PRIVATE src)
 
 target_compile_options(attpcfelib
-  PUBLIC -std=c++2a -Wall -O2)
+  PUBLIC -std=c++17 -Wall -O2)
 
 target_link_libraries(attpcfelib
   hdf5)
@@ -54,13 +54,13 @@ export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 # (include all headers with the Q_OBJECT macro)
 # ========================================================
 add_library(attpcguilib SHARED
-  src/gui/GuiMainWindow.cpp
-  src/gui/GuiDisplay.cpp
-  src/gui/GuiChartView.cpp
+  src/gui/MainWindow.cpp
+  src/gui/Display.cpp
+  src/gui/ChartView.cpp
   src/gui/GuiState.cpp
-  include/gui/GuiMainWindow.hpp
-  include/gui/GuiDisplay.hpp
-  include/gui/GuiChartView.hpp
+  include/gui/MainWindow.hpp
+  include/gui/Display.hpp
+  include/gui/ChartView.hpp
   include/gui/GuiState.hpp)
 
 target_include_directories(attpcguilib PUBLIC
@@ -69,7 +69,7 @@ target_include_directories(attpcguilib PUBLIC
   PRIVATE src)
 
 target_compile_options(attpcguilib
-  PUBLIC -std=c++2a -Wall -O2 -fPIC)
+  PUBLIC -std=c++17 -Wall -O2 -fPIC)
 
 target_link_libraries(attpcguilib
    Qt5::Widgets

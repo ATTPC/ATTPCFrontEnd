@@ -1,6 +1,7 @@
-#define GUIMAINWINDOW_CPP
-#include <gui/GuiMainWindow.hpp>
-#include <gui/GuiDisplay.hpp>
+#define MAINWINDOW_CPP
+#include <gui/MainWindow.hpp>
+#include <gui/Display.hpp>
+#include <gui/GuiState.hpp>
 //#include <GuiMapParser.hpp>
 
 //#include <QtWidgets> // Includes QtWidgets, QtGui and QtCore
@@ -17,18 +18,20 @@
 
 namespace attpcfe {
 
-  class GuiMainWindow::GuiMainWindowImpl {
+  class MainWindow::MainWindowImpl {
     
   public:
-    GuiMainWindowImpl() {} 
+    MainWindowImpl() : _pState{std::make_unique<GuiState>()} {} 
 
-    // Handles to widgets GuiMainWindow took ownership of
-    GuiDisplay* _display{nullptr};
+    std::unique_ptr<GuiState> _pState;
+    
+    // Handles to widgets MainWindow took ownership of
+    Display* _pDisplay{nullptr};
     //GuiMapParser* _mapParser{nullptr};
-    QLabel* _taskStatus{nullptr};
+    QLabel* _pTaskStatus{nullptr};
   };
 
-  GuiMainWindow::GuiMainWindow() : _pImpl{new GuiMainWindowImpl{}, [](GuiMainWindowImpl* ptr){ delete ptr; }}
+  MainWindow::MainWindow() : _pImpl{new MainWindowImpl{}, [](MainWindowImpl* ptr){ delete ptr; }}
   {
     setWindowTitle("ATTPC");
     initMenuBar();
@@ -40,7 +43,7 @@ namespace attpcfe {
     readSettings(); 
   }
 
-  void GuiMainWindow::initMenuBar()
+  void MainWindow::initMenuBar()
   {
     // Initialize the app menu. Dock menus are initialized in initDocks
     menuBar()->setNativeMenuBar(true);
@@ -49,22 +52,22 @@ namespace attpcfe {
     exit->setStatusTip(tr("Close the application"));
   }
 
-  void GuiMainWindow::initCentralWidget()
+  void MainWindow::initCentralWidget()
   {
-    _pImpl->_display = new GuiDisplay{this};
-    setCentralWidget(_pImpl->_display);
+    _pImpl->_pDisplay = new Display{this};
+    setCentralWidget(_pImpl->_pDisplay);
   }
 
-  void GuiMainWindow::initStatusBar()
+  void MainWindow::initStatusBar()
   {
     statusBar()->showMessage("Ready");
-    _pImpl->_taskStatus = new QLabel{};
-    _pImpl->_taskStatus->setMovie(new QMovie{"/home/nico/Downloads/wheel.gif"});
-    _pImpl->_taskStatus->hide();
-    statusBar()->addPermanentWidget(_pImpl->_taskStatus, 0);
+    _pImpl->_pTaskStatus = new QLabel{};
+    _pImpl->_pTaskStatus->setMovie(new QMovie{"/home/nico/Downloads/wheel.gif"});
+    _pImpl->_pTaskStatus->hide();
+    statusBar()->addPermanentWidget(_pImpl->_pTaskStatus, 0);
   }
   
-  void GuiMainWindow::initDocks()
+  void MainWindow::initDocks()
   {
     auto dockMenu = menuBar()->addMenu("&Docks");
 
@@ -79,21 +82,22 @@ namespace attpcfe {
     // Next dock
   }
 
-  GuiDisplay* GuiMainWindow::display() { return _pImpl->_display; }
+  GuiState* MainWindow::state() { return _pImpl->_pState.get(); }
+  Display* MainWindow::display() { return _pImpl->_pDisplay; }
 
-  void GuiMainWindow::closeEvent(QCloseEvent* event)
+  void MainWindow::closeEvent(QCloseEvent* event)
   {
     writeSettings();
     event->accept();
   }
 
-  void GuiMainWindow::writeSettings()
+  void MainWindow::writeSettings()
   {
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     settings.setValue("geometry", saveGeometry());
   }
 
-  void GuiMainWindow::readSettings()
+  void MainWindow::readSettings()
   {
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
     const QByteArray geometry = settings.value("geometry", QByteArray()).toByteArray();
@@ -110,18 +114,18 @@ namespace attpcfe {
     }    
   }
 
-  void GuiMainWindow::spinTaskStatusWheel()
+  void MainWindow::spinTaskStatusWheel()
   {
     statusBar()->showMessage("Running task");
-    _pImpl->_taskStatus->show();
-    _pImpl->_taskStatus->movie()->start();
+    _pImpl->_pTaskStatus->show();
+    _pImpl->_pTaskStatus->movie()->start();
   }
   
-  void GuiMainWindow::stopTaskStatusWheel()
+  void MainWindow::stopTaskStatusWheel()
   {
     statusBar()->showMessage("");
-    _pImpl->_taskStatus->movie()->stop();
-    _pImpl->_taskStatus->hide();
+    _pImpl->_pTaskStatus->movie()->stop();
+    _pImpl->_pTaskStatus->hide();
   }
   
 }

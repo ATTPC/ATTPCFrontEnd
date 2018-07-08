@@ -23,9 +23,9 @@ namespace attpcfe {
     _pImpl->_hitLists.reserve(nHitLists);
   }
 
-  std::size_t Event::Id() const { return _pImpl->_id; }
-  std::size_t Event::NHitLists() const { return _pImpl->_hitLists.size(); }
-  void Event::AddHitList(HitList&& list)
+  std::size_t Event::id() const { return _pImpl->_id; }
+  std::size_t Event::nHitLists() const { return _pImpl->_hitLists.size(); }
+  void Event::addHitList(HitList&& list)
   {
     _pImpl->_hitLists.push_back(std::move(list));
   }

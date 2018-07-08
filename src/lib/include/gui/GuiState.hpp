@@ -10,17 +10,18 @@ namespace attpcfe {
     class GuiStateImpl;
     std::unique_ptr<GuiStateImpl, void(*)(GuiStateImpl*)> _pImpl;
     
-    GuiState();
+    //GuiState();
 
   public:
+    GuiState();
     GuiState(GuiState const&) = delete;
     GuiState& operator=(GuiState const&) = delete;
 
-    static GuiState& instance()
-    {
-      static GuiState _state;
-      return _state;
-    }
+    //static GuiState& instance()
+    //{
+    //  static GuiState _state;
+    //  return _state;
+    //}
 
     //void setMap(udmx::osm::Map&& map);
     //udmx::osm::Map& map();

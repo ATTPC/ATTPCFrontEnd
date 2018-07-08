@@ -1,5 +1,5 @@
-#ifndef GUIMAINWINDOW_HPP
-#define GUIMAINWINDOW_HPP
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <QtWidgets/QMainWindow>
 
@@ -7,13 +7,14 @@
 
 namespace attpcfe {
 
-  class GuiDisplay;
-  class GuiMainWindow : public QMainWindow {
+  class GuiState;
+  class Display;
+  class MainWindow : public QMainWindow {
 
     Q_OBJECT
     
-    class GuiMainWindowImpl;
-    std::unique_ptr<GuiMainWindowImpl, void(*)(GuiMainWindowImpl*)> _pImpl;
+    class MainWindowImpl;
+    std::unique_ptr<MainWindowImpl, void(*)(MainWindowImpl*)> _pImpl;
 
   private:
     void initMenuBar();
@@ -27,11 +28,12 @@ namespace attpcfe {
     void closeEvent(QCloseEvent* event) override;
 
   public:
-    GuiMainWindow();
-    GuiMainWindow(GuiMainWindow const&) = delete;
-    GuiMainWindow& operator=(GuiMainWindow const&) = delete;
+    MainWindow();
+    MainWindow(MainWindow const&) = delete;
+    MainWindow& operator=(MainWindow const&) = delete;
 
-    GuiDisplay* display();							   
+    GuiState* state();	
+    Display* display();
 
   public slots:
     void spinTaskStatusWheel();

@@ -22,7 +22,7 @@ namespace attpcfe {
     ~TaskSystem();
 
     template<typename F, typename... Args>
-    void VoidAsync(F&& func, Args&&... args) 
+    void voidAsync(F&& func, Args&&... args) 
     {
       using result_t = std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)>;
 
@@ -30,11 +30,11 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.Push(std::move(task));
+      _q.push(std::move(task));
     }
     
     template<typename F, typename... Args>
-    auto Async(F&& func, Args&&... args)
+    auto async(F&& func, Args&&... args)
       -> std::future<std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)> >
     {
       using result_t = std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)>;
@@ -44,13 +44,13 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.Push(std::move(task));
+      _q.push(std::move(task));
       
       return future;
     }
 
     template<typename MemberType, typename Base, typename... Args>
-    auto Async(MemberType Base::* func, Base&& base, Args&&... args)
+    auto async(MemberType Base::* func, Base&& base, Args&&... args)
       -> std::future<std::result_of_t<std::decay_t<MemberType>(std::decay_t<Args>...)> >
     {
       using result_t = std::result_of_t<std::decay_t<MemberType>(std::decay_t<Args>...)>;
@@ -60,13 +60,13 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.Push(std::move(task));
+      _q.push(std::move(task));
       
       return future;
     }
 
     template<typename T, typename F, typename... Args>
-    std::future<T> Then(std::future<T>& f, F&& func, Args&&... args) 
+    std::future<T> then(std::future<T>& f, F&& func, Args&&... args) 
     {
       std::packaged_task<void()> pt{
 	[_f = std::move(f), _func = std::forward<F>(func),
@@ -79,13 +79,13 @@ namespace attpcfe {
       auto future = pt.get_future();
 
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
-      _q.Push(std::move(task));
+      _q.push(std::move(task));
 
       return future;
     }
 
     template<typename T, typename MemberType, typename Base, typename... Args>
-    std::future<T> Then(std::future<T>& f, MemberType Base::* func, Base&& base, Args&&... args) 
+    std::future<T> then(std::future<T>& f, MemberType Base::* func, Base&& base, Args&&... args) 
     {
       std::packaged_task<void()> pt{
 	[_f = std::move(f), _func = std::forward<Base>(base).*func,
@@ -98,13 +98,13 @@ namespace attpcfe {
       auto future = pt.get_future();
 
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
-      _q.Push(std::move(task));
+      _q.push(std::move(task));
 
       return future;
     }
     
   private:
-    void Run(unsigned int i);
+    void run(unsigned int i);
   };
 }
 #endif

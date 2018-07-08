@@ -7,7 +7,7 @@ namespace attpcfe
   class BLCorrection {
 
   public:
-    void SubtractBaseline(Pad& pad);
+    void subtractBaseline(Pad& pad);
   };
 }
 #endif

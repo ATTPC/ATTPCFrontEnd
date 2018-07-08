@@ -15,8 +15,8 @@ namespace attpcfe {
     TrackEvent();
     TrackEvent(std::size_t id);
 
-    std::size_t Id() const;
-    void AddTrack(Track&& track);
+    std::size_t id() const;
+    void addTrack(Track&& track);
   };
 }
 #endif

@@ -15,8 +15,8 @@ namespace attpcfe {
     PatternEvent();
     PatternEvent(std::size_t id);
     
-    std::size_t Id() const;
-    void AddRawTrack(RawTrack&& rawTrack);
+    std::size_t id() const;
+    void addRawTrack(RawTrack&& rawTrack);
   };
 }
 #endif

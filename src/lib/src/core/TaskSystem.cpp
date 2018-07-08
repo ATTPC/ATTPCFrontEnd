@@ -7,22 +7,22 @@ namespace attpcfe {
   {
     for (unsigned int n = 0; n < _count; ++n)
     {
-      _threads.emplace_back([&, n](){ Run(n); });
+      _threads.emplace_back([&, n](){ run(n); });
     }
   }
 
   TaskSystem::~TaskSystem()
   {
-    _q.Done();
+    _q.done();
     for (auto& thread : _threads) thread.join();
   }
 
-  void TaskSystem::Run(unsigned int i)
+  void TaskSystem::run(unsigned int i)
   {
     while (true)
     {
       task_t task;
-      if (!_q.Pop(task)) break;
+      if (!_q.pop(task)) break;
       task();
     }
   }

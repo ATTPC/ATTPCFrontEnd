@@ -22,36 +22,36 @@ namespace attpcfe {
   public:
     NotificationQueueImpl() {}
     
-    auto& ProtectedMembers() { return _protected; }
-    auto& Condition() { return _ready; }
+    auto& protectedMembers() { return _protected; }
+    auto& condition() { return _ready; }
   };
 
   NotificationQueue::NotificationQueue() : _pImpl{new NotificationQueueImpl{}, [](NotificationQueueImpl* ptr){ delete ptr; }} {}
 
-  bool NotificationQueue::Pop(task_t& task)
+  bool NotificationQueue::pop(task_t& task)
   {
-    lock_t lock{_pImpl->ProtectedMembers()._mutex};
-    while (_pImpl->ProtectedMembers()._q.empty() && !_pImpl->ProtectedMembers()._done)
-      _pImpl->Condition().wait(lock);
+    lock_t lock{_pImpl->protectedMembers()._mutex};
+    while (_pImpl->protectedMembers()._q.empty() && !_pImpl->protectedMembers()._done)
+      _pImpl->condition().wait(lock);
 
-    if (_pImpl->ProtectedMembers()._done) return false;
+    if (_pImpl->protectedMembers()._done) return false;
     
-    assert(!_pImpl->ProtectedMembers()._q.empty());
+    assert(!_pImpl->protectedMembers()._q.empty());
     
-    task = std::move(_pImpl->ProtectedMembers()._q.front());
-    _pImpl->ProtectedMembers()._q.pop_front();
+    task = std::move(_pImpl->protectedMembers()._q.front());
+    _pImpl->protectedMembers()._q.pop_front();
     return true;
   }
 
-  void NotificationQueue::Push(task_t task)
+  void NotificationQueue::push(task_t task)
   {
-    if(lock_t lock{_pImpl->ProtectedMembers()._mutex}; true) _pImpl->ProtectedMembers()._q.push_back(std::move(task));
-    _pImpl->Condition().notify_one();
+    if(lock_t lock{_pImpl->protectedMembers()._mutex}; true) _pImpl->protectedMembers()._q.push_back(std::move(task));
+    _pImpl->condition().notify_one();
   }
 
-  void NotificationQueue::Done()
+  void NotificationQueue::done()
   {
-    if(lock_t lock{_pImpl->ProtectedMembers()._mutex}; true) _pImpl->ProtectedMembers()._done = true;
-    _pImpl->Condition().notify_all();
+    if(lock_t lock{_pImpl->protectedMembers()._mutex}; true) _pImpl->protectedMembers()._done = true;
+    _pImpl->condition().notify_all();
   }
 }

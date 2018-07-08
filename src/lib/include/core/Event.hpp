@@ -15,9 +15,9 @@ namespace attpcfe {
     Event();
     Event(std::size_t id, std::size_t nHitLists);
 
-    std::size_t Id() const;
-    std::size_t NHitLists() const;
-    void AddHitList(HitList&& list);
+    std::size_t id() const;
+    std::size_t nHitLists() const;
+    void addHitList(HitList&& list);
   };
 }
 #endif

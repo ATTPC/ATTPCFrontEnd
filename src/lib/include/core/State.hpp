@@ -27,16 +27,16 @@ namespace attpcfe {
     //return _state;
     //}
 
-    void ReserveStacks(std::size_t capacity);
-    void PushRawEvent(RawEvent&& evt);
-    void PopRawEvent(RawEvent& evt);
-    void PushEvent(Event&& evt);
-    void PopEvent(Event& evt);
-    void PushPatternEvent(PatternEvent&& evt);
-    void PopPatternEvent(PatternEvent& evt);
-    void PushTrackEvent(TrackEvent&& evt);
-    void PopTrackEvent(TrackEvent& evt);
-    std::size_t NTrackEvents() const;
+    void reserveStacks(std::size_t capacity);
+    void pushRawEvent(RawEvent&& evt);
+    void popRawEvent(RawEvent& evt);
+    void pushEvent(Event&& evt);
+    void popEvent(Event& evt);
+    void pushPatternEvent(PatternEvent&& evt);
+    void popPatternEvent(PatternEvent& evt);
+    void pushTrackEvent(TrackEvent&& evt);
+    void popTrackEvent(TrackEvent& evt);
+    std::size_t nTrackEvents() const;
   };
 }
 #endif

@@ -16,7 +16,7 @@ int main() {
 
   for (int i = 0; i < 100; ++i)
   {
-    auto f = ts.Async([i, &sum]()
+    auto f = ts.async([i, &sum]()
 		      {
 			sum += i;
 			std::this_thread::sleep_for(0.5s);

@@ -4,6 +4,10 @@ project(ATTPCFE VERSION 0.1 LANGUAGES C CXX)
 # to install libraries into proper locations on all platforms
 include(GNUInstallDirs)
 
+# Do not like that but replaces extra -std=gnu++11 that overtakes target_compile_options
+# with -std=gnu++1z
+set(CMAKE_CXX_STANDARD 17) 
+
 # define imported targets
 # HDF5
 find_package(HDF5 COMPONENTS C REQUIRED)

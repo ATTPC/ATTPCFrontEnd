@@ -21,22 +21,22 @@ namespace attpcfe {
 
   State::State() : _pImpl{new StateImpl{}, [](StateImpl* ptr){ delete ptr; }} {}
 
-  void State::ReserveStacks(std::size_t capacity)
+  void State::reserveStacks(std::size_t capacity)
   {
-    _pImpl->_rawEvents.Reserve(capacity);
-    _pImpl->_events.Reserve(capacity);
+    _pImpl->_rawEvents.reserve(capacity);
+    _pImpl->_events.reserve(capacity);
   }
 
-  void State::PushRawEvent(RawEvent&& evt) { _pImpl->_rawEvents.Push(std::move(evt)); }
-  void State::PopRawEvent(RawEvent& evt) { _pImpl->_rawEvents.Pop(evt); }
+  void State::pushRawEvent(RawEvent&& evt) { _pImpl->_rawEvents.push(std::move(evt)); }
+  void State::popRawEvent(RawEvent& evt) { _pImpl->_rawEvents.pop(evt); }
 
-  void State::PushEvent(Event&& evt) { _pImpl->_events.Push(std::move(evt)); }
-  void State::PopEvent(Event& evt) { _pImpl->_events.Pop(evt); }
+  void State::pushEvent(Event&& evt) { _pImpl->_events.push(std::move(evt)); }
+  void State::popEvent(Event& evt) { _pImpl->_events.pop(evt); }
 
-  void State::PushPatternEvent(PatternEvent&& evt) { _pImpl->_patternEvents.Push(std::move(evt)); }
-  void State::PopPatternEvent(PatternEvent& evt) { _pImpl->_patternEvents.Pop(evt); }
+  void State::pushPatternEvent(PatternEvent&& evt) { _pImpl->_patternEvents.push(std::move(evt)); }
+  void State::popPatternEvent(PatternEvent& evt) { _pImpl->_patternEvents.pop(evt); }
 
-  void State::PushTrackEvent(TrackEvent&& evt) { _pImpl->_trackEvents.Push(std::move(evt)); }
-  void State::PopTrackEvent(TrackEvent& evt) { _pImpl->_trackEvents.Pop(evt); }
-  std::size_t State::NTrackEvents() const { return _pImpl->_trackEvents.Size(); }
+  void State::pushTrackEvent(TrackEvent&& evt) { _pImpl->_trackEvents.push(std::move(evt)); }
+  void State::popTrackEvent(TrackEvent& evt) { _pImpl->_trackEvents.pop(evt); }
+  std::size_t State::nTrackEvents() const { return _pImpl->_trackEvents.size(); }
 }

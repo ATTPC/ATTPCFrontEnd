@@ -16,11 +16,11 @@ namespace attpcfe {
     RawEvent();
     RawEvent(std::size_t id, std::size_t nPads);
 
-    std::size_t Id() const;
-    std::size_t NPads() const;
-    std::vector<Pad> const& Pads() const;
-    std::vector<Pad>& Pads();
-    void AddPad(Pad&& pad);
+    std::size_t id() const;
+    std::size_t nPads() const;
+    std::vector<Pad> const& pads() const;
+    std::vector<Pad>& pads();
+    void addPad(Pad&& pad);
   };
 }
 #endif

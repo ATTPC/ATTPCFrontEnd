@@ -15,14 +15,14 @@ namespace attpcfe {
     
   public:
     DataHandler() {}
-    ~DataHandler() { Close(); }
+    ~DataHandler() { close(); }
 
-    void Open(char const* file) { _nRawEvents = _T.Open(file); }
-    std::size_t NRawEvents() const { return _nRawEvents; }
-    std::size_t NPads(std::size_t iRawEvent) { return _T.NPads(iRawEvent); }
-    std::vector<int16_t> PadRawData(std::size_t iPad) { return _T.PadRawData(iPad); }
-    void EndRawEvent() { _T.EndRawEvent(); }
-    void Close() { _T.Close(); }
+    void open(char const* file) { _nRawEvents = _T.open(file); }
+    std::size_t nRawEvents() const { return _nRawEvents; }
+    std::size_t nPads(std::size_t iRawEvent) { return _T.nPads(iRawEvent); }
+    std::vector<int16_t> padRawData(std::size_t iPad) { return _T.padRawData(iPad); }
+    void endRawEvent() { _T.endRawEvent(); }
+    void close() { _T.close(); }
   };
 }
 #endif

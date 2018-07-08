@@ -15,7 +15,7 @@ namespace attpcfe
     enum class MODE {
       BLSUB
     };
-    void Execute(MODE mode);
+    void run(MODE mode);
   };
 }
 #endif

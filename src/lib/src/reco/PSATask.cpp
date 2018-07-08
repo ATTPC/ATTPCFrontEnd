@@ -18,21 +18,21 @@ namespace attpcfe {
 
   PSATask::PSATask(std::shared_ptr<State> pState) : _pState{pState} {}
 
-  void PSATask::Execute(MODE mode)
+  void PSATask::run(MODE mode)
   {
     RawEvent rawEvent;
-    _pState->PopRawEvent(rawEvent);
+    _pState->popRawEvent(rawEvent);
 
-    Event event{rawEvent.Id(), rawEvent.NPads()};
+    Event event{rawEvent.id(), rawEvent.nPads()};
 
-    std::cout << "> run psa, event: " << event.Id() << '\n';
+    std::cout << "> run psa, event: " << event.id() << '\n';
 
-    for (auto& pad : rawEvent.Pads())
+    for (auto& pad : rawEvent.pads())
     {
       if (mode == MODE::BLSUB)
       {
 	BLCorrection blCorr;
-	blCorr.SubtractBaseline(pad);
+	blCorr.subtractBaseline(pad);
       }
       
       HitList hits;
@@ -40,14 +40,14 @@ namespace attpcfe {
       double charge = 1.0;
       std::vector<double> pos{0., 0., 0.};
       Hit hit{std::move(pos), charge};
-      hits.AddHit(std::move(hit));
+      hits.addHit(std::move(hit));
       
-      event.AddHitList(std::move(hits));
+      event.addHitList(std::move(hits));
     }
 
     std::this_thread::sleep_for(0.001s);
     
-    _pState->PushEvent(std::move(event));
+    _pState->pushEvent(std::move(event));
   }
   
 }

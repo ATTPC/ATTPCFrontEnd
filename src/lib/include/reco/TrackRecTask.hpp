@@ -13,7 +13,7 @@ namespace attpcfe
   public:
     TrackRecTask(std::shared_ptr<State> pState);
  
-    void Execute();
+    void run();
   };
 }
 #endif
