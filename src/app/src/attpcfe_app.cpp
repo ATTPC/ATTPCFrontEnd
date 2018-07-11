@@ -33,13 +33,13 @@ int main(int argc, char* argv[]) {
   auto nRawEvents = dataHandler.nRawEvents();
 
   // Reserve memory for event stacks
-  auto state = std::make_unique<State>();
-  state->reserveStacks(nRawEvents);
+  State state;
+  state.reserveStacks(nRawEvents);
 
   // Create tasks
-  PSATask psa{state.get()};
-  PatRecTask patRec{state.get()};
-  TrackRecTask trackRec{state.get()};
+  PSATask psa{&state};
+  PatRecTask patRec{&state};
+  TrackRecTask trackRec{&state};
 
   auto count = 0;
 
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     dataHandler.endRawEvent();
 
     // Push raw event on stack
-    state->pushRawEvent(std::move(rawEvent));
+    state.pushRawEvent(std::move(rawEvent));
 
     // Run tasks in parallel
     auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
   // Wait for all continuations to finish
   for (auto const& f : futures) f.wait();
 
-  std::cout << "> " << state->nTrackEvents() << " track events on stack\n";
+  std::cout << "> " << state.nTrackEvents() << " track events on stack\n";
 
   std::cout << "> " << count << " raw events\n";
   

@@ -20,7 +20,6 @@ namespace attpcfe {
     
   public:
     ChartView(QChart* chart, MainWindow* mainWindow);
-    //void drawMap();
   };
 }
 #endif

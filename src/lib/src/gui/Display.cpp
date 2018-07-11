@@ -29,8 +29,8 @@ namespace attpcfe {
     layout()->addWidget(_pImpl->_pChartView);
   }
 
-  //void GuiDisplay::displayMap()
+  //void Display::displayPadPlane()
   //{
-  //  _pImpl->_chartView->drawMap();
+  //  draw(_pImpl->_pMainWindow->state()->padPlane(), _pImpl->_pChartView);
   //}
 }

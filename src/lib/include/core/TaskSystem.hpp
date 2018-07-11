@@ -15,7 +15,9 @@ namespace attpcfe {
 
     const unsigned _count{std::thread::hardware_concurrency()};
     std::vector<std::thread> _threads;
-    NotificationQueue _q;
+    //NotificationQueue _q;
+    std::vector<NotificationQueue> _qs{_count};
+    std::atomic<unsigned int> _index{0};
     
   public:
     TaskSystem();
@@ -30,7 +32,9 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.push(std::move(task));
+      //_q.push(std::move(task));
+      auto i = _index++;
+      _qs[i % _count].push(std::move(task));
     }
     
     template<typename F, typename... Args>
@@ -44,7 +48,9 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.push(std::move(task));
+      //_q.push(std::move(task));
+      auto i = _index++;
+      _qs[i % _count].push(std::move(task));
       
       return future;
     }
@@ -60,7 +66,9 @@ namespace attpcfe {
       
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
       
-      _q.push(std::move(task));
+      //_q.push(std::move(task));
+      auto i = _index++;
+      _qs[i % _count].push(std::move(task));
       
       return future;
     }
@@ -79,7 +87,10 @@ namespace attpcfe {
       auto future = pt.get_future();
 
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
-      _q.push(std::move(task));
+
+      //_q.push(std::move(task));
+      auto i = _index++;
+      _qs[i % _count].push(std::move(task));
 
       return future;
     }
@@ -98,7 +109,10 @@ namespace attpcfe {
       auto future = pt.get_future();
 
       task_t task{[pt = std::move(pt)]() mutable { pt(); }};
-      _q.push(std::move(task));
+
+      //_q.push(std::move(task));
+      auto i = _index++;
+      _qs[i % _count].push(std::move(task));
 
       return future;
     }

@@ -18,7 +18,10 @@ namespace attpcfe {
     Display(QWidget* parent);
 
   public slots:
-    //void displayMap();
+    //void displayPadPlane();
   };
+
+  //class PadPlane;
+  //void draw(PadPlane* padPlane, ChartView* chartView) {};
 }
 #endif
