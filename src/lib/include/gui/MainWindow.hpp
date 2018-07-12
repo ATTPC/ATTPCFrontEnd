@@ -33,7 +33,8 @@ namespace attpcfe {
     MainWindow& operator=(MainWindow const&) = delete;
 
     GuiState* state();	
-    Display* display();
+    Display* planeDisplay();
+    Display* tpcDisplay();			   
 
   public slots:
     void spinTaskStatusWheel();

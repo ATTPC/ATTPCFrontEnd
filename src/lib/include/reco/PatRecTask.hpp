@@ -11,7 +11,7 @@ namespace attpcfe
     State* _pState;
 
   public:
-    PatRecTask(State* state);
+    explicit PatRecTask(State* state);
  
     void run();
   };

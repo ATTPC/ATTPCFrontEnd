@@ -21,7 +21,8 @@ add_library(attpcfelib SHARED
   src/reco/BaselineCorrection.cpp
   src/reco/PSATask.cpp
   src/reco/PatRecTask.cpp
-  src/reco/TrackRecTask.cpp)
+  src/reco/TrackRecTask.cpp
+  src/reco/PadPlane.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -56,11 +57,15 @@ export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 add_library(attpcguilib SHARED
   src/gui/MainWindow.cpp
   src/gui/Display.cpp
+  src/gui/DisplayFunctions.cpp
   src/gui/ChartView.cpp
+  src/gui/OpenGLView.cpp
   src/gui/GuiState.cpp
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
+  include/gui/DisplayFunctions.hpp
   include/gui/ChartView.hpp
+  include/gui/OpenGLView.hpp
   include/gui/GuiState.hpp)
 
 target_include_directories(attpcguilib PUBLIC

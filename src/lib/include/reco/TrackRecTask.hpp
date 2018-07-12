@@ -11,7 +11,7 @@ namespace attpcfe
     State* _pState;
 
   public:
-    TrackRecTask(State* pState);
+    explicit TrackRecTask(State* pState);
  
     void run();
   };

@@ -2,6 +2,7 @@
 #include <gui/Display.hpp>
 #include <gui/MainWindow.hpp>
 #include <gui/ChartView.hpp>
+#include <gui/OpenGLView.hpp>
 
 #include <QtWidgets/QVBoxLayout>
 
@@ -17,20 +18,24 @@ namespace attpcfe {
     MainWindow* _pMainWindow;
 
     // Handles to widgets GuiDisplay took ownership of
-    ChartView* _pChartView;
+    std::variant<ChartView*, OpenGLView*> _view;
   };
   
-  Display::Display(QWidget* parent) : QWidget{parent}, _pImpl{new DisplayImpl{parent}, [](DisplayImpl* ptr){ delete ptr; }}
-  {
-    setAutoFillBackground(false);
+  Display::Display(QWidget* parent, VIEW_MODE mode) : QWidget{parent}, _pImpl{new DisplayImpl{parent}, [](DisplayImpl* ptr){ delete ptr; }}
+  {  
     setLayout(new QVBoxLayout{});
     
-    _pImpl->_pChartView = new ChartView{new QChart{}, _pImpl->_pMainWindow};
-    layout()->addWidget(_pImpl->_pChartView);
+    if (mode == VIEW_MODE::VIEW_2D)
+    {
+      _pImpl->_view = new ChartView{new QChart{}, _pImpl->_pMainWindow};
+      layout()->addWidget(std::get<ChartView*>(_pImpl->_view));
+    }
+
+    if (mode == VIEW_MODE::VIEW_3D)
+    {
+      _pImpl->_view = new OpenGLView; 
+      layout()->addWidget(std::get<OpenGLView*>(_pImpl->_view));
+    }
   }
 
-  //void Display::displayPadPlane()
-  //{
-  //  draw(_pImpl->_pMainWindow->state()->padPlane(), _pImpl->_pChartView);
-  //}
 }

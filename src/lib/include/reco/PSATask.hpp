@@ -11,10 +11,12 @@ namespace attpcfe
     State* _pState;
 
   public:
-    PSATask(State* state);
+    explicit PSATask(State* state);
+
     enum class MODE {
       BLSUB
     };
+
     void run(MODE mode);
   };
 }

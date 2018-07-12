@@ -7,7 +7,7 @@
 
 namespace attpcfe {
 
-  class Display : public QWidget { // Could inherit from QOpenGLWidget
+  class Display : public QWidget { 
 
     Q_OBJECT
     
@@ -15,13 +15,16 @@ namespace attpcfe {
     std::unique_ptr<DisplayImpl, void(*)(DisplayImpl*)> _pImpl;
     
   public:
-    Display(QWidget* parent);
+    // Seems that moc cannot parse enum class
+    //MOC_SKIP_BEGIN
+    enum class VIEW_MODE { VIEW_2D, VIEW_3D };
+    //MOC_SKIP_END
+    
+    Display(QWidget* parent, VIEW_MODE mode);
 
-  public slots:
-    //void displayPadPlane();
+    //public slots:
+
   };
 
-  //class PadPlane;
-  //void draw(PadPlane* padPlane, ChartView* chartView) {};
 }
 #endif

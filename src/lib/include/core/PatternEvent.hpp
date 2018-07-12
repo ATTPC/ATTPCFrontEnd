@@ -13,7 +13,7 @@ namespace attpcfe {
 
   public:
     PatternEvent();
-    PatternEvent(std::size_t id);
+    explicit PatternEvent(std::size_t id);
     
     std::size_t id() const;
     void addRawTrack(RawTrack&& rawTrack);

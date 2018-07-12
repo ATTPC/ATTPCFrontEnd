@@ -2,12 +2,12 @@
 #include <gui/MainWindow.hpp>
 #include <gui/Display.hpp>
 #include <gui/GuiState.hpp>
-//#include <GuiMapParser.hpp>
 
 //#include <QtWidgets> // Includes QtWidgets, QtGui and QtCore
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QLabel>
@@ -26,8 +26,8 @@ namespace attpcfe {
     std::unique_ptr<GuiState> _pState;
     
     // Handles to widgets MainWindow took ownership of
-    Display* _pDisplay{nullptr};
-    //GuiMapParser* _mapParser{nullptr};
+    Display* _pPlaneDisplay{nullptr};
+    Display* _pTpcDisplay{nullptr};
     QLabel* _pTaskStatus{nullptr};
   };
 
@@ -54,8 +54,17 @@ namespace attpcfe {
 
   void MainWindow::initCentralWidget()
   {
-    _pImpl->_pDisplay = new Display{this};
-    setCentralWidget(_pImpl->_pDisplay);
+    auto tabs = new QTabWidget;
+    //tabs->setStyleSheet("background:QRgb(0xd2d0d1);");
+    //There is a frame appearing around the widgets placed in tabs, did not figure out how to get rid of it yet.
+    
+    _pImpl->_pPlaneDisplay = new Display(this, Display::VIEW_MODE::VIEW_2D);
+    tabs->addTab(_pImpl->_pPlaneDisplay, tr("Plane"));
+
+    _pImpl->_pTpcDisplay = new Display(this, Display::VIEW_MODE::VIEW_3D);
+    tabs->addTab(_pImpl->_pTpcDisplay, tr("TPC"));
+    
+    setCentralWidget(tabs);
   }
 
   void MainWindow::initStatusBar()
@@ -69,7 +78,7 @@ namespace attpcfe {
   
   void MainWindow::initDocks()
   {
-    auto dockMenu = menuBar()->addMenu("&Docks");
+    [[maybe_unused]] auto dockMenu = menuBar()->addMenu("&Docks");
 
     // Map parser
     //_pImpl->_mapParser = new GuiMapParser{this};
@@ -83,8 +92,9 @@ namespace attpcfe {
   }
 
   GuiState* MainWindow::state() { return _pImpl->_pState.get(); }
-  Display* MainWindow::display() { return _pImpl->_pDisplay; }
-
+  Display* MainWindow::planeDisplay() { return _pImpl->_pPlaneDisplay; }
+  Display* MainWindow::tpcDisplay() { return _pImpl->_pTpcDisplay; }
+  
   void MainWindow::closeEvent(QCloseEvent* event)
   {
     writeSettings();
