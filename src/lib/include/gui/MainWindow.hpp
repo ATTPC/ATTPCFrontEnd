@@ -33,7 +33,7 @@ namespace attpcfe {
     MainWindow& operator=(MainWindow const&) = delete;
 
     GuiState* state();	
-    Display* planeDisplay();
+    Display* padPlaneDisplay();
     Display* tpcDisplay();			   
 
   public slots:

@@ -22,7 +22,8 @@ add_library(attpcfelib SHARED
   src/reco/PSATask.cpp
   src/reco/PatRecTask.cpp
   src/reco/TrackRecTask.cpp
-  src/reco/PadPlane.cpp)
+  src/reco/Padplane.cpp
+  src/reco/Tpc.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -61,12 +62,16 @@ add_library(attpcguilib SHARED
   src/gui/ChartView.cpp
   src/gui/OpenGLView.cpp
   src/gui/GuiState.cpp
+  src/gui/PadplaneDock.cpp
+  src/gui/TpcDock.cpp	
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
   include/gui/DisplayFunctions.hpp
   include/gui/ChartView.hpp
   include/gui/OpenGLView.hpp
-  include/gui/GuiState.hpp)
+  include/gui/GuiState.hpp
+  include/gui/PadplaneDock.hpp
+  include/gui/TpcDock.hpp)
 
 target_include_directories(attpcguilib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -81,6 +86,7 @@ target_link_libraries(attpcguilib
    Qt5::Charts
    Qt5::Gui
    Qt5::Core)
+#   ${VTK_LIBRARIES})
 
 install(TARGETS attpcguilib EXPORT ATTPCGUILibConfig
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -98,11 +104,11 @@ export(TARGETS attpcguilib FILE ATTPCGUILibConfig.cmake)
 add_executable(hdf5_wrapper
     test/Hdf5WrapperTest.cpp)
 target_link_libraries(hdf5_wrapper
-  attpcfelib)
+    attpcfelib ${VTK_LIBRARIES})
 add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
 
 add_executable(task_system
     test/TaskSystemTest.cpp)
 target_link_libraries(task_system
-  attpcfelib)
+  attpcfelib ${VTK_LIBRARIES})
 add_test(NAME task_system_test COMMAND task_system)

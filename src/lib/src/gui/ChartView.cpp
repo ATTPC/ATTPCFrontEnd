@@ -2,7 +2,6 @@
 #include <gui/ChartView.hpp>
 #include <gui/MainWindow.hpp>
 #include <gui/GuiState.hpp>
-//#include <OSMMap.hpp>
 
 #include <QtCharts/QLineSeries>
 

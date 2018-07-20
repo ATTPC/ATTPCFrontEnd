@@ -4,8 +4,10 @@
 namespace attpcfe {
 
   class Display;
-  class PadPlane;
+  class Padplane;
+  class Tpc;
   
-  void displayPadPlane(Display* display, PadPlane* plane);
+  void display(Display* display, Padplane* padplane);
+  void display(Display* display, Tpc* tpc);
 }
 #endif

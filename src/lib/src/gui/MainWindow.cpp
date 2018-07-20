@@ -1,6 +1,8 @@
 #define MAINWINDOW_CPP
 #include <gui/MainWindow.hpp>
 #include <gui/Display.hpp>
+#include <gui/PadplaneDock.hpp>
+#include <gui/TpcDock.hpp>
 #include <gui/GuiState.hpp>
 
 //#include <QtWidgets> // Includes QtWidgets, QtGui and QtCore
@@ -26,8 +28,10 @@ namespace attpcfe {
     std::unique_ptr<GuiState> _pState;
     
     // Handles to widgets MainWindow took ownership of
-    Display* _pPlaneDisplay{nullptr};
+    Display* _pPadplaneDisplay{nullptr};
     Display* _pTpcDisplay{nullptr};
+    PadplaneDock* _pPadplaneDock{nullptr};
+    TpcDock* _pTpcDock{nullptr};
     QLabel* _pTaskStatus{nullptr};
   };
 
@@ -55,11 +59,11 @@ namespace attpcfe {
   void MainWindow::initCentralWidget()
   {
     auto tabs = new QTabWidget;
-    //tabs->setStyleSheet("background:QRgb(0xd2d0d1);");
     //There is a frame appearing around the widgets placed in tabs, did not figure out how to get rid of it yet.
+    //tabs->setStyleSheet("background:QRgb(0xd2d0d1);");
     
-    _pImpl->_pPlaneDisplay = new Display(this, Display::VIEW_MODE::VIEW_2D);
-    tabs->addTab(_pImpl->_pPlaneDisplay, tr("Plane"));
+    _pImpl->_pPadplaneDisplay = new Display(this, Display::VIEW_MODE::VIEW_2D);
+    tabs->addTab(_pImpl->_pPadplaneDisplay, tr("Padplane"));
 
     _pImpl->_pTpcDisplay = new Display(this, Display::VIEW_MODE::VIEW_3D);
     tabs->addTab(_pImpl->_pTpcDisplay, tr("TPC"));
@@ -78,21 +82,26 @@ namespace attpcfe {
   
   void MainWindow::initDocks()
   {
-    [[maybe_unused]] auto dockMenu = menuBar()->addMenu("&Docks");
+    auto dockMenu = menuBar()->addMenu("&Docks");
+      
+    // Padplane dock
+    _pImpl->_pPadplaneDock = new PadplaneDock{this};
+    addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pPadplaneDock);
+    //_pImpl->_pPadplaneDock->hide();
+    dockMenu->addAction(_pImpl->_pPadplaneDock->toggleViewAction());
+    dockMenu->actions().last()->setStatusTip(tr("View padplane dock"));
+    dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 
-    // Map parser
-    //_pImpl->_mapParser = new GuiMapParser{this};
-    //addDockWidget(Qt::RightDockWidgetArea, _pImpl->_mapParser);
-    //_pImpl->_mapParser->hide();
-    //dockMenu->addAction(_pImpl->_mapParser->toggleViewAction());
-    //dockMenu->actions().last()->setStatusTip(tr("View map parser"));
-    //dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
-
-    // Next dock
+    // TPC dock
+    _pImpl->_pTpcDock = new TpcDock{this};
+    addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pTpcDock);
+    dockMenu->addAction(_pImpl->_pTpcDock->toggleViewAction());
+    dockMenu->actions().last()->setStatusTip(tr("View TPC dock"));
+    dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
   }
 
   GuiState* MainWindow::state() { return _pImpl->_pState.get(); }
-  Display* MainWindow::planeDisplay() { return _pImpl->_pPlaneDisplay; }
+  Display* MainWindow::padPlaneDisplay() { return _pImpl->_pPadplaneDisplay; }
   Display* MainWindow::tpcDisplay() { return _pImpl->_pTpcDisplay; }
   
   void MainWindow::closeEvent(QCloseEvent* event)

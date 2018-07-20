@@ -34,6 +34,15 @@ message(STATUS "> Qt5 Charts library: ${QtCharts_loc}")
 message(STATUS "> Qt5 Gui library: ${QtGui_loc}")
 message(STATUS "> Qt5 Core library: ${QtCore_loc}")
 
+# VTK
+set(ENV{VTK_DIR} "/home/nico/Work/ThirdPartyLibs/VTK/build")
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+#message(STATUS "> VTK include: ${VTK_INCLUDE_DIRS}")
+#message(STATUS "> VTK lib: ${VTK_LIBRARIES}")
+message(STATUS "> VTK use file: ${VTK_USE_FILE}")
+
+
 enable_testing()
 
 add_subdirectory(lib)
