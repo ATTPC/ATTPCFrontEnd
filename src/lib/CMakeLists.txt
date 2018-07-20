@@ -63,7 +63,9 @@ add_library(attpcguilib SHARED
   src/gui/OpenGLView.cpp
   src/gui/GuiState.cpp
   src/gui/PadplaneDock.cpp
-  src/gui/TpcDock.cpp	
+  src/gui/TpcDock.cpp
+  src/gui/ReconstructionDock.cpp
+  src/gui/ReconstructionTasks.cpp	
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
   include/gui/DisplayFunctions.hpp
@@ -71,7 +73,9 @@ add_library(attpcguilib SHARED
   include/gui/OpenGLView.hpp
   include/gui/GuiState.hpp
   include/gui/PadplaneDock.hpp
-  include/gui/TpcDock.hpp)
+  include/gui/TpcDock.hpp
+  include/gui/ReconstructionDock.hpp
+  include/gui/ReconstructionTasks.hpp)
 
 target_include_directories(attpcguilib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -3,6 +3,7 @@
 #include <gui/Display.hpp>
 #include <gui/PadplaneDock.hpp>
 #include <gui/TpcDock.hpp>
+#include <gui/ReconstructionDock.hpp>
 #include <gui/GuiState.hpp>
 
 //#include <QtWidgets> // Includes QtWidgets, QtGui and QtCore
@@ -32,6 +33,7 @@ namespace attpcfe {
     Display* _pTpcDisplay{nullptr};
     PadplaneDock* _pPadplaneDock{nullptr};
     TpcDock* _pTpcDock{nullptr};
+    ReconstructionDock* _pReconstructionDock{nullptr};
     QLabel* _pTaskStatus{nullptr};
   };
 
@@ -59,8 +61,6 @@ namespace attpcfe {
   void MainWindow::initCentralWidget()
   {
     auto tabs = new QTabWidget;
-    //There is a frame appearing around the widgets placed in tabs, did not figure out how to get rid of it yet.
-    //tabs->setStyleSheet("background:QRgb(0xd2d0d1);");
     
     _pImpl->_pPadplaneDisplay = new Display(this, Display::VIEW_MODE::VIEW_2D);
     tabs->addTab(_pImpl->_pPadplaneDisplay, tr("Padplane"));
@@ -98,6 +98,13 @@ namespace attpcfe {
     dockMenu->addAction(_pImpl->_pTpcDock->toggleViewAction());
     dockMenu->actions().last()->setStatusTip(tr("View TPC dock"));
     dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+
+    // Reconstruction dock
+    _pImpl->_pReconstructionDock = new ReconstructionDock{this};
+    addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pReconstructionDock);
+    dockMenu->addAction(_pImpl->_pReconstructionDock->toggleViewAction());
+    dockMenu->actions().last()->setStatusTip(tr("View reconstruction dock"));
+    dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
   }
 
   GuiState* MainWindow::state() { return _pImpl->_pState.get(); }
