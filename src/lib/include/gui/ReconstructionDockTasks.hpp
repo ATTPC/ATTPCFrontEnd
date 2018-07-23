@@ -6,13 +6,14 @@
 
 namespace attpcfe {
 
+  class ReconstructionDockState;
   class ReconstructionTask {
 
     class ReconstructionTaskImpl;
     std::unique_ptr<ReconstructionTaskImpl, void(*)(ReconstructionTaskImpl*)> _pImpl;
     
   public:
-    ReconstructionTask();
+    ReconstructionTask(std::string file, ReconstructionDockState* state);
     void run();
   };
 }

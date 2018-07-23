@@ -5,13 +5,13 @@
 
 namespace attpcfe
 {
-  class State;
+  class ReconstructionState;
   class PSATask {
 
-    State* _pState;
+    ReconstructionState* _pState;
 
   public:
-    explicit PSATask(State* state);
+    explicit PSATask(ReconstructionState* state);
 
     enum class MODE {
       BLSUB

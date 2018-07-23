@@ -85,19 +85,19 @@ namespace attpcfe {
     auto dockMenu = menuBar()->addMenu("&Docks");
       
     // Padplane dock
-    _pImpl->_pPadplaneDock = new PadplaneDock{this};
-    addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pPadplaneDock);
-    //_pImpl->_pPadplaneDock->hide();
-    dockMenu->addAction(_pImpl->_pPadplaneDock->toggleViewAction());
-    dockMenu->actions().last()->setStatusTip(tr("View padplane dock"));
-    dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    //_pImpl->_pPadplaneDock = new PadplaneDock{this};
+    //addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pPadplaneDock);
+    ////_pImpl->_pPadplaneDock->hide();
+    //dockMenu->addAction(_pImpl->_pPadplaneDock->toggleViewAction());
+    //dockMenu->actions().last()->setStatusTip(tr("View padplane dock"));
+    //dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 
     // TPC dock
-    _pImpl->_pTpcDock = new TpcDock{this};
-    addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pTpcDock);
-    dockMenu->addAction(_pImpl->_pTpcDock->toggleViewAction());
-    dockMenu->actions().last()->setStatusTip(tr("View TPC dock"));
-    dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    //_pImpl->_pTpcDock = new TpcDock{this};
+    //addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pTpcDock);
+    //dockMenu->addAction(_pImpl->_pTpcDock->toggleViewAction());
+    //dockMenu->actions().last()->setStatusTip(tr("View TPC dock"));
+    //dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
 
     // Reconstruction dock
     _pImpl->_pReconstructionDock = new ReconstructionDock{this};

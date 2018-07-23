@@ -1,6 +1,6 @@
 #define TRACKRECTASK_CPP
 #include <reco/TrackRecTask.hpp>
-#include <core/State.hpp>
+#include <core/ReconstructionState.hpp>
 #include <core/PatternEvent.hpp>
 #include <core/TrackEvent.hpp>
 #include <core/Track.hpp>
@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 namespace attpcfe {
 
-  TrackRecTask::TrackRecTask(State* state) : _pState{state} {}
+  TrackRecTask::TrackRecTask(ReconstructionState* state) : _pState{state} {}
 
   void TrackRecTask::run()
   {

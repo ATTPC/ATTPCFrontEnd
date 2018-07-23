@@ -18,7 +18,11 @@ namespace attpcfe {
     ReconstructionDock(QWidget* parent);
 
     public slots:
-    void load();
+    void loadPadplane();
+    void loadTpc();
+    void loadData();
+    void showPadplane();
+    void showTpc();
     void run();
   };
 }

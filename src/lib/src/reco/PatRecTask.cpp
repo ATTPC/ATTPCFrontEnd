@@ -1,6 +1,6 @@
 #define PATRECTASK_CPP
 #include <reco/PatRecTask.hpp>
-#include <core/State.hpp>
+#include <core/ReconstructionState.hpp>
 #include <core/Event.hpp>
 #include <core/PatternEvent.hpp>
 #include <core/RawTrack.hpp>
@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 
 namespace attpcfe {
 
-  PatRecTask::PatRecTask(State* state) : _pState{state} {}
+  PatRecTask::PatRecTask(ReconstructionState* state) : _pState{state} {}
 
   void PatRecTask::run()
   {

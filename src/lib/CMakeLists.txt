@@ -8,7 +8,7 @@ add_library(attpcfelib SHARED
   src/core/Hdf5Wrapper.cpp
   src/core/NotificationQueue.cpp
   src/core/TaskSystem.cpp
-  src/core/State.cpp
+  src/core/ReconstructionState.cpp
   src/core/Pad.cpp
   src/core/RawEvent.cpp
   src/core/Hit.cpp
@@ -18,12 +18,12 @@ add_library(attpcfelib SHARED
   src/core/PatternEvent.cpp
   src/core/Track.cpp
   src/core/TrackEvent.cpp
+  src/core/Padplane.cpp
+  src/core/Tpc.cpp
   src/reco/BaselineCorrection.cpp
   src/reco/PSATask.cpp
   src/reco/PatRecTask.cpp
-  src/reco/TrackRecTask.cpp
-  src/reco/Padplane.cpp
-  src/reco/Tpc.cpp)
+  src/reco/TrackRecTask.cpp)
 
 target_include_directories(attpcfelib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -65,7 +65,8 @@ add_library(attpcguilib SHARED
   src/gui/PadplaneDock.cpp
   src/gui/TpcDock.cpp
   src/gui/ReconstructionDock.cpp
-  src/gui/ReconstructionTasks.cpp	
+  src/gui/ReconstructionDockTasks.cpp
+  src/gui/ReconstructionDockState.cpp	
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
   include/gui/DisplayFunctions.hpp
@@ -75,7 +76,8 @@ add_library(attpcguilib SHARED
   include/gui/PadplaneDock.hpp
   include/gui/TpcDock.hpp
   include/gui/ReconstructionDock.hpp
-  include/gui/ReconstructionTasks.hpp)
+  include/gui/ReconstructionDockTasks.hpp
+  include/gui/ReconstructionDockState.hpp)
 
 target_include_directories(attpcguilib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

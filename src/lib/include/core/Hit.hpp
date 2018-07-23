@@ -12,7 +12,7 @@ namespace attpcfe {
     std::unique_ptr<HitImpl, void(*)(HitImpl*)> _pImpl;
 
   public:
-    Hit(std::vector<double>&& pos, double charge);
+    Hit(std::vector<double>&& pos, double charge, std::size_t padNum);
   };
 }
 #endif

@@ -21,6 +21,8 @@ namespace attpcfe {
     std::vector<std::pair<double, double>>& sPadCoords();
     std::vector<std::pair<double, double>>& lPadCoords();
     std::vector<std::size_t>& orientations();
+    std::pair<double, double> const& padCoords(std::size_t padNum) const;
+    void load();
   };
 }
 #endif

@@ -1,7 +1,7 @@
 #include <core/DataHandler.hpp>
 #include <core/Hdf5Wrapper.hpp>
 #include <core/TaskSystem.hpp>
-#include <core/State.hpp>
+#include <core/ReconstructionState.hpp>
 #include <core/Pad.hpp>
 #include <core/RawEvent.hpp>
 #include <core/Hit.hpp>
@@ -9,6 +9,8 @@
 #include <core/Event.hpp>
 #include <core/PatternEvent.hpp>
 #include <core/TrackEvent.hpp>
+#include <core/Padplane.hpp>
+#include <core/Tpc.hpp>
 #include <reco/PSATask.hpp>
 #include <reco/PatRecTask.hpp>
 #include <reco/TrackRecTask.hpp>
@@ -32,8 +34,12 @@ int main(int argc, char* argv[]) {
   dataHandler.open("/home/nico/Downloads/perico.h5");
   auto nRawEvents = dataHandler.nRawEvents();
 
-  // Reserve memory for event stacks
-  State state;
+  // Create state
+  auto padplane = std::make_unique<Padplane>("/home/nico/Desktop/padplane.geom");
+  auto tpc = std::make_unique<Tpc>("/home/nico/Desktop/tpc.geom");
+  ReconstructionState state;
+  state.setPadplane(std::move(padplane));
+  state.setTpc(std::move(tpc));
   state.reserveStacks(nRawEvents);
 
   // Create tasks

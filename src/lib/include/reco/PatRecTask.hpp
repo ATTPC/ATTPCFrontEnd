@@ -5,13 +5,13 @@
 
 namespace attpcfe
 {
-  class State;
+  class ReconstructionState;
   class PatRecTask {
 
-    State* _pState;
+    ReconstructionState* _pState;
 
   public:
-    explicit PatRecTask(State* state);
+    explicit PatRecTask(ReconstructionState* state);
  
     void run();
   };

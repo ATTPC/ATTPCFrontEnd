@@ -18,8 +18,10 @@ namespace attpcfe {
     std::string const& geomFile() const;
     double radius() const;
     double height() const;
-    void setRadius(double radius);
-    void setHeight(double height);
+    double driftVelocity() const;
+    std::size_t entryBucket() const;
+
+    void load();
   };
 }
 #endif

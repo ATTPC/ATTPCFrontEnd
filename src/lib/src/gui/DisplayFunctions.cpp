@@ -1,8 +1,8 @@
 #define DISPLAYFUNCTIONS_CPP
 #include <gui/DisplayFunctions.hpp>
 #include <gui/Display.hpp>
-#include <reco/Padplane.hpp>
-#include <reco/Tpc.hpp>
+#include <core/Padplane.hpp>
+#include <core/Tpc.hpp>
 
 #include <vtkContextView.h>
 #include <vtkContextScene.h>
@@ -87,7 +87,7 @@ namespace attpcfe {
     cylinderActor->GetProperty()->SetOpacity(0.2);
     cylinderActor->RotateX(-75.0); 
     cylinderActor->RotateZ(-35.0); // Maps to Y
-    
+
     display->renderer()->AddActor(cylinderActor);
 
     display->renderer()->ResetCamera();
