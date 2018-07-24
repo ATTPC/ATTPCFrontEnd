@@ -18,6 +18,7 @@ namespace attpcfe {
     std::size_t id() const;
     std::size_t nHitLists() const;
     void addHitList(HitList&& list);
+    void shrinkHitLists();
   };
 }
 #endif

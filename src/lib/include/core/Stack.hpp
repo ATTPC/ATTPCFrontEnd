@@ -38,10 +38,15 @@ namespace attpcfe {
       _protected._elements.push_back(std::move(element));
     }
 
-    std::size_t size()
+    // Following methods are not thread safe 
+    std::size_t size() const
     {
-      lock_t lock{_protected._mutex};
       return _protected._elements.size();
+    }
+
+    T const& back() const
+    {
+      return _protected._elements.back();
     }
   };
 }

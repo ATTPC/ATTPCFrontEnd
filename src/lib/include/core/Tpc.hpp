@@ -19,7 +19,8 @@ namespace attpcfe {
     double radius() const;
     double height() const;
     double driftVelocity() const;
-    std::size_t entryBucket() const;
+    double samplingFreq() const;
+    int entryBucket() const;
 
     void load();
   };

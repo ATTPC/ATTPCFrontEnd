@@ -1,8 +1,6 @@
 #define MAINWINDOW_CPP
 #include <gui/MainWindow.hpp>
 #include <gui/Display.hpp>
-#include <gui/PadplaneDock.hpp>
-#include <gui/TpcDock.hpp>
 #include <gui/ReconstructionDock.hpp>
 #include <gui/GuiState.hpp>
 
@@ -31,8 +29,6 @@ namespace attpcfe {
     // Handles to widgets MainWindow took ownership of
     Display* _pPadplaneDisplay{nullptr};
     Display* _pTpcDisplay{nullptr};
-    PadplaneDock* _pPadplaneDock{nullptr};
-    TpcDock* _pTpcDock{nullptr};
     ReconstructionDock* _pReconstructionDock{nullptr};
     QLabel* _pTaskStatus{nullptr};
   };

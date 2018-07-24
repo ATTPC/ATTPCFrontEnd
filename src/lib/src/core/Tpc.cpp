@@ -14,9 +14,9 @@ namespace attpcfe {
     std::string _geomFile;
     double _radius{0.};
     double _height{0.};
-    double _driftVelocity{5.2}; // cm/us
-    double _samplingFreq{12.5}; // MHz
-    std::size_t _entryBucket{280};
+    double _driftVelocity{5.2E6}; // cm/s
+    double _samplingFreq{12.5E6}; // Hz
+    int _entryBucket{280};
   };
   
   Tpc::Tpc(std::string geomFile) : _pImpl{new TpcImpl{std::move(geomFile)}, [](TpcImpl* ptr){ delete ptr; }}
@@ -28,7 +28,8 @@ namespace attpcfe {
   double Tpc::radius() const { return _pImpl->_radius; }
   double Tpc::height() const { return _pImpl->_height; }
   double Tpc::driftVelocity() const { return _pImpl->_driftVelocity; }
-  std::size_t Tpc::entryBucket() const { return _pImpl->_entryBucket; }
+  double Tpc::samplingFreq() const { return _pImpl->_samplingFreq; }
+  int Tpc::entryBucket() const { return _pImpl->_entryBucket; }
 
   void Tpc::load() {
 

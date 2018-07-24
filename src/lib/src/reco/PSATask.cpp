@@ -12,8 +12,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include <chrono>
-using namespace std::chrono_literals;
 
 namespace attpcfe {
 
@@ -42,22 +40,24 @@ namespace attpcfe {
 
       auto maxChargeBucket = std::max_element(std::begin(pad.data()), std::end(pad.data()));
       auto maxCharge = *maxChargeBucket;
-      //auto timeBucket = _pState->tpc()->entryBucket() - std::distance(std::begin(pad.data()), maxChargeBucket);
 
-      //if (maxCharge < 10) continue;
+      if (std::distance(std::begin(pad.data()), maxChargeBucket) > _pState->tpc()->entryBucket()) continue;
+      if (maxCharge < 15) continue;
+      
+      auto timeBucket = _pState->tpc()->entryBucket() - std::distance(std::begin(pad.data()), maxChargeBucket);
+      auto z = _pState->tpc()->height() - timeBucket * _pState->tpc()->driftVelocity() / _pState->tpc()->samplingFreq();
 
-      std::cout << pad.number() << ' ' << maxCharge << ' ' << std::distance(std::begin(pad.data()), maxChargeBucket) << '\n';
+      auto pos = std::vector<double>{};
+      pos.emplace_back(_pState->padplane()->padCoords(pad.number()).first);
+      pos.emplace_back(_pState->padplane()->padCoords(pad.number()).second);
+      pos.emplace_back(z); 
       
-      //auto pos = std::vector<double>{};
-      //pos.emplace_back(_pState->padplane()->padCoords(pad.number()).first);
-      //pos.emplace_back(_pState->padplane()->padCoords(pad.number()).second);
-      //pos.emplace_back(0.); // z = 1000 - ((280 - timeBucket) * 80ns * 5.2 cm/us)
-      
-      //Hit hit{std::move(pos), maxCharge, pad.number()};
-      //hits.addHit(std::move(hit));
+      Hit hit{std::move(pos), maxCharge, pad.number()};
+      hits.addHit(std::move(hit));
       
       event.addHitList(std::move(hits));
     }
+    event.shrinkHitLists();
     _pState->pushEvent(std::move(event));
   }
   

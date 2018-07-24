@@ -24,6 +24,7 @@ namespace attpcfe {
     void showPadplane();
     void showTpc();
     void run();
+    void showEvent();
   };
 }
 #endif

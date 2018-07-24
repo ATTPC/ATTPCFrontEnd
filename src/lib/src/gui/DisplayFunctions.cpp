@@ -3,6 +3,7 @@
 #include <gui/Display.hpp>
 #include <core/Padplane.hpp>
 #include <core/Tpc.hpp>
+#include <core/Event.hpp>
 
 #include <vtkContextView.h>
 #include <vtkContextScene.h>
@@ -92,6 +93,12 @@ namespace attpcfe {
 
     display->renderer()->ResetCamera();
     display->renderer()->GetActiveCamera()->Zoom(1.5);
+  }
+
+  void display(Display* display, Event const& event)
+  {
+    //if (display->view() == nullptr) std::cout << "This is a 3D display\n";
+    //if (display->renderer() == nullptr) std::cout << "This is a 2D display\n";
   }
 
 }

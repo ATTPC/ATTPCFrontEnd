@@ -62,8 +62,6 @@ add_library(attpcguilib SHARED
   src/gui/ChartView.cpp
   src/gui/OpenGLView.cpp
   src/gui/GuiState.cpp
-  src/gui/PadplaneDock.cpp
-  src/gui/TpcDock.cpp
   src/gui/ReconstructionDock.cpp
   src/gui/ReconstructionDockTasks.cpp
   src/gui/ReconstructionDockState.cpp	
@@ -73,8 +71,6 @@ add_library(attpcguilib SHARED
   include/gui/ChartView.hpp
   include/gui/OpenGLView.hpp
   include/gui/GuiState.hpp
-  include/gui/PadplaneDock.hpp
-  include/gui/TpcDock.hpp
   include/gui/ReconstructionDock.hpp
   include/gui/ReconstructionDockTasks.hpp
   include/gui/ReconstructionDockState.hpp)

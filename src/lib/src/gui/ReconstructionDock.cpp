@@ -4,6 +4,8 @@
 #include <gui/ReconstructionDockTasks.hpp>
 #include <gui/MainWindow.hpp>
 #include <gui/DisplayFunctions.hpp>
+#include <core/Stack.hpp>
+#include <core/Event.hpp>
 #include <core/ReconstructionState.hpp>
 #include <core/Padplane.hpp>
 #include <core/Tpc.hpp>
@@ -38,8 +40,9 @@ namespace attpcfe {
     QPushButton* _showTpcButton{nullptr}; 
     QPushButton* _loadDataButton{nullptr};
     QPushButton* _runButton{nullptr};
+    QPushButton* _showEventButton{nullptr};
 
-    // ReconstructionState held by ReconstructionDock
+    // ReconstructionState
     std::unique_ptr<ReconstructionDockState> _state{std::make_unique<ReconstructionDockState>()};
   };
 
@@ -68,6 +71,9 @@ namespace attpcfe {
     _pImpl->_runButton = new QPushButton{"Run"};
     layout->addWidget(_pImpl->_runButton);
     connect(_pImpl->_runButton, &QPushButton::clicked, this, &ReconstructionDock::run);
+    _pImpl->_showEventButton = new QPushButton{"Show event"};
+    layout->addWidget(_pImpl->_showEventButton);
+    connect(_pImpl->_showEventButton, &QPushButton::clicked, this, &ReconstructionDock::showEvent);
     layout->addStretch();
     
     auto widget = new QWidget{};
@@ -157,10 +163,20 @@ namespace attpcfe {
       _pImpl->_pWatcher = std::make_unique<QFutureWatcher<void> >();
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, _pImpl->_mainWindow, &MainWindow::spinTaskStatusWheel);
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, _pImpl->_mainWindow, &MainWindow::stopTaskStatusWheel);
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(false); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(false); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(false); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(false); });
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
+      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
       
       connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){
 	  _pImpl->_pTask.reset(nullptr);
@@ -173,6 +189,12 @@ namespace attpcfe {
     {
       std::cout << "> ReconstructionDock::run, message: a raw data file (.h5) file must be loaded first\n";
     }
+  }
+
+  void ReconstructionDock::showEvent()
+  {
+    display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back());
+    display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back());
   }
   
 }

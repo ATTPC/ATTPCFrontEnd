@@ -12,10 +12,10 @@ namespace attpcfe {
 
     std::vector<double> _position{0., 0., 0.};
     double _charge{0.};
-    std::size_t _padNum{0};
+    int16_t _padNum{0};
   };
 
-  Hit::Hit(std::vector<double>&& pos, double charge, std::size_t padNum) : _pImpl{new HitImpl{}, [](HitImpl* ptr){ delete ptr; }}
+  Hit::Hit(std::vector<double>&& pos, double charge, int16_t padNum) : _pImpl{new HitImpl{}, [](HitImpl* ptr){ delete ptr; }}
   {
     _pImpl->_position = std::move(pos);
     _pImpl->_charge = charge;

@@ -5,6 +5,8 @@
 
 namespace attpcfe {
 
+  template<typename T>
+  class Stack;
   class Padplane;
   class Tpc;
   class RawEvent;
@@ -43,6 +45,9 @@ namespace attpcfe {
     void popPatternEvent(PatternEvent& evt);
     void pushTrackEvent(TrackEvent&& evt);
     void popTrackEvent(TrackEvent& evt);
+
+    Stack<Event> const& events() const;
+    
     std::size_t nTrackEvents() const;
   };
 }

@@ -25,8 +25,10 @@ namespace attpcfe {
     MainWindow* _pMainWindow;
 
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> _pRenderWindow{vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New()};
-    vtkSmartPointer<vtkContextView> _pView;
+    // For 2D display
+    vtkSmartPointer<vtkContextView> _pView; 
     vtkSmartPointer<vtkChartXY> _pChart;
+    // For 3D display
     vtkSmartPointer<vtkRenderer> _pRenderer;
 
     // Handles to widgets GuiDisplay took ownership of
