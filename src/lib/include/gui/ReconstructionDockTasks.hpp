@@ -13,7 +13,7 @@ namespace attpcfe {
     std::unique_ptr<ReconstructionTaskImpl, void(*)(ReconstructionTaskImpl*)> _pImpl;
     
   public:
-    ReconstructionTask(std::string file, ReconstructionDockState* state);
+    ReconstructionTask(std::string file, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* state);
     void run();
   };
 }

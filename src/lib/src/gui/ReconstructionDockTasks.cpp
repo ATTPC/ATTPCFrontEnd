@@ -16,14 +16,17 @@ namespace attpcfe {
   class ReconstructionTask::ReconstructionTaskImpl {
 
   public:
-    ReconstructionTaskImpl(std::string file, ReconstructionDockState* state) : _rawDataFile{std::move(file)}, _pState{state} {}
+    ReconstructionTaskImpl(std::string file, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* state) :
+      _rawDataFile{std::move(file)}, _fromEvent{fromEvent}, _nEvents{nEvents}, _pState{state} {}
 
     std::string _rawDataFile;
+    std::size_t _fromEvent;
+    std::size_t _nEvents;
     ReconstructionDockState* _pState;
   };
 
-  ReconstructionTask::ReconstructionTask(std::string file, ReconstructionDockState* state) :
-    _pImpl{new ReconstructionTaskImpl{std::move(file), state}, [](ReconstructionTaskImpl* ptr){ delete ptr; }} {}
+  ReconstructionTask::ReconstructionTask(std::string file, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* state) :
+    _pImpl{new ReconstructionTaskImpl{std::move(file), fromEvent, nEvents, state}, [](ReconstructionTaskImpl* ptr){ delete ptr; }} {}
   
   void ReconstructionTask::run()
   {
@@ -47,7 +50,7 @@ namespace attpcfe {
 
     // Loop over raw events in main thread
     //for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
-    for (std::size_t iRawEvent = 0; iRawEvent < 1; ++iRawEvent)
+    for (std::size_t iRawEvent = _pImpl->_fromEvent; iRawEvent < _pImpl->_fromEvent + _pImpl->_nEvents; ++iRawEvent)
     {
       auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;
       RawEvent rawEvent{iRawEvent, nPads};

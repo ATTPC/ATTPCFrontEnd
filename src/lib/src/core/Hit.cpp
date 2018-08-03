@@ -21,5 +21,9 @@ namespace attpcfe {
     _pImpl->_charge = charge;
     _pImpl->_padNum = padNum;
   }
+
+  std::vector<double> const& Hit::position() const { return _pImpl->_position; }
+  double Hit::charge() const { return _pImpl->_charge; }
+  int16_t Hit::padNum() const { return _pImpl->_padNum; }
   
 }

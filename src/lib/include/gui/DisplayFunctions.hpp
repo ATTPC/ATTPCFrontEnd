@@ -10,6 +10,7 @@ namespace attpcfe {
   
   void display(Display* display, Padplane* padplane);
   void display(Display* display, Tpc* tpc);
-  void display(Display* display, Event const& event);
+  void display(Display* display, Event const& event, Padplane* padplane);
+  void display(Display* display, Event const& event, Tpc* tpc);
 }
 #endif

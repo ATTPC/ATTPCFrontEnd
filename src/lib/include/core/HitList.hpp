@@ -2,6 +2,7 @@
 #define HITLIST_HPP
 
 #include <memory>
+#include <vector>
 
 namespace attpcfe {
 
@@ -15,6 +16,8 @@ namespace attpcfe {
     HitList();
 
     void addHit(Hit&& h);
+    std::size_t nHits() const;
+    std::vector<Hit> const& hits() const;
   };
 }
 #endif

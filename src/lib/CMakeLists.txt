@@ -59,8 +59,6 @@ add_library(attpcguilib SHARED
   src/gui/MainWindow.cpp
   src/gui/Display.cpp
   src/gui/DisplayFunctions.cpp
-  src/gui/ChartView.cpp
-  src/gui/OpenGLView.cpp
   src/gui/GuiState.cpp
   src/gui/ReconstructionDock.cpp
   src/gui/ReconstructionDockTasks.cpp
@@ -68,8 +66,6 @@ add_library(attpcguilib SHARED
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
   include/gui/DisplayFunctions.hpp
-  include/gui/ChartView.hpp
-  include/gui/OpenGLView.hpp
   include/gui/GuiState.hpp
   include/gui/ReconstructionDock.hpp
   include/gui/ReconstructionDockTasks.hpp

@@ -16,11 +16,10 @@ namespace attpcfe {
     explicit Padplane(std::string geomFile);
 
     std::string const& geomFile() const;
-    double sPadSize() const;
-    double lPadSize() const;
-    std::vector<std::pair<double, double>>& sPadCoords();
-    std::vector<std::pair<double, double>>& lPadCoords();
-    std::vector<std::size_t>& orientations();
+    bool padIsUp(std::size_t padNum) const;
+    bool padIsSmall(std::size_t padNum) const;
+    double padSize(std::size_t padNum) const;
+    double padHeight(std::size_t padNum) const;
     std::pair<double, double> const& padCoords(std::size_t padNum) const;
     void load();
   };

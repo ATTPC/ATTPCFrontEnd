@@ -35,7 +35,7 @@ namespace attpcfe {
 	blCorr.subtractBaseline(pad);
       }
 
-      // Dummy for now, assuming a single hit par pad
+      // Dummy for now, assuming a single hit per pad
       HitList hits;
 
       auto maxChargeBucket = std::max_element(std::begin(pad.data()), std::end(pad.data()));

@@ -14,8 +14,8 @@ namespace attpcfe {
 
     std::string _geomFile;
     std::size_t _nPads{10240};
-    double _sPadSize{4.6737};
-    double _lPadSize{9.5818};
+    double _sPadSize{4.6737}; // mm
+    double _lPadSize{9.5818}; // mm
     std::vector<std::pair<double, double>> _sPadCoords{_nPads, {0., 0.}};
     std::vector<std::pair<double, double>> _lPadCoords{_nPads, {0., 0.}};
     std::vector<std::size_t> _orientations;
@@ -30,18 +30,34 @@ namespace attpcfe {
   }
 
   std::string const& Padplane::geomFile() const { return _pImpl->_geomFile; }
-  double Padplane::sPadSize() const { return _pImpl->_sPadSize; }
-  double Padplane::lPadSize() const { return _pImpl->_lPadSize; }
-  std::vector<std::pair<double, double>>& Padplane::sPadCoords() { return _pImpl->_sPadCoords; }
-  std::vector<std::pair<double, double>>& Padplane::lPadCoords() { return _pImpl->_lPadCoords; }
-  std::vector<std::size_t>& Padplane::orientations() { return _pImpl->_orientations; }
 
+  bool Padplane::padIsUp(std::size_t padNum) const { return _pImpl->_orientations[padNum]; }
+
+  bool Padplane::padIsSmall(std::size_t padNum) const
+  {
+    if (_pImpl->_sPadCoords[padNum].first == 0.) return false;
+    else return true;
+  }
+
+  double Padplane::padSize(std::size_t padNum) const
+  {
+    if (padIsSmall(padNum)) return _pImpl->_sPadSize;
+    else return _pImpl->_lPadSize;
+  }
+
+  double Padplane::padHeight(std::size_t padNum) const
+  {
+    if (padIsSmall(padNum)) return _pImpl->_sPadSize * std::sqrt(3) / 2;
+    else return _pImpl->_lPadSize * std::sqrt(3) / 2;
+  }
+  
   std::pair<double, double> const& Padplane::padCoords(std::size_t padNum) const
   {
-    if (_pImpl->_sPadCoords[padNum].first == 0.)
-      return _pImpl->_lPadCoords[padNum];
-    else return _pImpl->_sPadCoords[padNum];
+    if (padIsSmall(padNum)) return _pImpl->_sPadCoords[padNum];
+    else return _pImpl->_lPadCoords[padNum];
   }
+
+
 
   void Padplane::load()
   {

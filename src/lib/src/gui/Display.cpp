@@ -1,8 +1,6 @@
 #define DISPLAY_CPP
 #include <gui/Display.hpp>
 #include <gui/MainWindow.hpp>
-#include <gui/ChartView.hpp>
-#include <gui/OpenGLView.hpp>
 
 #include <QtWidgets/QVBoxLayout>
 

@@ -11,6 +11,8 @@
 #include <core/Tpc.hpp>
 
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QVBoxLayout>
 #include <QtConcurrent/QtConcurrentRun>
@@ -28,6 +30,8 @@ namespace attpcfe {
 
     MainWindow* _mainWindow;
     std::string _rawDataFile;
+    int _startEvent;
+    int _nEvents;
     
     std::unique_ptr<QFutureWatcher<void> > _pWatcher;
     std::unique_ptr<ReconstructionTask> _pTask;
@@ -41,7 +45,9 @@ namespace attpcfe {
     QPushButton* _loadDataButton{nullptr};
     QPushButton* _runButton{nullptr};
     QPushButton* _showEventButton{nullptr};
-
+    QSpinBox* _nEventsSpin{nullptr};
+    QSpinBox* _startEventSpin{nullptr};
+    
     // ReconstructionState
     std::unique_ptr<ReconstructionDockState> _state{std::make_unique<ReconstructionDockState>()};
   };
@@ -50,7 +56,7 @@ namespace attpcfe {
   {
     setWindowTitle(tr("Reconstruction"));
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    setFixedSize(200, 200);
+    setFixedSize(200, 400);
 
     auto layout = new QVBoxLayout{};
     _pImpl->_loadPadplaneButton = new QPushButton{"Load padplane"};
@@ -59,15 +65,42 @@ namespace attpcfe {
     _pImpl->_showPadplaneButton = new QPushButton{"Show padplane"};
     layout->addWidget(_pImpl->_showPadplaneButton);
     connect(_pImpl->_showPadplaneButton, &QPushButton::clicked, this, &ReconstructionDock::showPadplane);
+    
     _pImpl->_loadTpcButton = new QPushButton{"Load TPC"};
     layout->addWidget(_pImpl->_loadTpcButton);
     connect(_pImpl->_loadTpcButton, &QPushButton::clicked, this, &ReconstructionDock::loadTpc);
     _pImpl->_showTpcButton = new QPushButton{"Show TPC"};
     layout->addWidget(_pImpl->_showTpcButton);
     connect(_pImpl->_showTpcButton, &QPushButton::clicked, this, &ReconstructionDock::showTpc);
+    
     _pImpl->_loadDataButton = new QPushButton{"Load data"};
     layout->addWidget(_pImpl->_loadDataButton);
     connect(_pImpl->_loadDataButton, &QPushButton::clicked, this, &ReconstructionDock::loadData);
+
+    _pImpl->_startEventSpin = new QSpinBox;
+    _pImpl->_startEventSpin->setMinimum(0);
+    _pImpl->_startEventSpin->setMaximum(1000000);
+    _pImpl->_startEventSpin->setSingleStep(1);
+    _pImpl->_startEventSpin->setValue(0);
+    auto startEventLabel = new QLabel{"From event:"};
+    layout->addWidget(startEventLabel);
+    layout->addWidget(_pImpl->_startEventSpin);
+    _pImpl->_startEvent = _pImpl->_startEventSpin->value();
+    connect(_pImpl->_startEventSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	    [&](int event){ _pImpl->_startEvent = event; });
+
+    _pImpl->_nEventsSpin = new QSpinBox;
+    _pImpl->_nEventsSpin->setMinimum(1);
+    _pImpl->_nEventsSpin->setMaximum(10);
+    _pImpl->_nEventsSpin->setSingleStep(1);
+    _pImpl->_nEventsSpin->setValue(1);
+    auto nEventsLabel = new QLabel{"# of events:"};
+    layout->addWidget(nEventsLabel);
+    layout->addWidget(_pImpl->_nEventsSpin);
+    _pImpl->_nEvents = _pImpl->_nEventsSpin->value();
+    connect(_pImpl->_nEventsSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	    [&](int nEvents){ _pImpl->_nEvents = nEvents; });
+    
     _pImpl->_runButton = new QPushButton{"Run"};
     layout->addWidget(_pImpl->_runButton);
     connect(_pImpl->_runButton, &QPushButton::clicked, this, &ReconstructionDock::run);
@@ -157,7 +190,10 @@ namespace attpcfe {
   {
     if (!_pImpl->_rawDataFile.empty() )
     {
-      _pImpl->_pTask = std::make_unique<ReconstructionTask>(_pImpl->_rawDataFile, _pImpl->_state.get());
+      _pImpl->_pTask = std::make_unique<ReconstructionTask>(_pImpl->_rawDataFile,
+							    static_cast<std::size_t>(_pImpl->_startEvent),
+							    static_cast<std::size_t>(_pImpl->_nEvents),
+							    _pImpl->_state.get());
       _pImpl->_pFuture = std::make_unique<QFuture<void> >(QtConcurrent::run(_pImpl->_pTask.get(), &ReconstructionTask::run));
 
       _pImpl->_pWatcher = std::make_unique<QFutureWatcher<void> >();
@@ -193,8 +229,10 @@ namespace attpcfe {
 
   void ReconstructionDock::showEvent()
   {
-    display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back());
-    display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back());
+    display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->padplane());
+    display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->tpc());
   }
+
+
   
 }

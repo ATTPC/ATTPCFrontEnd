@@ -2,6 +2,7 @@
 #define EVENT_HPP
 
 #include <memory>
+#include <vector>
 
 namespace attpcfe {
 
@@ -17,6 +18,7 @@ namespace attpcfe {
 
     std::size_t id() const;
     std::size_t nHitLists() const;
+    std::vector<HitList> const& hitLists() const;
     void addHitList(HitList&& list);
     void shrinkHitLists();
   };

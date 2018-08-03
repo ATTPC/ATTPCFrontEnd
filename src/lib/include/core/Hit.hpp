@@ -13,6 +13,10 @@ namespace attpcfe {
 
   public:
     Hit(std::vector<double>&& pos, double charge, int16_t padNum);
+
+    std::vector<double> const& position() const;
+    double charge() const;
+    int16_t padNum() const;
   };
 }
 #endif

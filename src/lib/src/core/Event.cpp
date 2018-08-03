@@ -31,6 +31,8 @@ namespace attpcfe {
     _pImpl->_hitLists.push_back(std::move(list));
   }
 
+  std::vector<HitList> const& Event::hitLists() const { return _pImpl->_hitLists; }
+
   void Event::shrinkHitLists()
   {
     _pImpl->_hitLists.shrink_to_fit();
