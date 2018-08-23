@@ -72,13 +72,13 @@ namespace attpcfe {
     }
   }
 
-  void display(Display* display, Tpc* tpc)
+  void display(Display* pDisplay, Tpc* pTpc)
   {
     auto cylinder = vtkSmartPointer<vtkCylinderSource>::New();
     cylinder->SetResolution(20);
     cylinder->SetCenter(0., 0., 0.);
-    cylinder->SetRadius(tpc->radius());
-    cylinder->SetHeight(tpc->height());
+    cylinder->SetRadius(pTpc->radius());
+    cylinder->SetHeight(pTpc->height());
     cylinder->SetCapping(true);
 
     // The mapper is responsible for pushing the geometry into the graphics library.
@@ -95,14 +95,15 @@ namespace attpcfe {
     cylinderActor->RotateX(-90.0); // Points to the right
     //cylinderActor->RotateZ(-20.0); // Points to the top
 
-    
-    display->renderer()->AddActor(cylinderActor);
+    pDisplay->renderer()->AddActor(cylinderActor);
 
-    display->renderer()->ResetCamera();
-    display->renderer()->GetActiveCamera()->Zoom(1.5);
+    pDisplay->renderer()->ResetCamera();
+    pDisplay->renderer()->GetActiveCamera()->Zoom(1.5);
+
+    pDisplay->renderer()->Render();
   }
 
-  void display(Display* display, Event const& event, Padplane* padplane)
+  void display(Display* pDisplay, Event const& event, Padplane* pPadplane)
   {
     if (event.nHitLists() == 0)
     {
@@ -110,6 +111,22 @@ namespace attpcfe {
       return;
     }
 
+    // First need to clear display from previous event.
+    if (auto nLitPads = pPadplane->nLitPads(); nLitPads)
+    {
+      for (std::size_t i = pPadplane->nPads(); i <= nLitPads; ++i) 
+	pDisplay->chart()->RemovePlot(i);
+    }
+    // Update number of lit pads for current event.
+    pPadplane->setnLitPads(event.nHitLists());
+
+    // We asssume a single hit per list for now.
+    auto maxCharge = 0.;
+    for (auto const& hitList : event.hitLists())
+    {
+      if (hitList.hits()[0].charge() > maxCharge) maxCharge = hitList.hits()[0].charge();
+    }
+    
     for (auto const& hitList : event.hitLists())
     {
       auto table = vtkSmartPointer<vtkTable>::New();
@@ -124,23 +141,23 @@ namespace attpcfe {
 
       table->SetNumberOfRows(4);
 
-      // need pad coordinates only once, so look only at first hit in hitlist
+      // We need the current pad coordinates only once, so look only at first hit in hitlist.
       Hit const& hit = hitList.hits()[0];
       auto padNum = hit.padNum();
 
-      auto x_0 = hit.position()[0] - padplane->padSize(padNum) / 2;
+      auto x_0 = hit.position()[0] - pPadplane->padSize(padNum) / 2;
       auto x_1 = hit.position()[0];
-      auto x_2 = hit.position()[0] + padplane->padSize(padNum) / 2;
-      auto y_0 = (padplane->padIsUp(padNum)) ?
-	hit.position()[1] - padplane->padHeight(padNum) / 2 :
-	hit.position()[1] + padplane->padHeight(padNum) / 2;
-      auto y_1 = (padplane->padIsUp(padNum)) ?
-	hit.position()[1] + padplane->padHeight(padNum) / 2 :
-	hit.position()[1] - padplane->padHeight(padNum) / 2;
+      auto x_2 = hit.position()[0] + pPadplane->padSize(padNum) / 2;
+      auto y_0 = (pPadplane->padIsUp(padNum)) ?
+	hit.position()[1] - pPadplane->padHeight(padNum) / 2 :
+	hit.position()[1] + pPadplane->padHeight(padNum) / 2;
+      auto y_1 = (pPadplane->padIsUp(padNum)) ?
+	hit.position()[1] + pPadplane->padHeight(padNum) / 2 :
+	hit.position()[1] - pPadplane->padHeight(padNum) / 2;
       //auto y_2 = y_0;
-      auto y_2 = (padplane->padIsUp(padNum)) ?
-	hit.position()[1] - padplane->padHeight(padNum) / 2 :
-	hit.position()[1] + padplane->padHeight(padNum) / 2;
+      auto y_2 = (pPadplane->padIsUp(padNum)) ?
+	hit.position()[1] - pPadplane->padHeight(padNum) / 2 :
+	hit.position()[1] + pPadplane->padHeight(padNum) / 2;
 	
       table->SetValue(0, 0, x_0);
       table->SetValue(1, 0, x_1);
@@ -151,13 +168,18 @@ namespace attpcfe {
       table->SetValue(2, 1, y_2);
       table->SetValue(3, 1, y_0);
 
-      auto linePlot = display->chart()->AddPlot(vtkChart::LINE);
+      auto linePlot = pDisplay->chart()->AddPlot(vtkChart::LINE);
       linePlot->SetInputData(table, 0, 1);
-      linePlot->SetColor(255, 0, 0, 255);
+
+      double ratio = hit.charge() / maxCharge;
+      double red = 255 * ratio;
+      double green = (ratio <= 0.5) ? 255 * 2 * ratio : 255 * (1. - 2 * (ratio - 1.));
+      double blue = 255 * (1. - ratio);
+      linePlot->SetColor(red, green, blue, 255);
     }
   }
 
-  void display(Display* display, Event const& event, Tpc* tpc)
+  void display(Display* pDisplay, Event const& event, Tpc* pTpc)
   {
     if (event.nHitLists() == 0)
     {
@@ -166,8 +188,14 @@ namespace attpcfe {
     }
 
     // First need to clear display from previous event.
-    display->renderer()->RemoveAllViewProps(); // Need to check for leaks here.
-    display->renderer()->Render();
+    pDisplay->renderer()->RemoveAllViewProps(); // Need to check for leaks here.
+    display(pDisplay, pTpc);
+
+    auto maxCharge = 0.;
+    for (auto const& hitList : event.hitLists())
+    {
+      if (hitList.hits()[0].charge() > maxCharge) maxCharge = hitList.hits()[0].charge();
+    }
       
     for (auto const& hitList : event.hitLists())
     {
@@ -184,15 +212,22 @@ namespace attpcfe {
 
 	auto cubeActor = vtkSmartPointer<vtkActor>::New();
 	cubeActor->SetMapper(cubeMapper);
-	cubeActor->GetProperty()->SetColor(1.0, 0.0, 0.0);
 	cubeActor->GetProperty()->SetOpacity(0.5);
+
+	double ratio = hit.charge() / maxCharge;
+	double red = ratio;
+	double green = (ratio <= 0.5) ? 2 * ratio : 1. - 2 * (ratio - 1.);
+	double blue = 1. - ratio;
+	cubeActor->GetProperty()->SetColor(red, blue, green);
 
 	//cubeActor->RotateX(-20.0); 
 	//cubeActor->RotateZ(-20.0); 
 
-	display->renderer()->AddActor(cubeActor);
+	pDisplay->renderer()->AddActor(cubeActor);
       }
-    }	
+    }
+
+    //pDisplay->renderer()->Render();
   }
 
 }

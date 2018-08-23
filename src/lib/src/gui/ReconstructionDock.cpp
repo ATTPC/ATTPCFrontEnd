@@ -142,7 +142,7 @@ namespace attpcfe {
     }
   }
 
-    void ReconstructionDock::loadTpc()
+  void ReconstructionDock::loadTpc()
   {
     QFileDialog dialog{this};
     dialog.setFileMode(QFileDialog::AnyFile);
@@ -197,24 +197,25 @@ namespace attpcfe {
       _pImpl->_pFuture = std::make_unique<QFuture<void> >(QtConcurrent::run(_pImpl->_pTask.get(), &ReconstructionTask::run));
 
       _pImpl->_pWatcher = std::make_unique<QFutureWatcher<void> >();
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, _pImpl->_mainWindow, &MainWindow::spinTaskStatusWheel);
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, _pImpl->_mainWindow, &MainWindow::stopTaskStatusWheel);
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
+      auto pWatcher = _pImpl->_pWatcher.get();
+      connect(pWatcher, &QFutureWatcher<void>::started, _pImpl->_mainWindow, &MainWindow::spinTaskStatusWheel);
+      connect(pWatcher, &QFutureWatcher<void>::finished, _pImpl->_mainWindow, &MainWindow::stopTaskStatusWheel);
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
       
-      connect(_pImpl->_pWatcher.get(), &QFutureWatcher<void>::finished, [&](){
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){
 	  _pImpl->_pTask.reset(nullptr);
 	  _pImpl->_pFuture.reset(nullptr);
 	  _pImpl->_pWatcher.reset(nullptr); });

@@ -27,6 +27,7 @@ namespace attpcfe {
     std::unique_ptr<GuiState> _pState;
     
     // Handles to widgets MainWindow took ownership of
+    //QTabWidget _pDisplayTabs{nullptr};
     Display* _pPadplaneDisplay{nullptr};
     Display* _pTpcDisplay{nullptr};
     ReconstructionDock* _pReconstructionDock{nullptr};
@@ -56,6 +57,7 @@ namespace attpcfe {
 
   void MainWindow::initCentralWidget()
   {
+    //_pImpl->pDisplayTabs = new QTabWidget;
     auto tabs = new QTabWidget;
     
     _pImpl->_pPadplaneDisplay = new Display(this, Display::VIEW_MODE::VIEW_2D);

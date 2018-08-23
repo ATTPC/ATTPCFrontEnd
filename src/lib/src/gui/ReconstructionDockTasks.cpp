@@ -40,16 +40,12 @@ namespace attpcfe {
     auto nRawEvents = dataHandler.nRawEvents();
 
     // Reserve memory for event stacks
-    //Padplane padplane{"/home/nico/Desktop/padplane.geom"};
-    //Tpc tpc{"/home/nico/Desktop/tpc.geom"};
-    //State state{&padplane, &tpc};
     _pImpl->_pState->state()->reserveStacks(nRawEvents);
 
     // Create tasks
     PSATask psa{_pImpl->_pState->state()};
 
     // Loop over raw events in main thread
-    //for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
     for (std::size_t iRawEvent = _pImpl->_fromEvent; iRawEvent < _pImpl->_fromEvent + _pImpl->_nEvents; ++iRawEvent)
     {
       auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;

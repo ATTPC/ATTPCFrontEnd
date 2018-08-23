@@ -20,6 +20,8 @@ namespace attpcfe {
     
     bool pop(task_t& task);
     void push(task_t task);
+    bool try_pop(task_t& task);
+    bool try_push(task_t task);
     void done();
   };
 }

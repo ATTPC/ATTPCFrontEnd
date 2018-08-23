@@ -19,6 +19,8 @@ namespace attpcfe {
     std::vector<std::pair<double, double>> _sPadCoords{_nPads, {0., 0.}};
     std::vector<std::pair<double, double>> _lPadCoords{_nPads, {0., 0.}};
     std::vector<std::size_t> _orientations;
+
+    std::size_t _nLitPads{0}; // Holds the number of pads currently lit on display.
   };
   
   Padplane::Padplane(std::string geomFile) : _pImpl{new PadplaneImpl{std::move(geomFile)}, [](PadplaneImpl* ptr){ delete ptr; }}
@@ -30,6 +32,8 @@ namespace attpcfe {
   }
 
   std::string const& Padplane::geomFile() const { return _pImpl->_geomFile; }
+
+  std::size_t Padplane::nPads() const { return _pImpl->_nPads; }
 
   bool Padplane::padIsUp(std::size_t padNum) const { return _pImpl->_orientations[padNum]; }
 
@@ -57,7 +61,9 @@ namespace attpcfe {
     else return _pImpl->_lPadCoords[padNum];
   }
 
+  std::size_t Padplane::nLitPads() const { return _pImpl->_nLitPads; }
 
+  void Padplane::setnLitPads(std::size_t nLitPads) { _pImpl->_nLitPads = nLitPads; }
 
   void Padplane::load()
   {

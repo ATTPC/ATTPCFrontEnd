@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
   // Open input file with data handler
   DataHandler<Hdf5Wrapper> dataHandler;
-  dataHandler.open("/home/nico/Downloads/perico.h5");
+  dataHandler.open("/home/nico/Desktop/perico.h5");
   auto nRawEvents = dataHandler.nRawEvents();
 
   // Create state

@@ -36,7 +36,7 @@ namespace attpcfe {
 
     if (_pImpl->protectedMembers()._done) return false;
     
-    assert(!_pImpl->protectedMembers()._q.empty());
+    //assert(!_pImpl->protectedMembers()._q.empty());
     
     task = std::move(_pImpl->protectedMembers()._q.front());
     _pImpl->protectedMembers()._q.pop_front();
@@ -47,6 +47,25 @@ namespace attpcfe {
   {
     if(lock_t lock{_pImpl->protectedMembers()._mutex}; true) _pImpl->protectedMembers()._q.push_back(std::move(task));
     _pImpl->condition().notify_one();
+  }
+
+  // For task stealing.
+  bool NotificationQueue::try_pop(task_t& task)
+  {
+    lock_t lock{_pImpl->protectedMembers()._mutex, std::try_to_lock};
+    if (!lock || _pImpl->protectedMembers()._q.empty()) return false;
+
+    task = std::move(_pImpl->protectedMembers()._q.front());
+    _pImpl->protectedMembers()._q.pop_front();
+    return true;
+  }
+
+  bool NotificationQueue::try_push(task_t task)
+  {
+    if (lock_t lock{_pImpl->protectedMembers()._mutex}; !lock) return false;
+    _pImpl->protectedMembers()._q.push_back(std::move(task));
+    _pImpl->condition().notify_one();
+    return true;
   }
 
   void NotificationQueue::done()
