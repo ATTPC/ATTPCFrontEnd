@@ -207,10 +207,10 @@ namespace attpcfe {
       connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
       connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
       connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
+      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
       connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
       connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
       connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
