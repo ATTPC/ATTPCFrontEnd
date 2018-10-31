@@ -1,6 +1,8 @@
 #define PADPLANE_CPP
 #include <core/Padplane.hpp>
 
+#include <vtkPlot.h>
+
 #include <fstream>
 #include <sstream>
 #include <cmath>
@@ -20,7 +22,7 @@ namespace attpcfe {
     std::vector<std::pair<double, double>> _lPadCoords{_nPads, {0., 0.}};
     std::vector<std::size_t> _orientations;
 
-    std::size_t _nLitPads{0}; // Holds the number of pads currently lit on display.
+    std::vector<vtkPlot*> _litPads;
   };
   
   Padplane::Padplane(std::string geomFile) : _pImpl{new PadplaneImpl{std::move(geomFile)}, [](PadplaneImpl* ptr){ delete ptr; }}
@@ -61,9 +63,7 @@ namespace attpcfe {
     else return _pImpl->_lPadCoords[padNum];
   }
 
-  std::size_t Padplane::nLitPads() const { return _pImpl->_nLitPads; }
-
-  void Padplane::setnLitPads(std::size_t nLitPads) { _pImpl->_nLitPads = nLitPads; }
+  std::vector<vtkPlot*>& Padplane::litPads() { return _pImpl->_litPads; }
 
   void Padplane::load()
   {

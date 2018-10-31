@@ -97,6 +97,7 @@ namespace attpcfe {
       return future;
     }
 
+    // Continuation.
     template<typename T, typename F, typename... Args>
     std::future<T> then(std::future<T>& f, F&& func, Args&&... args) 
     {

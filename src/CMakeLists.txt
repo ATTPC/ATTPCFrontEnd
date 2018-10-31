@@ -1,14 +1,11 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 project(ATTPCFE VERSION 0.1 LANGUAGES C CXX)
 
-# to install libraries into proper locations on all platforms
-include(GNUInstallDirs)
-
-# Do not like that but replaces extra -std=gnu++11 that overtakes target_compile_options
+# Do not like that but gets rid of -std=gnu++11 that overwrites target_compile_features
 # with -std=gnu++1z
 set(CMAKE_CXX_STANDARD 17) 
 
-# define imported targets
+# Define imported targets
 # HDF5
 find_package(HDF5 COMPONENTS C REQUIRED)
 add_library(hdf5 SHARED IMPORTED)
@@ -42,8 +39,9 @@ include(${VTK_USE_FILE})
 #message(STATUS "> VTK lib: ${VTK_LIBRARIES}")
 message(STATUS "> VTK use file: ${VTK_USE_FILE}")
 
-
+# For CTest
 enable_testing()
+
 
 add_subdirectory(lib)
 add_subdirectory(app)

@@ -112,13 +112,12 @@ namespace attpcfe {
     }
 
     // First need to clear display from previous event.
-    if (auto nLitPads = pPadplane->nLitPads(); nLitPads)
+    for (auto& litPad : pPadplane->litPads())
     {
-      for (std::size_t i = pPadplane->nPads(); i <= nLitPads; ++i) 
-	pDisplay->chart()->RemovePlot(i);
+      auto idx = pDisplay->chart()->GetPlotIndex(litPad);
+      pDisplay->chart()->RemovePlot(idx);
     }
-    // Update number of lit pads for current event.
-    pPadplane->setnLitPads(event.nHitLists());
+    pPadplane->litPads().clear();
 
     // We asssume a single hit per list for now.
     auto maxCharge = 0.;
@@ -169,6 +168,7 @@ namespace attpcfe {
       table->SetValue(3, 1, y_0);
 
       auto linePlot = pDisplay->chart()->AddPlot(vtkChart::LINE);
+      pPadplane->litPads().push_back(linePlot);
       linePlot->SetInputData(table, 0, 1);
 
       double ratio = hit.charge() / maxCharge;

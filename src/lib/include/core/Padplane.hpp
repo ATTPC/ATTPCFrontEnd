@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+class vtkPlot;
+
 namespace attpcfe {
 
   class Padplane {
@@ -22,8 +24,7 @@ namespace attpcfe {
     double padSize(std::size_t padNum) const;
     double padHeight(std::size_t padNum) const;
     std::pair<double, double> const& padCoords(std::size_t padNum) const;
-    std::size_t nLitPads() const;
-    void setnLitPads(std::size_t nLitPads);
+    std::vector<vtkPlot*>& litPads();
     void load();
   };
 }

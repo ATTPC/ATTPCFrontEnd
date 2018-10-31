@@ -57,6 +57,10 @@ namespace attpcfe {
       
       event.addHitList(std::move(hits));
     }
+
+
+    std::cout << "> run psa, event: " << event.id() << " with " << event.nHitLists()  << " pads\n";
+    
     event.shrinkHitLists();
     _pState->pushEvent(std::move(event));
   }

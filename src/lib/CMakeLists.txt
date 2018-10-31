@@ -25,28 +25,37 @@ add_library(attpcfelib SHARED
   src/reco/PatRecTask.cpp
   src/reco/TrackRecTask.cpp)
 
-target_include_directories(attpcfelib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  PRIVATE src)
+target_include_directories(attpcfelib
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_compile_options(attpcfelib
-  PUBLIC -std=c++17 -Wall -O2)
+  PRIVATE -Wall -O2)
+#  PRIVATE -std=c++17 -Wall -O2)
+
+target_compile_features(attpcfelib
+  PRIVATE cxx_std_17)
 
 target_link_libraries(attpcfelib
   hdf5)
 
 # 'make install' to the correct locations (provided by GNUInstallDirs)
-install(TARGETS attpcfelib EXPORT ATTPCFELibConfig
+include(GNUInstallDirs)
+install(TARGETS attpcfelib
+    EXPORT ATTPCFELibConfig
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # This is for Windows
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+#    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # This is for Windows
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # This makes the project importable from the install directory
 # Put config file in per-project dir (name MUST match), can also
 # just go into 'cmake'.
-install(EXPORT ATTPCFELibConfig DESTINATION share/ATTPCFELib/cmake)
+install(EXPORT ATTPCFELibConfig
+  DESTINATION share/ATTPCFELib/cmake)
 
 # This makes the project importable from the build directory
 export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
@@ -71,13 +80,19 @@ add_library(attpcguilib SHARED
   include/gui/ReconstructionDockTasks.hpp
   include/gui/ReconstructionDockState.hpp)
 
-target_include_directories(attpcguilib PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  PRIVATE src)
+target_include_directories(attpcguilib
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_compile_options(attpcguilib
-  PUBLIC -std=c++17 -Wall -O2 -fPIC)
+  PRIVATE -std=c++17 -Wall -O2 -fPIC)
+#  PRIVATE -std=c++17 -Wall -O2 -fPIC)
+
+target_compile_features(attpcguilib
+  PRIVATE cxx_std_17)
 
 target_link_libraries(attpcguilib
    Qt5::Widgets

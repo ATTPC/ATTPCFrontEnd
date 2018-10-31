@@ -47,14 +47,11 @@ int main(int argc, char* argv[]) {
   PatRecTask patRec{&state};
   TrackRecTask trackRec{&state};
 
-  auto count = 0;
-
   // Loop over raw events in main thread
   for (std::size_t iRawEvent = 0; iRawEvent < nRawEvents; ++iRawEvent)
   {
     auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;
     RawEvent rawEvent{iRawEvent, nPads};
-    ++count;
     std::cout << "> read raw event: " << iRawEvent << " with " << nPads << "pads\n";
 
     for (std::size_t iPad = 0; iPad < nPads; ++iPad)
@@ -80,8 +77,6 @@ int main(int argc, char* argv[]) {
 
   std::cout << "> " << state.nTrackEvents() << " track events on stack\n";
 
-  std::cout << "> " << count << " raw events\n";
-  
   auto end = std::chrono::system_clock::now();
   auto duration = std::chrono::duration<double>{end - start};
   std::cout << "> ATTPCFE app:MESSAGE, elapsed time: " << duration.count() << "s\n";
