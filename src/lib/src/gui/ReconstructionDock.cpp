@@ -98,8 +98,8 @@ namespace attpcfe {
     layout->addWidget(nEventsLabel);
     layout->addWidget(_pImpl->_nEventsSpin);
     _pImpl->_nEvents = _pImpl->_nEventsSpin->value();
-    connect(_pImpl->_nEventsSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-	    [&](int nEvents){ _pImpl->_nEvents = nEvents; });
+    //connect(_pImpl->_nEventsSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+    //	    [&](int nEvents){ _pImpl->_nEvents = nEvents; });
     
     _pImpl->_runButton = new QPushButton{"Run"};
     layout->addWidget(_pImpl->_runButton);
@@ -190,6 +190,8 @@ namespace attpcfe {
   {
     if (!_pImpl->_rawDataFile.empty() )
     {
+      // Because we decrement _nEvents in showEvent(), we need to get the value from the spinbox directly, not via value changed slot
+      _pImpl->_nEvents = _pImpl->_nEventsSpin->value();
       _pImpl->_pTask = std::make_unique<ReconstructionTask>(_pImpl->_rawDataFile,
 							    static_cast<std::size_t>(_pImpl->_startEvent),
 							    static_cast<std::size_t>(_pImpl->_nEvents),
@@ -230,8 +232,14 @@ namespace attpcfe {
 
   void ReconstructionDock::showEvent()
   {
-    display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->padplane());
-    display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->tpc());
+    //display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->padplane());
+    //display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->tpc());
+
+    auto idx = 0;
+    if (_pImpl->_nEvents) idx = --_pImpl->_nEvents;
+      
+    display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events()[idx], _pImpl->_state->state()->padplane());
+    display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events()[idx], _pImpl->_state->state()->tpc());
   }
 
 

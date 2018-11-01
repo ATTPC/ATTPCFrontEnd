@@ -25,18 +25,13 @@ namespace attpcfe {
     ReconstructionState(ReconstructionState const&) = delete;
     ReconstructionState& operator=(ReconstructionState const&) = delete;
 
-    //static ReconstructionState& Instance() // Initialization of static local storage variable is thread-safe since C++11
-    //{
-    //static ReconstructionState _state;
-    //return _state;
-    //}
-
     void setPadplane(std::unique_ptr<Padplane> padplane);
     void setTpc(std::unique_ptr<Tpc> tpc);
     Padplane* padplane();
     Tpc* tpc();
 
     void reserveStacks(std::size_t capacity);
+    void clearStacks();
     void pushRawEvent(RawEvent&& evt);
     void popRawEvent(RawEvent& evt);
     void pushEvent(Event&& evt);

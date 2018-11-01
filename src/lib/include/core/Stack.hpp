@@ -48,6 +48,17 @@ namespace attpcfe {
     {
       return _protected._elements.back();
     }
+
+    T const& operator[](std::size_t idx) const
+    {
+      return _protected._elements[idx];
+    }
+
+    void clear()
+    {
+      _protected._elements.clear();
+      _protected._elements.shrink_to_fit();
+    }
   };
 }
 #endif

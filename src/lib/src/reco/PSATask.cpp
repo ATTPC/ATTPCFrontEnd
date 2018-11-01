@@ -24,8 +24,9 @@ namespace attpcfe {
 
     Event event{rawEvent.id(), rawEvent.nPads()};
 
-    std::cout << "> run psa, event: " << event.id() << '\n';
-
+    std::cout << "> run psa:\n"
+	      << "> .. event: " << event.id() << '\n';
+    
     for (auto& pad : rawEvent.pads())
     {
       // Perform baseline subtraction 
@@ -58,8 +59,7 @@ namespace attpcfe {
       event.addHitList(std::move(hits));
     }
 
-
-    std::cout << "> run psa, event: " << event.id() << " with " << event.nHitLists()  << " pads\n";
+    std::cout << "> .. pads: " << event.nHitLists()  << '\n';
     
     event.shrinkHitLists();
     _pState->pushEvent(std::move(event));

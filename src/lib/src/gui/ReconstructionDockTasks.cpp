@@ -37,11 +37,11 @@ namespace attpcfe {
     // Open input file with data handler
     DataHandler<Hdf5Wrapper> dataHandler;
     dataHandler.open(_pImpl->_rawDataFile.c_str());
-    auto nRawEvents = dataHandler.nRawEvents();
 
-    // Reserve memory for event stacks
-    _pImpl->_pState->state()->reserveStacks(nRawEvents);
-
+    // Clear and reserve memory for event stacks
+    _pImpl->_pState->state()->clearStacks();
+    _pImpl->_pState->state()->reserveStacks(_pImpl->_nEvents);
+    
     // Create tasks
     PSATask psa{_pImpl->_pState->state()};
 
@@ -51,7 +51,8 @@ namespace attpcfe {
       auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;
       RawEvent rawEvent{iRawEvent, nPads};
 
-      std::cout << "> read raw event: " << iRawEvent << " with " << nPads << " pads\n";
+      std::cout << "> read raw event:\n" 
+		<< "> .. event: " << iRawEvent << '\n';
 
       for (std::size_t iPad = 0; iPad < nPads; ++iPad)
       {

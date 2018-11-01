@@ -37,6 +37,12 @@ namespace attpcfe {
     _pImpl->_events.reserve(capacity);
   }
 
+  void ReconstructionState::clearStacks()
+  {
+    _pImpl->_rawEvents.clear();
+    _pImpl->_events.clear();
+  }
+
   void ReconstructionState::pushRawEvent(RawEvent&& evt) { _pImpl->_rawEvents.push(std::move(evt)); }
   void ReconstructionState::popRawEvent(RawEvent& evt) { _pImpl->_rawEvents.pop(evt); }
   void ReconstructionState::pushEvent(Event&& evt) { _pImpl->_events.push(std::move(evt)); }
