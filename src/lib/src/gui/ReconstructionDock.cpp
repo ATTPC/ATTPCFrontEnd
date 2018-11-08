@@ -9,6 +9,8 @@
 #include <core/ReconstructionState.hpp>
 #include <core/Padplane.hpp>
 #include <core/Tpc.hpp>
+#include <core/DataHandler.hpp>
+#include <core/Hdf5Wrapper.hpp>
 
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
@@ -30,7 +32,8 @@ namespace attpcfe {
 
     MainWindow* _mainWindow;
     std::string _rawDataFile;
-    int _startEvent;
+    std::unique_ptr<DataHandler<Hdf5Wrapper>> _dataHandler{std::make_unique<DataHandler<Hdf5Wrapper>>()};
+    int _fromEvent;
     int _nEvents;
     
     std::unique_ptr<QFutureWatcher<void> > _pWatcher;
@@ -46,7 +49,7 @@ namespace attpcfe {
     QPushButton* _runButton{nullptr};
     QPushButton* _showEventButton{nullptr};
     QSpinBox* _nEventsSpin{nullptr};
-    QSpinBox* _startEventSpin{nullptr};
+    QSpinBox* _fromEventSpin{nullptr};
     
     // ReconstructionState
     std::unique_ptr<ReconstructionDockState> _state{std::make_unique<ReconstructionDockState>()};
@@ -77,29 +80,26 @@ namespace attpcfe {
     layout->addWidget(_pImpl->_loadDataButton);
     connect(_pImpl->_loadDataButton, &QPushButton::clicked, this, &ReconstructionDock::loadData);
 
-    _pImpl->_startEventSpin = new QSpinBox;
-    _pImpl->_startEventSpin->setMinimum(0);
-    _pImpl->_startEventSpin->setMaximum(1000000);
-    _pImpl->_startEventSpin->setSingleStep(1);
-    _pImpl->_startEventSpin->setValue(0);
+    _pImpl->_fromEventSpin = new QSpinBox;
+    _pImpl->_fromEventSpin->setSingleStep(1);
+    _pImpl->_fromEventSpin->setValue(0);
     auto startEventLabel = new QLabel{"From event:"};
     layout->addWidget(startEventLabel);
-    layout->addWidget(_pImpl->_startEventSpin);
-    _pImpl->_startEvent = _pImpl->_startEventSpin->value();
-    connect(_pImpl->_startEventSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-	    [&](int event){ _pImpl->_startEvent = event; });
+    layout->addWidget(_pImpl->_fromEventSpin);
+    _pImpl->_fromEvent = _pImpl->_fromEventSpin->value();
+    connect(_pImpl->_fromEventSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	    [&](int event){ _pImpl->_fromEvent = event; });
 
     _pImpl->_nEventsSpin = new QSpinBox;
     _pImpl->_nEventsSpin->setMinimum(1);
-    _pImpl->_nEventsSpin->setMaximum(10);
     _pImpl->_nEventsSpin->setSingleStep(1);
     _pImpl->_nEventsSpin->setValue(1);
     auto nEventsLabel = new QLabel{"# of events:"};
     layout->addWidget(nEventsLabel);
     layout->addWidget(_pImpl->_nEventsSpin);
     _pImpl->_nEvents = _pImpl->_nEventsSpin->value();
-    //connect(_pImpl->_nEventsSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-    //	    [&](int nEvents){ _pImpl->_nEvents = nEvents; });
+    connect(_pImpl->_fromEventSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	    [&](int event){ _pImpl->_nEventsSpin->setMaximum(_pImpl->_dataHandler->nRawEvents() - _pImpl->_fromEvent); });
     
     _pImpl->_runButton = new QPushButton{"Run"};
     layout->addWidget(_pImpl->_runButton);
@@ -178,7 +178,16 @@ namespace attpcfe {
     dialog.setViewMode(QFileDialog::Detail);
     if (dialog.exec())
     {
-      _pImpl->_rawDataFile = dialog.selectedFiles().front().toStdString();
+      auto dataFile = dialog.selectedFiles().front().toStdString();
+
+      _pImpl->_dataHandler->setDataFile(dataFile);
+      _pImpl->_dataHandler->open(dataFile);
+
+      // Initialize spin box values
+      _pImpl->_fromEventSpin->setMinimum(_pImpl->_dataHandler->fRawEvent());
+      _pImpl->_fromEventSpin->setMaximum(_pImpl->_dataHandler->fRawEvent() + _pImpl->_dataHandler->nRawEvents() - 1);
+      _pImpl->_fromEventSpin->setValue(_pImpl->_dataHandler->fRawEvent());
+      _pImpl->_nEventsSpin->setMaximum(_pImpl->_dataHandler->nRawEvents());
     }
     else
     {
@@ -188,53 +197,59 @@ namespace attpcfe {
 
   void ReconstructionDock::run()
   {
-    if (!_pImpl->_rawDataFile.empty() )
+    // Check pre-conditions
+    if (_pImpl->_state->state()->padplane() == nullptr)
     {
-      // Because we decrement _nEvents in showEvent(), we need to get the value from the spinbox directly, not via value changed slot
-      _pImpl->_nEvents = _pImpl->_nEventsSpin->value();
-      _pImpl->_pTask = std::make_unique<ReconstructionTask>(_pImpl->_rawDataFile,
-							    static_cast<std::size_t>(_pImpl->_startEvent),
-							    static_cast<std::size_t>(_pImpl->_nEvents),
-							    _pImpl->_state.get());
-      _pImpl->_pFuture = std::make_unique<QFuture<void> >(QtConcurrent::run(_pImpl->_pTask.get(), &ReconstructionTask::run));
+      std::cout << "> ReconstructionDock::run, message: a padplane geometry file (.geom) must be loaded first\n";
+      return;
+    }
+    if (_pImpl->_state->state()->tpc() == nullptr)
+    {
+      std::cout << "> ReconstructionDock::run, message: a TPC geometry file (.geom) must be loaded first\n";
+      return;
+    }
+    if (_pImpl->_dataHandler->dataFile().empty() )  
+    {
+      std::cout << "> ReconstructionDock::run, message: a raw data file (.h5) must be loaded first\n";
+      return;
+    }
 
-      _pImpl->_pWatcher = std::make_unique<QFutureWatcher<void> >();
-      auto pWatcher = _pImpl->_pWatcher.get();
-      connect(pWatcher, &QFutureWatcher<void>::started, _pImpl->_mainWindow, &MainWindow::spinTaskStatusWheel);
-      connect(pWatcher, &QFutureWatcher<void>::finished, _pImpl->_mainWindow, &MainWindow::stopTaskStatusWheel);
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
+    _pImpl->_nEvents = _pImpl->_nEventsSpin->value(); // Get value directly from spinbox, not via value changed slot
+    _pImpl->_pTask = std::make_unique<ReconstructionTask>(_pImpl->_dataHandler.get(),
+							  static_cast<std::size_t>(_pImpl->_fromEvent),
+							  static_cast<std::size_t>(_pImpl->_nEvents),
+							  _pImpl->_state.get());
+    _pImpl->_pFuture = std::make_unique<QFuture<void> >(QtConcurrent::run(_pImpl->_pTask.get(), &ReconstructionTask::run));
+
+    _pImpl->_pWatcher = std::make_unique<QFutureWatcher<void> >();
+    auto pWatcher = _pImpl->_pWatcher.get();
+    connect(pWatcher, &QFutureWatcher<void>::started, _pImpl->_mainWindow, &MainWindow::spinTaskStatusWheel);
+    connect(pWatcher, &QFutureWatcher<void>::finished, _pImpl->_mainWindow, &MainWindow::stopTaskStatusWheel);
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadPadplaneButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showPadplaneButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadTpcButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showTpcButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_loadDataButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_runButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::started, [&](){ _pImpl->_showEventButton->setEnabled(false); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadPadplaneButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showPadplaneButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadTpcButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showTpcButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_loadDataButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_runButton->setEnabled(true); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){ _pImpl->_showEventButton->setEnabled(true); });
       
-      connect(pWatcher, &QFutureWatcher<void>::finished, [&](){
-	  _pImpl->_pTask.reset(nullptr);
-	  _pImpl->_pFuture.reset(nullptr);
-	  _pImpl->_pWatcher.reset(nullptr); });
+    connect(pWatcher, &QFutureWatcher<void>::finished, [&](){
+	_pImpl->_pTask.reset(nullptr);
+	_pImpl->_pFuture.reset(nullptr);
+	_pImpl->_pWatcher.reset(nullptr); });
       
-      _pImpl->_pWatcher->setFuture(*(_pImpl->_pFuture.get()));
-    }
-    else
-    {
-      std::cout << "> ReconstructionDock::run, message: a raw data file (.h5) file must be loaded first\n";
-    }
+    _pImpl->_pWatcher->setFuture(*(_pImpl->_pFuture.get()));
   }
 
   void ReconstructionDock::showEvent()
   {
-    //display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->padplane());
-    //display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events().back(), _pImpl->_state->state()->tpc());
-
     auto idx = 0;
     if (_pImpl->_nEvents) idx = --_pImpl->_nEvents;
       

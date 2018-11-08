@@ -2,6 +2,17 @@
 #include <core/Hdf5Wrapper.hpp>
 
 #include <iostream>
+#include <algorithm>
+
+/*
+  Wrapper around specific h5 file format.
+  Data structure:
+  > group: "get"
+  > .. dataset: "i" (i = event number)
+
+  Dataset are n x 517 int16 arrays, n = number of pads in event.
+  First 5 entries are reserved for addressing, next 512 entries are raw ADCs.
+*/
 
 namespace attpcfe {
 
@@ -24,12 +35,12 @@ namespace attpcfe {
 
   Hdf5Wrapper::Hdf5Wrapper() : _pImpl{new Hdf5WrapperImpl{}, [](Hdf5WrapperImpl* ptr) { delete ptr; }} {}
 
-  std::optional<hid_t> Hdf5Wrapper::openFile(char const* file, IO_MODE mode)
+  std::optional<hid_t> Hdf5Wrapper::openFile(std::string const& file, IO_MODE mode)
   {
     hid_t fileId;
     (mode == IO_MODE::READ) ?
-      fileId = H5Fopen(file, H5F_ACC_RDONLY, H5P_DEFAULT) :
-      fileId = H5Fopen(file, H5F_ACC_RDWR, H5P_DEFAULT);
+      fileId = H5Fopen(file.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT) :
+      fileId = H5Fopen(file.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
 
     if (fileId >= 0)
     {
@@ -97,15 +108,28 @@ namespace attpcfe {
       std::cerr << "> Hdf5Wrapper::closeDataset:ERROR, cannot close dataset with ID: " << datasetId << '\n';
   }
 
-  std::size_t Hdf5Wrapper::open(char const* file)
+  std::tuple<std::size_t, std::size_t> Hdf5Wrapper::open(std::string const& file)
   {
     auto f = openFile(file, Hdf5Wrapper::IO_MODE::READ);
-    if (!f.has_value()) return 0;
+    if (!f.has_value()) return {0, 0};
     _pImpl->_file = f.value();
-    auto [group, n_entries] = openGroup(f.value(), "get");
-    if (!group.has_value()) return 0;
+    auto [group, nEntries] = openGroup(f.value(), "get");
+    if (!group.has_value()) return {0, 0};
     _pImpl->_group = group.value();
-    return n_entries;
+
+    auto events = std::vector<int>{}; events.reserve(nEntries);
+    for (std::size_t iEntry = 0; iEntry < nEntries; ++iEntry)
+    {
+      auto nameLength = std::size_t{10};
+      char name[nameLength];
+      if (H5Gget_objname_by_idx(group.value(), iEntry, name, nameLength) > 0)
+      {
+      	events.push_back(std::atoi(name));
+      }
+    }
+
+    auto fEvent = static_cast<std::size_t>(*std::min_element(std::begin(events), std::end(events)));
+    return {nEntries, fEvent};
   }
 
   std::size_t Hdf5Wrapper::nPads(std::size_t iRawEvent)
