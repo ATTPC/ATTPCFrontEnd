@@ -243,7 +243,12 @@ namespace attpcfe {
     connect(pWatcher, &QFutureWatcher<void>::finished, [&](){
 	_pImpl->_pTask.reset(nullptr);
 	_pImpl->_pFuture.reset(nullptr);
-	_pImpl->_pWatcher.reset(nullptr); });
+	_pImpl->_pWatcher.reset(nullptr);
+
+	// Set number of requested events to actual number of processed events
+	// Can happen to be different because of empty events
+	_pImpl->_nEvents = _pImpl->_state->state()->events().size();
+      });
       
     _pImpl->_pWatcher->setFuture(*(_pImpl->_pFuture.get()));
   }
@@ -252,7 +257,10 @@ namespace attpcfe {
   {
     auto idx = 0;
     if (_pImpl->_nEvents) idx = --_pImpl->_nEvents;
-      
+
+    std::cout << "> display event:\n";
+    std::cout << "> .. event id: " << _pImpl->_state->state()->events()[idx].id() << ", idx: " << idx << "/" << _pImpl->_state->state()->events().size() << '\n';
+
     display(_pImpl->_mainWindow->padPlaneDisplay(), _pImpl->_state->state()->events()[idx], _pImpl->_state->state()->padplane());
     display(_pImpl->_mainWindow->tpcDisplay(), _pImpl->_state->state()->events()[idx], _pImpl->_state->state()->tpc());
   }
