@@ -17,48 +17,19 @@ namespace attpcfe {
     } _protected;
 
   public:
-    Stack() {};
+    Stack() = default;
 
-    void reserve(std::size_t capacity)
-    {
-      lock_t lock{_protected._mutex};
-      _protected._elements.reserve(capacity);
-    }
-
-    void pop(T& element)
-    {
-      lock_t lock{_protected._mutex};
-      element = std::move(_protected._elements.back());
-      _protected._elements.pop_back();
-    }
-
-    void push(T&& element)
-    {
-      lock_t lock{_protected._mutex};
-      _protected._elements.push_back(std::move(element));
-    }
-
+    void reserve(std::size_t capacity);
+    void pop(T& element);
+    void push(T&& element);
+ 
     // Following methods are not thread safe 
-    std::size_t size() const
-    {
-      return _protected._elements.size();
-    }
-
-    T const& back() const
-    {
-      return _protected._elements.back();
-    }
-
-    T const& operator[](std::size_t idx) const
-    {
-      return _protected._elements[idx];
-    }
-
-    void clear()
-    {
-      _protected._elements.clear();
-      _protected._elements.shrink_to_fit();
-    }
+    std::size_t size() const;
+    T const& back() const;
+    T const& operator[](std::size_t idx) const;
+    void clear();
   };
 }
+
+#include <core/Stack.inl>
 #endif

@@ -87,21 +87,21 @@ namespace attpcfe {
     }
   }
 
-  void Hdf5Wrapper::closeFile(hid_t fileId)
+  void Hdf5Wrapper::closeFile(hid_t fileId) const
   {
     herr_t retId = H5Fclose(fileId);
     if (retId < 0)
       std::cerr << "> Hdf5Wrapper::closeFile:ERROR, cannot close file with ID: " << fileId << '\n';
   }
 
-  void Hdf5Wrapper::closeGroup(hid_t groupId)
+  void Hdf5Wrapper::closeGroup(hid_t groupId) const
   {
     herr_t retId = H5Gclose(groupId);
     if (retId < 0)
       std::cerr << "> Hdf5Wrapper::closeGroup:ERROR, cannot close group with ID: " << groupId << '\n';
   }
 
-  void Hdf5Wrapper::closeDataset(hid_t datasetId)
+  void Hdf5Wrapper::closeDataset(hid_t datasetId) const
   {
     herr_t retId = H5Dclose(datasetId);
     if (retId < 0)
@@ -151,12 +151,12 @@ namespace attpcfe {
     return {data, data + 517};
   }
 
-  void Hdf5Wrapper::endRawEvent()
+  void Hdf5Wrapper::endRawEvent() const
   {
     closeDataset(_pImpl->_dataset);
   }
 
-  void Hdf5Wrapper::close()
+  void Hdf5Wrapper::close() const
   {
     closeGroup(_pImpl->_group);
     closeFile(_pImpl->_file);

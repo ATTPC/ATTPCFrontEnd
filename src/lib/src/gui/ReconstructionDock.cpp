@@ -31,7 +31,6 @@ namespace attpcfe {
     ReconstructionDockImpl(QWidget* parent) : _mainWindow{dynamic_cast<MainWindow*>(parent)} {}
 
     MainWindow* _mainWindow;
-    std::string _rawDataFile;
     std::unique_ptr<DataHandler<Hdf5Wrapper>> _dataHandler{std::make_unique<DataHandler<Hdf5Wrapper>>()};
     int _fromEvent;
     int _nEvents;

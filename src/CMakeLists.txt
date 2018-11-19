@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 project(ATTPCFE VERSION 0.1 LANGUAGES C CXX)
 
+# To install libraries into proper locations on all platforms
+include(GNUInstallDirs)
+
 # Do not like that but gets rid of -std=gnu++11 that overwrites target_compile_features
 # with -std=gnu++1z
 set(CMAKE_CXX_STANDARD 17) 

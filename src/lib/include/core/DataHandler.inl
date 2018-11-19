@@ -1,41 +1,39 @@
 #ifndef DATAHANDLER_INL
 #define DATAHANDLER_INL
 
-#include <core/DataHandler.hpp>
-
 namespace attpcfe {
 
   template<typename T>	
-  DataHandler::DataHandler() {}
+  DataHandler<T>::DataHandler() {}
 
   template<typename T>
-  DataHandler::~DataHandler() { close(); }
+  DataHandler<T>::~DataHandler() { close(); }
 
   template<typename T>		
-  void DataHandler::setDataFile(std::string const& file) const { _dataFile = file; }
+  void DataHandler<T>::setDataFile(std::string const& file) { _dataFile = file; }
 
   template<typename T>		
-  std::string const& DataHandler::dataFile() const { return _dataFile; }
+  std::string const& DataHandler<T>::dataFile() const { return _dataFile; }
 
   template<typename T>	
-  void DataHandler::open(std::string const& file) { std::tie(_nRawEvents, _fRawEvent) = _T.open(file); }
+  void DataHandler<T>::open(std::string const& file) { std::tie(_nRawEvents, _fRawEvent) = _T.open(file); }
 
   template<typename T>
-  std::size_t DataHandler::nRawEvents() const { return _nRawEvents; }
+  std::size_t DataHandler<T>::nRawEvents() const { return _nRawEvents; }
 
   template<typename T>
-  std::size_t DataHandler::fRawEvent() const { return _fRawEvent; }
+  std::size_t DataHandler<T>::fRawEvent() const { return _fRawEvent; }
 
   template<typename T>
-  std::size_t DataHandler::nPads(std::size_t iRawEvent) const { return _T.nPads(iRawEvent); }
+  std::size_t DataHandler<T>::nPads(std::size_t iRawEvent) { return _T.nPads(iRawEvent); }
 
   template<typename T>
-  std::vector<int16_t> DataHandler::padRawData(std::size_t iPad) const { return _T.padRawData(iPad); }
+  std::vector<int16_t> DataHandler<T>::padRawData(std::size_t iPad) { return _T.padRawData(iPad); }
 
   template<typename T>
-  void DataHandler::endRawEvent() const { _T.endRawEvent(); }
+  void DataHandler<T>::endRawEvent() const { _T.endRawEvent(); }
 
   template<typename T>
-  void DataHandler::close() const { _T.close(); }
+  void DataHandler<T>::close() const { _T.close(); }
 }
 #endif

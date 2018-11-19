@@ -29,9 +29,9 @@ namespace attpcfe {
     std::optional<hid_t> openFile(std::string const& file, IO_MODE mode);
     std::tuple<std::optional<hid_t>, hsize_t> openGroup(hid_t fileId, char const* group);
     std::tuple<std::optional<hid_t>, std::vector<hsize_t> > openDataset(hid_t locId, char const* dataset);
-    void closeFile(hid_t file);
-    void closeGroup(hid_t group);
-    void closeDataset(hid_t dataset);
+    void closeFile(hid_t file) const;
+    void closeGroup(hid_t group) const;
+    void closeDataset(hid_t dataset) const;
 
     template<typename T>
     void readSlab(hid_t dataset, hsize_t* counts, hsize_t* offsets, hsize_t* dimsOut, T* data)
@@ -50,8 +50,8 @@ namespace attpcfe {
     std::tuple<std::size_t, std::size_t> open(std::string const& file);
     std::size_t nPads(std::size_t iRawEvent);
     std::vector<int16_t> padRawData(std::size_t iPad);
-    void endRawEvent();
-    void close();
+    void endRawEvent() const;
+    void close() const;
   };
 }
 

@@ -16,16 +16,6 @@ namespace attpcfe {
   class ReconstructionTask::ReconstructionTaskImpl {
 
   public:
-    //ReconstructionTaskImpl(std::string file, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* state) :
-    //  _rawDataFile{std::move(file)}, _fromEvent{fromEvent}, _nEvents{nEvents}, _pState{state} {}
-
-    //std::string _rawDataFile;
-    //std::size_t _fromEvent;
-    //std::size_t _nEvents;
-    //DataHandler<Hdf5Wrapper> _dataHandler;
-    //ReconstructionDockState* _pState;
-    //};
-
     ReconstructionTaskImpl(DataHandler<Hdf5Wrapper>* pDataHandler, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* pState) :
       _pDataHandler{pDataHandler}, _fromEvent{fromEvent}, _nEvents{nEvents}, _pState{pState} {}
 
@@ -35,10 +25,6 @@ namespace attpcfe {
     std::size_t _nEvents;
     ReconstructionDockState* _pState;
   };
-
-  //ReconstructionTask::ReconstructionTask(std::string file, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* state) :
-  //  _pImpl{new ReconstructionTaskImpl{std::move(file), fromEvent, nEvents, state}, [](ReconstructionTaskImpl* ptr){ delete ptr; }} {}
-
 
   ReconstructionTask::ReconstructionTask(DataHandler<Hdf5Wrapper>* pDataHandler, std::size_t fromEvent, std::size_t nEvents, ReconstructionDockState* pState) :
     _pImpl{new ReconstructionTaskImpl{pDataHandler, fromEvent, nEvents, pState}, [](ReconstructionTaskImpl* ptr){ delete ptr; }} {}
