@@ -68,14 +68,12 @@ add_library(attpcguilib SHARED
   src/gui/MainWindow.cpp
   src/gui/Display.cpp
   src/gui/DisplayFunctions.cpp
-  src/gui/GuiState.cpp
   src/gui/ReconstructionDock.cpp
   src/gui/ReconstructionDockTasks.cpp
   src/gui/ReconstructionDockState.cpp	
   include/gui/MainWindow.hpp
   include/gui/Display.hpp
   include/gui/DisplayFunctions.hpp
-  include/gui/GuiState.hpp
   include/gui/ReconstructionDock.hpp
   include/gui/ReconstructionDockTasks.hpp
   include/gui/ReconstructionDockState.hpp)
