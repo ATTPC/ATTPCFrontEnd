@@ -35,7 +35,6 @@ message(STATUS "> Qt5 Gui library: ${QtGui_loc}")
 message(STATUS "> Qt5 Core library: ${QtCore_loc}")
 
 # VTK
-set(ENV{VTK_DIR} "/home/nico/Work/ThirdPartyLibs/VTK/build")
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 #message(STATUS "> VTK include: ${VTK_INCLUDE_DIRS}")
