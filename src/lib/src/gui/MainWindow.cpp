@@ -22,9 +22,7 @@ namespace attpcfe {
   class MainWindow::MainWindowImpl {
     
   public:
-    MainWindowImpl() : _pState{std::make_unique<GuiState>()} {} 
-
-    std::unique_ptr<GuiState> _pState;
+    MainWindowImpl() = default; 
     
     // Handles to widgets MainWindow took ownership of
     //QTabWidget _pDisplayTabs{nullptr};
@@ -82,21 +80,6 @@ namespace attpcfe {
   {
     auto dockMenu = menuBar()->addMenu("&Docks");
       
-    // Padplane dock
-    //_pImpl->_pPadplaneDock = new PadplaneDock{this};
-    //addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pPadplaneDock);
-    ////_pImpl->_pPadplaneDock->hide();
-    //dockMenu->addAction(_pImpl->_pPadplaneDock->toggleViewAction());
-    //dockMenu->actions().last()->setStatusTip(tr("View padplane dock"));
-    //dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
-
-    // TPC dock
-    //_pImpl->_pTpcDock = new TpcDock{this};
-    //addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pTpcDock);
-    //dockMenu->addAction(_pImpl->_pTpcDock->toggleViewAction());
-    //dockMenu->actions().last()->setStatusTip(tr("View TPC dock"));
-    //dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-
     // Reconstruction dock
     _pImpl->_pReconstructionDock = new ReconstructionDock{this};
     addDockWidget(Qt::RightDockWidgetArea, _pImpl->_pReconstructionDock);
@@ -105,7 +88,6 @@ namespace attpcfe {
     dockMenu->actions().last()->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
   }
 
-  GuiState* MainWindow::state() { return _pImpl->_pState.get(); }
   Display* MainWindow::padPlaneDisplay() { return _pImpl->_pPadplaneDisplay; }
   Display* MainWindow::tpcDisplay() { return _pImpl->_pTpcDisplay; }
   
