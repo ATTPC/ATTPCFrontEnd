@@ -1,6 +1,5 @@
 #include <core/DataHandler.hpp>
 #include <core/Hdf5Wrapper.hpp>
-#include <core/TaskSystem.hpp>
 #include <core/ReconstructionState.hpp>
 #include <core/Pad.hpp>
 #include <core/RawEvent.hpp>
@@ -14,6 +13,7 @@
 #include <reco/PSATask.hpp>
 #include <reco/PatRecTask.hpp>
 #include <reco/TrackRecTask.hpp>
+#include <utils/TaskSystem.hpp>
 
 #include <chrono>
 #include <iostream>

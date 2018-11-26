@@ -1,5 +1,5 @@
-#ifndef TASKSYSTEM_HPP
-#define TASKSYSTEM_HPP
+#ifndef TASKSYSTEM_INL
+#define TASKSYSTEM_INL
 
 namespace attpcfe {
 

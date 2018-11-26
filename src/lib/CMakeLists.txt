@@ -5,9 +5,8 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
+  src/core/Logger.cpp
   src/core/Hdf5Wrapper.cpp
-  src/core/NotificationQueue.cpp
-  src/core/TaskSystem.cpp
   src/core/ReconstructionState.cpp
   src/core/Pad.cpp
   src/core/RawEvent.cpp
@@ -23,7 +22,11 @@ add_library(attpcfelib SHARED
   src/reco/BaselineCorrection.cpp
   src/reco/PSATask.cpp
   src/reco/PatRecTask.cpp
-  src/reco/TrackRecTask.cpp)
+  src/reco/TrackRecTask.cpp
+  src/utils/NotificationQueue.cpp
+  src/utils/TaskSystem.cpp
+  src/utils/Active.cpp
+  src/utils/Singleton.cpp)
 
 target_include_directories(attpcfelib
   PUBLIC
@@ -34,7 +37,6 @@ target_include_directories(attpcfelib
 
 target_compile_options(attpcfelib
   PRIVATE -Wall -O2)
-#  PRIVATE -std=c++17 -Wall -O2)
 
 target_compile_features(attpcfelib
   PRIVATE cxx_std_17)
@@ -87,7 +89,6 @@ target_include_directories(attpcguilib
 
 target_compile_options(attpcguilib
   PRIVATE -std=c++17 -Wall -O2 -fPIC)
-#  PRIVATE -std=c++17 -Wall -O2 -fPIC)
 
 target_compile_features(attpcguilib
   PRIVATE cxx_std_17)

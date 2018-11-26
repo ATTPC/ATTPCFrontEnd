@@ -3,7 +3,7 @@
 // Not using pimpl idiom because of templated async
 #ifndef TASKSYSTEM_HPP
 #define TASKSYSTEM_HPP
-#include <core/NotificationQueue.hpp>
+#include <utils/NotificationQueue.hpp>
 
 #include <thread>
 #include <vector>

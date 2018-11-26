@@ -1,7 +1,6 @@
 #define RECONSTRUCTIONTASKS_CPP
 #include <gui/ReconstructionDockTasks.hpp>
 #include <gui/ReconstructionDockState.hpp>
-#include <core/TaskSystem.hpp>
 #include <core/ReconstructionState.hpp>
 #include <core/Padplane.hpp>
 #include <core/Tpc.hpp>
@@ -10,6 +9,7 @@
 #include <core/Pad.hpp>
 #include <core/RawEvent.hpp>
 #include <reco/PSATask.hpp>
+#include <utils/TaskSystem.hpp>
 
 namespace attpcfe {
 

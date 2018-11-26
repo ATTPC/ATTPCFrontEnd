@@ -1,5 +1,5 @@
-#define NOTIFICATION_QUEUE_CPP
-#include <core/NotificationQueue.hpp>
+#define NOTIFICATIONQUEUE_CPP
+#include <utils/NotificationQueue.hpp>
 
 #include <deque>
 #include <mutex>
