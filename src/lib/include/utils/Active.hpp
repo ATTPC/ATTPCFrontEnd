@@ -2,6 +2,8 @@
 #ifndef ACTIVE_HPP
 #define ACTIVE_HPP
 
+#include <utils/SimpleQueue.hpp>
+
 #include <functional>
 #include <memory>
 #include <thread>

@@ -16,4 +16,6 @@ namespace attpcfe {
     static T& instance();
   };
 }
+
+#include <utils/Singleton.inl>
 #endif

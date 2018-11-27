@@ -2,6 +2,7 @@
 #define LOGGER_HPP
 
 #include <utils/Singleton.hpp>
+
 #include <memory>
 
 namespace attpcfe {
@@ -13,10 +14,10 @@ namespace attpcfe {
     class LoggerImpl;
     std::unique_ptr<LoggerImpl, void(*)(LoggerImpl*)> _pImpl;
     
-    Logger() = default;
+    Logger();
 
   public:
     
   };
 }
-#endif;
+#endif

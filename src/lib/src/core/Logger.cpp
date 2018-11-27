@@ -1,6 +1,6 @@
 #define LOGGER_CPP
 #include <core/Logger.hpp>
-#include <utils/Active.h>
+#include <utils/Active.hpp>
 
 #include <vector>
 

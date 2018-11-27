@@ -25,8 +25,7 @@ add_library(attpcfelib SHARED
   src/reco/TrackRecTask.cpp
   src/utils/NotificationQueue.cpp
   src/utils/TaskSystem.cpp
-  src/utils/Active.cpp
-  src/utils/Singleton.cpp)
+  src/utils/Active.cpp)
 
 target_include_directories(attpcfelib
   PUBLIC

@@ -15,7 +15,7 @@ namespace attpcfe {
   void SimpleQueue<T>::push(T task) {
 
     lock_t lock{_mutex};
-    _q.push_back(std::move(T));
+    _q.push_back(std::move(task));
   }
 }
 #endif
