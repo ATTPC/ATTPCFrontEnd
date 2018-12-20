@@ -44,6 +44,5 @@ message(STATUS "> VTK use file: ${VTK_USE_FILE}")
 # For CTest
 enable_testing()
 
-
 add_subdirectory(lib)
 add_subdirectory(app)

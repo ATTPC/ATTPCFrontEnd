@@ -6,6 +6,9 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # ========================================================
 add_library(attpcfelib SHARED
   src/core/Logger.cpp
+  src/core/LogMsg.cpp
+  src/core/LogLevel.cpp
+  src/core/LogSink.cpp
   src/core/Hdf5Wrapper.cpp
   src/core/ReconstructionState.cpp
   src/core/Pad.cpp
@@ -123,3 +126,9 @@ add_executable(task_system
 target_link_libraries(task_system
   attpcfelib ${VTK_LIBRARIES})
 add_test(NAME task_system_test COMMAND task_system)
+
+add_executable(logger
+    test/LoggerTest.cpp)
+target_link_libraries(logger
+  attpcfelib ${VTK_LIBRARIES})
+add_test(NAME logger_test COMMAND logger)
