@@ -2,8 +2,7 @@
 #define LOGMSG_INL
 
 namespace attpcfe {
-
-
+  
   template<typename T>
   LogMsg& LogMsg::operator<<(T value)
   {

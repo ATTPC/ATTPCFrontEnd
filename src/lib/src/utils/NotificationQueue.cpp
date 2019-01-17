@@ -31,7 +31,7 @@ namespace attpcfe {
   bool NotificationQueue::pop(task_t& task)
   {
     lock_t lock{_pImpl->protectedMembers()._mutex};
-    while (_pImpl->protectedMembers()._q.empty() && !_pImpl->protectedMembers()._done)
+    while (_pImpl->protectedMembers()._q.empty() && !_pImpl->protectedMembers()._done) // Protects from spurious wakes
       _pImpl->condition().wait(lock);
 
     if (_pImpl->protectedMembers()._done) return false;
@@ -62,7 +62,7 @@ namespace attpcfe {
 
   bool NotificationQueue::try_push(task_t task)
   {
-    if (lock_t lock{_pImpl->protectedMembers()._mutex}; !lock) return false;
+    if (lock_t lock{_pImpl->protectedMembers()._mutex, std::try_to_lock}; !lock) return false;
     _pImpl->protectedMembers()._q.push_back(std::move(task));
     _pImpl->condition().notify_one();
     return true;

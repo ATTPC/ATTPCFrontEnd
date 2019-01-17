@@ -10,6 +10,7 @@
 #include <core/TrackEvent.hpp>
 #include <core/Padplane.hpp>
 #include <core/Tpc.hpp>
+#include <core/Logger.hpp>
 #include <reco/PSATask.hpp>
 #include <reco/PatRecTask.hpp>
 #include <reco/TrackRecTask.hpp>
@@ -25,14 +26,19 @@ int main(int argc, char* argv[]) {
 
   auto start = std::chrono::system_clock::now();
 
+
+  
   // Create task system
   TaskSystem taskSystem;
   std::vector<std::future<void>> futures;
 
+  gLog << "start";
+  /*
   // Open input file with data handler
   DataHandler<Hdf5Wrapper> dataHandler;
   dataHandler.open("/home/nico/Desktop/perico.h5");
-  auto nRawEvents = dataHandler.nRawEvents();
+  //auto nRawEvents = dataHandler.nRawEvents();
+  auto nRawEvents = std::size_t{10};
 
   // Create state
   auto padplane = std::make_unique<Padplane>("/home/nico/Desktop/padplane.geom");
@@ -52,7 +58,8 @@ int main(int argc, char* argv[]) {
   {
     auto nPads = dataHandler.nPads(iRawEvent); if (nPads == 0) continue;
     RawEvent rawEvent{iRawEvent, nPads};
-    std::cout << "> read raw event: " << iRawEvent << " with " << nPads << "pads\n";
+    //std::cout << "> read raw event: " << iRawEvent << " with " << nPads << "pads\n";
+    //gLog << "read raw event: " << iRawEvent << " with " << nPads << "pads";
 
     for (std::size_t iPad = 0; iPad < nPads; ++iPad)
     {
@@ -66,17 +73,17 @@ int main(int argc, char* argv[]) {
     state.pushRawEvent(std::move(rawEvent));
 
     // Run tasks in parallel
-    auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
-    auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, patRec);
-    auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, trackRec);
-    futures.push_back(std::move(fTrackEvent));
+    //auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
+    //auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, patRec);
+    //auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, trackRec);
+    //futures.push_back(std::move(fTrackEvent));
   }
 
   // Wait for all continuations to finish
-  for (auto const& f : futures) f.wait();
+  //for (auto const& f : futures) f.wait();
 
-  std::cout << "> " << state.nTrackEvents() << " track events on stack\n";
-
+  //std::cout << "> " << state.nTrackEvents() << " track events on stack\n";
+  */
   auto end = std::chrono::system_clock::now();
   auto duration = std::chrono::duration<double>{end - start};
   std::cout << "> ATTPCFE app:MESSAGE, elapsed time: " << duration.count() << "s\n";

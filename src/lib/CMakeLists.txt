@@ -90,7 +90,7 @@ target_include_directories(attpcguilib
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_compile_options(attpcguilib
-  PRIVATE -std=c++17 -Wall -O2 -fPIC)
+  PRIVATE -Wall -O2 -fPIC)
 
 target_compile_features(attpcguilib
   PRIVATE cxx_std_17)

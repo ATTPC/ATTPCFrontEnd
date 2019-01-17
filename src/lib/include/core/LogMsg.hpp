@@ -23,9 +23,9 @@ namespace attpcfe {
   private:
     friend class Logger;
     
-    LogMsg(Logger* logger, eLogLevel level, std::string const& file, std::size_t line);
+    LogMsg(Logger* logger, eLogLevel level, std::string const& filename, std::size_t line);
     LogMsg(LogMsg const&) = delete;
-    LogMsg(LogMsg&&) = delete;
+    LogMsg(LogMsg&&);
 
     Logger* _logger;
     Meta _meta;

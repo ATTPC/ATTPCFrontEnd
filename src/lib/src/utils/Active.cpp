@@ -10,7 +10,7 @@ namespace attpcfe {
 
   Active::~Active() {
 
-    send([&]{ _done = true; });
+    send([&](){ _done = true; });
     _thd->join();
   }
 

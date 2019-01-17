@@ -2,7 +2,8 @@
 #ifndef ACTIVE_HPP
 #define ACTIVE_HPP
 
-#include <utils/SimpleQueue.hpp>
+//#include <utils/SimpleQueue.hpp>
+#include <utils/SimpleNotificationQueue.hpp>
 
 #include <functional>
 #include <memory>
@@ -16,8 +17,9 @@ namespace attpcfe {
 
     bool _done{false};
     std::unique_ptr<std::thread> _thd{nullptr};
-    SimpleQueue<Message> _q;
-
+    //SimpleQueue<Message> _q;
+    SimpleNotificationQueue<Message> _q;
+    
     void run();
 
   public:

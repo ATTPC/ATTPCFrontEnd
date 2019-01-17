@@ -1,3 +1,4 @@
+// Logging framework based on tutorial from GrandMaster's Playground
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
@@ -21,7 +22,6 @@ namespace attpcfe {
     Logger();
 
   public:
-
     void addSink(LogSink sink);
     void flush(LogMsg const* msg);
 
@@ -29,6 +29,7 @@ namespace attpcfe {
   };
 }
 
+// Macros to generate messages with proper logging levels
 #define gLogLevel(level) (			\
         attpcfe::Logger::instance()(			\
 	         attpcfe::eLogLevel::level,		\

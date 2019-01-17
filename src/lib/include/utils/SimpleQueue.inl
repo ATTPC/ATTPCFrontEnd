@@ -4,6 +4,12 @@
 namespace attpcfe {
 
   template <typename T>
+  bool SimpleQueue<T>::_empty() {
+
+    return _q.empty();
+  }
+  
+  template <typename T>
   void SimpleQueue<T>::pop(T& task) {
 
     lock_t lock{_mutex};

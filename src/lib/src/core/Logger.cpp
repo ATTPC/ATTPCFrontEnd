@@ -13,8 +13,8 @@ namespace attpcfe {
   public:
     LoggerImpl() {};
 
-    std::vector<LogSink> _sinks;
     Active _active;
+    std::vector<LogSink> _sinks;
   };
 
   Logger::Logger() : _pImpl{new LoggerImpl{}, [](LoggerImpl* ptr){ delete ptr; }}
@@ -36,7 +36,7 @@ namespace attpcfe {
 
     auto meta = msg->_meta;
     auto msg_ = msg->_buffer.str();
-    _pImpl->_active.send([=](){ for (auto const& sink : _pImpl->_sinks) log(sink, meta, msg_); });
+    _pImpl->_active.send([=](){	for (auto const& sink : _pImpl->_sinks) log(sink, meta, msg_); });
   }
 
   LogMsg Logger::operator()(eLogLevel level, std::string const& filename, std::size_t line) {

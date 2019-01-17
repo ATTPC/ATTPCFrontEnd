@@ -1,4 +1,8 @@
 // Implements concept-based run-time polymorphism a la Sean Parent (runtime-concept idiom)
+// A sink (loggable) satisfies the log concept for a given message (meta + msg)
+// In this implementation logging is down via a call operator
+//   log(loggable, meta, msg)
+//   -> loggable(meta, msg)
 #ifndef LOGSINK_HPP
 #define LOGSINK_HPP
 

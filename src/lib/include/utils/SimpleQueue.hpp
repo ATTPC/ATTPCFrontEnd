@@ -16,7 +16,7 @@ namespace attpcfe {
     
   public:
     SimpleQueue() = default;
-
+    bool _empty();
     void pop(T&);
     void push(T);
   };
