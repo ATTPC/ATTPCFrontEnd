@@ -1,7 +1,7 @@
 #ifndef LOGMSG_HPP
 #define LOGMSG_HPP
 
-#include <core/LogLevel.hpp>
+#include <utils/LogLevel.hpp>
 
 #include <string>
 #include <sstream>
@@ -42,5 +42,5 @@ namespace attpcfe {
     LogMsg& operator<<(std::ostream& (*fn)(std::ostream&));
   };
 }
-#include <core/LogMsg.inl>
+#include <utils/LogMsg.inl>
 #endif

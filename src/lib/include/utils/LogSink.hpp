@@ -6,7 +6,7 @@
 #ifndef LOGSINK_HPP
 #define LOGSINK_HPP
 
-#include <core/LogMsg.hpp>
+#include <utils/LogMsg.hpp>
 
 #include <memory>
 
@@ -54,5 +54,5 @@ namespace attpcfe {
     friend void log(LogSink const& sink, LogMsg::Meta const&, std::string const& msg);
   };
 }
-#include <core/LogSink.inl>
+#include <utils/LogSink.inl>
 #endif

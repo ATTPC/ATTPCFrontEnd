@@ -1,5 +1,5 @@
 #define LOGLEVEL_CPP
-#include <core/LogLevel.hpp>
+#include <utils/LogLevel.hpp>
 
 std::ostream& operator<<(std::ostream& os, attpcfe::eLogLevel const& level)
 {

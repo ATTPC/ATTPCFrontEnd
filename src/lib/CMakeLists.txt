@@ -5,10 +5,6 @@ project(lib VERSION 0.1 LANGUAGES C CXX)
 # Define the core library
 # ========================================================
 add_library(attpcfelib SHARED
-  src/core/Logger.cpp
-  src/core/LogMsg.cpp
-  src/core/LogLevel.cpp
-  src/core/LogSink.cpp
   src/core/Hdf5Wrapper.cpp
   src/core/ReconstructionState.cpp
   src/core/Pad.cpp
@@ -28,7 +24,11 @@ add_library(attpcfelib SHARED
   src/reco/TrackRecTask.cpp
   src/utils/NotificationQueue.cpp
   src/utils/TaskSystem.cpp
-  src/utils/Active.cpp)
+  src/utils/Active.cpp
+  src/utils/Logger.cpp
+  src/utils/LogMsg.cpp
+  src/utils/LogLevel.cpp
+  src/utils/LogSink.cpp)
 
 target_include_directories(attpcfelib
   PUBLIC

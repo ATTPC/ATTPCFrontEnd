@@ -1,6 +1,6 @@
 #define LOGMSG_CPP
-#include <core/LogMsg.hpp>
-#include <core/Logger.hpp>
+#include <utils/LogMsg.hpp>
+#include <utils/Logger.hpp>
 
 namespace attpcfe {
 

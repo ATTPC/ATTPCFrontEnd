@@ -1,6 +1,6 @@
 #define LOGSINK_CPP
-#include <core/LogSink.hpp>
-#include <core/LogMsg.hpp>
+#include <utils/LogSink.hpp>
+#include <utils/LogMsg.hpp>
 
 namespace attpcfe {
 

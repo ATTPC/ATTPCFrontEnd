@@ -3,8 +3,8 @@
 #define LOGGER_HPP
 
 #include <utils/Singleton.hpp>
-#include <core/LogMsg.hpp> // Needed for gLogLevel macro
-#include <core/LogLevel.hpp> // Needed for gLogLevel macro
+#include <utils/LogMsg.hpp> // Needed for gLogLevel macro
+#include <utils/LogLevel.hpp> // Needed for gLogLevel macro
 
 #include <memory>
 
