@@ -4,7 +4,7 @@
 #include <utils/Active.hpp>
 
 #include <vector>
-#include <iostream>
+//#include <iostream>
 
 namespace attpcfe {
 
@@ -20,11 +20,8 @@ namespace attpcfe {
   Logger::Logger() : _pImpl{new LoggerImpl{}, [](LoggerImpl* ptr){ delete ptr; }}
   {
     // Console sink
-    addSink([](LogMsg::Meta const& meta, std::string const& msg){
-	std::cout << meta._level
-		  << "FILE: " << meta._file << ' '
-		  << "LINE: " << meta._line << ' '
-		  << "=> " << msg << '\n'; });
+    addSink(makeConsoleSink());
+    addSink(makeFileSink("/home/nico/Desktop/attpcfe.log"));
   }
 
   void Logger::addSink(LogSink sink) {

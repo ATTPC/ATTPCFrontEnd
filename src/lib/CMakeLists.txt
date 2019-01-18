@@ -66,7 +66,7 @@ export(TARGETS attpcfelib FILE ATTPCFELibConfig.cmake)
 
 # ========================================================
 # Define the gui library
-# (include all headers with the Q_OBJECT macro)
+# (includes all headers with the Q_OBJECT macro)
 # ========================================================
 add_library(attpcguilib SHARED
   src/gui/MainWindow.cpp
@@ -97,15 +97,14 @@ target_compile_features(attpcguilib
 
 target_link_libraries(attpcguilib
    Qt5::Widgets
-   Qt5::Charts
    Qt5::Gui
    Qt5::Core)
 #   ${VTK_LIBRARIES})
 
 install(TARGETS attpcguilib EXPORT ATTPCGUILibConfig
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # this is for Windows
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+#    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})  # this is for Windows
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT ATTPCGUILibConfig DESTINATION share/ATTPCGUILib/cmake)

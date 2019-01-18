@@ -37,12 +37,11 @@ message(STATUS "> Qt5 Core library: ${QtCore_loc}")
 # VTK
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
-#message(STATUS "> VTK include: ${VTK_INCLUDE_DIRS}")
-#message(STATUS "> VTK lib: ${VTK_LIBRARIES}")
 message(STATUS "> VTK use file: ${VTK_USE_FILE}")
 
-# For CTest
+# Enable CTest
 enable_testing()
 
+# Project tree
 add_subdirectory(lib)
 add_subdirectory(app)

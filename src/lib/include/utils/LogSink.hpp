@@ -9,6 +9,7 @@
 #include <utils/LogMsg.hpp>
 
 #include <memory>
+#include <fstream>
 
 namespace attpcfe {
 
@@ -53,6 +54,21 @@ namespace attpcfe {
 
     friend void log(LogSink const& sink, LogMsg::Meta const&, std::string const& msg);
   };
+
+  // Would usually move this to a separate header.
+  LogSink makeConsoleSink();
+  
+  class FileSink {
+
+  public:
+    FileSink(std::string const& filename);
+
+    void operator()(LogMsg::Meta const& meta, std::string const& msg) const;
+
+    std::unique_ptr<std::ofstream> _pFile;
+  };
+  
+  LogSink makeFileSink(std::string const& filename);
 }
 #include <utils/LogSink.inl>
 #endif
