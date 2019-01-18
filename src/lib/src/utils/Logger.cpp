@@ -4,7 +4,6 @@
 #include <utils/Active.hpp>
 
 #include <vector>
-//#include <iostream>
 
 namespace attpcfe {
 
@@ -19,8 +18,9 @@ namespace attpcfe {
 
   Logger::Logger() : _pImpl{new LoggerImpl{}, [](LoggerImpl* ptr){ delete ptr; }}
   {
-    // Console sink
+    // Console sink.
     addSink(makeConsoleSink());
+    // File sink.
     addSink(makeFileSink("/home/nico/Desktop/attpcfe.log"));
   }
 
