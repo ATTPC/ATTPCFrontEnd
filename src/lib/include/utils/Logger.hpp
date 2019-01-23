@@ -1,8 +1,12 @@
 // Logging framework based on tutorial from GrandMaster's Playground
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
-
+#define UNITTEST 1;
+#ifdef UNITTEST
+#include <utils/UnitTestable.hpp>
+#endif
 #include <utils/Singleton.hpp>
+
 #include <utils/LogMsg.hpp> // Needed for gLogLevel macro
 #include <utils/LogLevel.hpp> // Needed for gLogLevel macro
 
@@ -11,9 +15,16 @@
 namespace attpcfe {
 
   class LogSink;
-  
-  class Logger : public Singleton<Logger> {
 
+#ifdef UNITTEST 
+  class Logger : public Singleton<Logger>, public UnitTestable<Logger> {
+
+    friend struct Test<Logger>;
+    static void test();
+#else
+  class Logger : public Singleton<Logger> {
+#endif
+    
     friend class Singleton<Logger>;
 
     class LoggerImpl;

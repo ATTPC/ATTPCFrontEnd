@@ -1,14 +1,13 @@
 #ifndef UNITTESTREGISTER_HPP
 #define UNITTESTREGISTER_HPP
-
 #include <utils/UnitTest.hpp>
-
 #include <utils/Singleton.hpp>
+
 #include <memory>
 
 namespace attpcfe {
 
-  //class UnitTest;
+  class UnitTest;
 
   class UnitTestRegister : public Singleton<UnitTestRegister> {
 

@@ -3,7 +3,10 @@
 // Not using pimpl idiom because of templated async
 #ifndef TASKSYSTEM_HPP
 #define TASKSYSTEM_HPP
+#define UNITTEST 1;
+#ifdef UNITTEST
 #include <utils/UnitTestable.hpp>
+#endif
 #include <utils/NotificationQueue.hpp>
 
 #include <thread>
@@ -14,14 +17,14 @@
 
 namespace attpcfe {
 
-  #ifdef UNITTEST
+#ifdef UNITTEST
   class TaskSystem : public UnitTestable<TaskSystem> {
 
     friend struct Test<TaskSystem>;
     static void test();
-  #else
+#else
   class TaskSystem {
-  #endif
+#endif
 
     const unsigned int _count{std::thread::hardware_concurrency()};
     const unsigned int _K{3};

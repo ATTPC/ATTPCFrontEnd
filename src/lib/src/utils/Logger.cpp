@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include <iostream>
+
 namespace attpcfe {
 
   class Logger::LoggerImpl {
@@ -40,4 +42,11 @@ namespace attpcfe {
 
     return LogMsg(this, level, filename, line);
   }
+
+#ifdef UNITTEST
+  void Logger::test()
+  {
+    std::cout << "> Logger::test\n";
+  }
+#endif
 }

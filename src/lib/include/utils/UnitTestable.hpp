@@ -4,9 +4,6 @@
 
 namespace attpcfe {
 
-  //template<class>
-  //struct Test;
-
   template<class T>
   struct Test {
 

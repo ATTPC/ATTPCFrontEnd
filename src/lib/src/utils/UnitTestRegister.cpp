@@ -1,6 +1,5 @@
 #define UNITTESTREGISTER_CPP
 #include <utils/UnitTestRegister.hpp>
-#include <utils/UnitTest.hpp>
 
 #include <vector>
 

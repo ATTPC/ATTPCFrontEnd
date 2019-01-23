@@ -1,5 +1,9 @@
 #ifndef SIMPLENOTIFICATIONQUEUE_HPP
 #define SIMPLENOTIFICATIONQUEUE_HPP
+#define UNITTEST 1;
+#ifdef UNITTEST
+#include <utils/UnitTestable.hpp>
+#endif
 
 #include <deque>
 #include <mutex>
@@ -7,9 +11,16 @@
 
 namespace attpcfe {
 
-  template <typename T>
-  class SimpleNotificationQueue {
+  template<typename T>
+#ifdef UNITTEST
+  class SimpleNotificationQueue : public UnitTestable<SimpleNotificationQueue<T>> {
 
+    friend struct Test<SimpleNotificationQueue<T>>;
+    static void test();
+#else
+  class SimpleNotificationQueue {
+#endif
+    
     using lock_t = std::unique_lock<std::mutex>;
     
     std::deque<T> _q;
