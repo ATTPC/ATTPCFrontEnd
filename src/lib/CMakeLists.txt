@@ -28,7 +28,9 @@ add_library(attpcfelib SHARED
   src/utils/Logger.cpp
   src/utils/LogMsg.cpp
   src/utils/LogLevel.cpp
-  src/utils/LogSink.cpp)
+  src/utils/LogSink.cpp
+  src/utils/UnitTestRegister.cpp
+  src/utils/UnitTest.cpp)
 
 target_include_directories(attpcfelib
   PUBLIC
@@ -131,3 +133,9 @@ add_executable(logger
 target_link_libraries(logger
   attpcfelib ${VTK_LIBRARIES})
 add_test(NAME logger_test COMMAND logger)
+
+add_executable(unit_test_register
+    test/UnitTestRegisterTest.cpp)
+target_link_libraries(unit_test_register
+  attpcfelib ${VTK_LIBRARIES})
+add_test(NAME unit_test_register_test COMMAND unit_test_register)

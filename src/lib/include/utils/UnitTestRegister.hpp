@@ -1,28 +1,26 @@
 #ifndef UNITTESTREGISTER_HPP
 #define UNITTESTREGISTER_HPP
 
-#include <utils/Singleton.hpp>
+#include <utils/UnitTest.hpp>
 
-#include <vector>
+#include <utils/Singleton.hpp>
+#include <memory>
 
 namespace attpcfe {
 
-  class UnitTest;
+  //class UnitTest;
 
   class UnitTestRegister : public Singleton<UnitTestRegister> {
 
     friend class Singleton<UnitTestRegister>;
 
     class UnitTestRegisterImpl;
-    std::unique_ptr<UnitTestRegisterImpl, void(*)(UniTestRegisterImpl*)> _pImpl;
+    std::unique_ptr<UnitTestRegisterImpl, void(*)(UnitTestRegisterImpl*)> _pImpl;
     
-    UnitTestRegister() = default;
-
-    std::vector<UnitTest> _unitTests;
+    UnitTestRegister();
 
   public:
-    //template<typename T, typename F, typename... Args>
-    void register(UnitTest unitTest);
+    void register_(UnitTest unitTest);
     void runUnitTests();
   };
 }

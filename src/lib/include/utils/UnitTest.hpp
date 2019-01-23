@@ -26,8 +26,8 @@ namespace attpcfe {
     std::shared_ptr<concept_t const> _self;
 
   public:
-    template<typename T, typename F, typename... Args>
-    UnitTest(T type, F&& func, Args&&... args);
+    template<typename T>
+    UnitTest(T impl);
     
     friend void test(UnitTest const& unitTest);
   };

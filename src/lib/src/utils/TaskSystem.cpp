@@ -1,6 +1,8 @@
 #define TASKSYSTEM_CPP
 #include <utils/TaskSystem.hpp>
 
+#include <iostream>
+
 namespace attpcfe {
 
   TaskSystem::TaskSystem()
@@ -39,4 +41,10 @@ namespace attpcfe {
     }
   }
 
+#ifdef UNITTEST
+  void TaskSystem::test()
+  {
+    std::cout << "> TaskSystem::test\n";
+  }
+#endif
 }
