@@ -1,23 +1,19 @@
 #include <core/Hdf5Wrapper.hpp>
-#include <cassert>
+#include <utils/UnitTestRegister.hpp>
+#include <chrono>
+#include <thread>
 
+using namespace std::chrono_literals;
 using namespace attpcfe;
 
 int main() {
 
   Hdf5Wrapper hdf;
-  auto file = hdf.openFile("/home/nico/Downloads/test.h5", Hdf5Wrapper::IO_MODE::READ);
-  assert(file.has_value());
+  UnitTestRegister::instance().runUnitTests();
 
-  auto [group, n_entries] = hdf.openGroup(file.value(), "get");
-  assert(group.has_value());
-  
-  auto [dataset, dims] = hdf.openDataset(group.value(), "0");
-  assert(dataset.has_value());
+  // Need to make sure the background thread of the active object is executed
+  // before the Logger::dtor is called. Should not be a problem in production code.
+  std::this_thread::sleep_for(1s);
 
-  hdf.closeDataset(dataset.value());
-  hdf.closeGroup(group.value());
-  hdf.closeFile(file.value());
-  
   return 0;
 }

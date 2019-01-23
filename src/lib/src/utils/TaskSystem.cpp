@@ -1,7 +1,9 @@
 #define TASKSYSTEM_CPP
 #include <utils/TaskSystem.hpp>
 
+#ifdef UNITTEST
 #include <iostream>
+#endif
 
 namespace attpcfe {
 

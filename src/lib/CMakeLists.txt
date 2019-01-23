@@ -45,6 +45,11 @@ target_compile_options(attpcfelib
 target_compile_features(attpcfelib
   PRIVATE cxx_std_17)
 
+if(${--with_unit_test})
+target_compile_definitions(attpcfelib
+  PRIVATE UNITTEST=1)
+endif()
+
 target_link_libraries(attpcfelib
   hdf5)
 

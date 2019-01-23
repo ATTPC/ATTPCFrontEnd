@@ -9,7 +9,7 @@ int main() {
 
   SimpleNotificationQueue<std::function<void()>> q;
   TaskSystem ts;
-  gLog << "Create logger\n";
+  Logger::instance();
   
   UnitTestRegister::instance().runUnitTests();
   

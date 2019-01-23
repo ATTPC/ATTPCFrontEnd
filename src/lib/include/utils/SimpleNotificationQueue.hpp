@@ -1,13 +1,12 @@
 #ifndef SIMPLENOTIFICATIONQUEUE_HPP
 #define SIMPLENOTIFICATIONQUEUE_HPP
-#define UNITTEST 1;
-#ifdef UNITTEST
-#include <utils/UnitTestable.hpp>
-#endif
-
 #include <deque>
 #include <mutex>
 #include <condition_variable>
+
+#ifdef UNITTEST
+#include <utils/UnitTestable.hpp>
+#endif
 
 namespace attpcfe {
 

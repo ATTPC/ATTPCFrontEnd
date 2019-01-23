@@ -1,8 +1,12 @@
 #define HDF5WRAPPER_CPP
 #include <core/Hdf5Wrapper.hpp>
-
 #include <iostream>
 #include <algorithm>
+
+#ifdef UNITTEST
+#include <utils/Logger.hpp>
+#include <cassert>
+#endif
 
 /*
   Wrapper around specific h5 file format.
@@ -161,4 +165,31 @@ namespace attpcfe {
     closeGroup(_pImpl->_group);
     closeFile(_pImpl->_file);
   }
+
+#ifdef UNITTEST
+  void Hdf5Wrapper::test()
+  {
+    Hdf5Wrapper hdf;
+    auto file = hdf.openFile("/home/nico/Desktop/perico.h5", Hdf5Wrapper::IO_MODE::READ);
+    assert(file.has_value());
+
+    gLogDebug << "Opened data file";
+
+    auto [group, n_entries] = hdf.openGroup(file.value(), "get");
+    assert(group.has_value());
+
+    gLogDebug << "Opened data group";
+  
+    auto [dataset, dims] = hdf.openDataset(group.value(), "0");
+    assert(dataset.has_value());
+
+    gLogDebug << "Opened data set";
+
+    hdf.closeDataset(dataset.value());
+    hdf.closeGroup(group.value());
+    hdf.closeFile(file.value());
+
+    gLogDebug << "Closed all";
+  }
+#endif  
 }

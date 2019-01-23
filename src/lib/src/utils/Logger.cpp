@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include <iostream>
-
 namespace attpcfe {
 
   class Logger::LoggerImpl {
@@ -20,10 +18,8 @@ namespace attpcfe {
 
   Logger::Logger() : _pImpl{new LoggerImpl{}, [](LoggerImpl* ptr){ delete ptr; }}
   {
-    // Console sink.
-    addSink(makeConsoleSink());
-    // File sink.
-    addSink(makeFileSink("/home/nico/Desktop/attpcfe.log"));
+    addSink(makeConsoleSink()); // Console sink.
+    addSink(makeFileSink("/home/nico/Desktop/attpcfe.log")); // File sink.
   }
 
   void Logger::addSink(LogSink sink) {
@@ -46,7 +42,11 @@ namespace attpcfe {
 #ifdef UNITTEST
   void Logger::test()
   {
-    std::cout << "> Logger::test\n";
+    gLog << "Testing message log" << std::endl;
+    gLogDebug << "Testing debug log" << std::endl;
+    gLogWarning << "Testing warning log" << std::endl;
+    gLogError << "Testing error log" << std::endl;
+    gLogFatal << "Testing fatal log" << std::endl ;
   }
 #endif
 }

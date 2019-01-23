@@ -3,7 +3,6 @@
 // Not using pimpl idiom because of templated async
 #ifndef TASKSYSTEM_HPP
 #define TASKSYSTEM_HPP
-#define UNITTEST 1;
 #ifdef UNITTEST
 #include <utils/UnitTestable.hpp>
 #endif
@@ -12,8 +11,6 @@
 #include <thread>
 #include <vector>
 #include <functional>
-
-#define UNITTEST 1;
 
 namespace attpcfe {
 

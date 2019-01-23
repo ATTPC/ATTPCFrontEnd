@@ -1,19 +1,26 @@
 #ifndef HDF5WRAPPER_HPP
 #define HDF5WRAPPER_HPP
+#ifdef UNITTEST
+#include <utils/UnitTestable.hpp>
+#endif
 
 #include <hdf5.h>
-
 #include <memory>
 #include <optional>
 #include <tuple>
 #include <vector>
 
-#include <iostream>
-
 namespace attpcfe {
 
-  class Hdf5Wrapper {
+#ifdef UNITTEST
+  class Hdf5Wrapper : public UnitTestable<Hdf5Wrapper> {
 
+    friend struct Test<Hdf5Wrapper>;
+    static void test();
+#else
+  class Hdf5Wrapper {
+#endif
+    
     class Hdf5WrapperImpl;
     std::unique_ptr<Hdf5WrapperImpl, void(*)(Hdf5WrapperImpl*)> _pImpl;
 
@@ -54,5 +61,4 @@ namespace attpcfe {
     void close() const;
   };
 }
-
 #endif

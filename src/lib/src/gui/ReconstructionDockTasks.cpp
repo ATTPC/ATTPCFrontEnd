@@ -11,6 +11,8 @@
 #include <reco/PSATask.hpp>
 #include <utils/TaskSystem.hpp>
 
+#include <iostream>
+
 namespace attpcfe {
 
   class ReconstructionTask::ReconstructionTaskImpl {

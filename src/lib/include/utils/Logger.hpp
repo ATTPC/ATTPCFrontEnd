@@ -1,16 +1,14 @@
 // Logging framework based on tutorial from GrandMaster's Playground
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
-#define UNITTEST 1;
+#include <utils/Singleton.hpp>
+#include <utils/LogMsg.hpp> // Needed for gLogLevel macro
+#include <utils/LogLevel.hpp> // Needed for gLogLevel macro
+#include <memory>
+
 #ifdef UNITTEST
 #include <utils/UnitTestable.hpp>
 #endif
-#include <utils/Singleton.hpp>
-
-#include <utils/LogMsg.hpp> // Needed for gLogLevel macro
-#include <utils/LogLevel.hpp> // Needed for gLogLevel macro
-
-#include <memory>
 
 namespace attpcfe {
 
