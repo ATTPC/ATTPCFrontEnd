@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
     state.pushRawEvent(std::move(rawEvent));
 
     // Run tasks in parallel
-    auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
+    auto fEvent = taskSystem.async_get(&PSATask::run, psa, PSATask::MODE::BLSUB);
     auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, patRec);
     auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, trackRec);
     futures.push_back(std::move(fTrackEvent));

@@ -25,5 +25,5 @@ namespace attpcfe {
   {
     for (auto const& unitTest : _pImpl->_unitTests) test(unitTest);
   }
-   
 }
+

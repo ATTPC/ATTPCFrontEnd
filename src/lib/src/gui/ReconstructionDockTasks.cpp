@@ -65,7 +65,7 @@ namespace attpcfe {
       _pImpl->_pState->state()->pushRawEvent(std::move(rawEvent));
 
       // Run tasks in parallel
-      auto fEvent = taskSystem.async(&PSATask::run, psa, PSATask::MODE::BLSUB);
+      auto fEvent = taskSystem.async_get(&PSATask::run, psa, PSATask::MODE::BLSUB);
       futures.push_back(std::move(fEvent));
     }
 

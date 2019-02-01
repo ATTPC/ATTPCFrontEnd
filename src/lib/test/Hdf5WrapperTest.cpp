@@ -6,9 +6,10 @@
 using namespace std::chrono_literals;
 using namespace attpcfe;
 
+
 int main() {
 
-  Hdf5Wrapper hdf;
+  Hdf5Wrapper hdf;  
   UnitTestRegister::instance().runUnitTests();
 
   // Need to make sure the background thread of the active object is executed
@@ -17,3 +18,5 @@ int main() {
 
   return 0;
 }
+
+

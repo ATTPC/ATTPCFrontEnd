@@ -5,6 +5,8 @@
 
 #include <memory>
 
+#include <future>
+
 namespace attpcfe {
 
   class UnitTest;
@@ -20,7 +22,14 @@ namespace attpcfe {
 
   public:
     void register_(UnitTest unitTest);
+
+    template<typename F, typename... Args>
+    void register_func(F&& func, Args&&... args);
+    //template <typename Base, typename F, typename I, typename... Args>
+    //void reg_(F Base::*f, I&& instance, Args&&... args);
+    
     void runUnitTests();
   };
 }
+#include <utils/UnitTestRegister.inl>
 #endif
