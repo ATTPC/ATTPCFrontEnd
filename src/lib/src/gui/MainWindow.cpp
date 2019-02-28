@@ -2,8 +2,6 @@
 #include <gui/MainWindow.hpp>
 #include <gui/Display.hpp>
 #include <gui/ReconstructionDock.hpp>
-
-//#include <QtWidgets> // Includes QtWidgets, QtGui and QtCore
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QMenuBar>

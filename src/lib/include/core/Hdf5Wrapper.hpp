@@ -28,17 +28,19 @@ namespace attpcfe {
 
   public:
     Hdf5Wrapper();
-    Hdf5Wrapper(Hdf5Wrapper const&) = delete;
-    Hdf5Wrapper& operator=(Hdf5Wrapper const&) = delete;
+    Hdf5Wrapper(Hdf5Wrapper const&);
+    Hdf5Wrapper& operator=(Hdf5Wrapper const&);
+    Hdf5Wrapper(Hdf5Wrapper&&) noexcept = default;
+    Hdf5Wrapper& operator=(Hdf5Wrapper&&) noexcept = default;
 
     enum class IO_MODE {
       READ,
       WRITE
     };
 
-    std::optional<hid_t> openFile(std::string const& file, IO_MODE mode);
-    std::tuple<std::optional<hid_t>, hsize_t> openGroup(hid_t fileId, char const* group);
-    std::tuple<std::optional<hid_t>, std::vector<hsize_t> > openDataset(hid_t locId, char const* dataset);
+    std::optional<hid_t> openFile(std::string const& file, IO_MODE mode) const;
+    std::tuple<std::optional<hid_t>, hsize_t> openGroup(hid_t fileId, char const* group) const;
+    std::tuple<std::optional<hid_t>, std::vector<hsize_t> > openDataset(hid_t locId, char const* dataset) const;
     void closeFile(hid_t file) const;
     void closeGroup(hid_t group) const;
     void closeDataset(hid_t dataset) const;

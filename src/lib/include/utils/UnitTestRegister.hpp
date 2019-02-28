@@ -5,8 +5,6 @@
 
 #include <memory>
 
-#include <future>
-
 namespace attpcfe {
 
   class UnitTest;

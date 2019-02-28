@@ -39,7 +39,16 @@ namespace attpcfe {
 
   Hdf5Wrapper::Hdf5Wrapper() : _pImpl{new Hdf5WrapperImpl{}, [](Hdf5WrapperImpl* ptr) { delete ptr; }} {}
 
-  std::optional<hid_t> Hdf5Wrapper::openFile(std::string const& file, IO_MODE mode)
+  Hdf5Wrapper::Hdf5Wrapper(Hdf5Wrapper const& rhs) : _pImpl{new Hdf5WrapperImpl{*rhs._pImpl}, [](Hdf5WrapperImpl* ptr) { delete ptr; }} {}
+  Hdf5Wrapper& Hdf5Wrapper::operator=(Hdf5Wrapper const& rhs)
+  {
+    if (this != &rhs)
+      _pImpl = std::unique_ptr<Hdf5WrapperImpl, void(*)(Hdf5WrapperImpl*)>{new Hdf5WrapperImpl{*rhs._pImpl}, [](Hdf5WrapperImpl* ptr) { delete ptr; }};
+    return  *this;
+  }
+  
+  
+  std::optional<hid_t> Hdf5Wrapper::openFile(std::string const& file, IO_MODE mode) const
   {
     hid_t fileId;
     (mode == IO_MODE::READ) ?
@@ -57,7 +66,7 @@ namespace attpcfe {
     }
   }
 
-  std::tuple<std::optional<hid_t>, hsize_t> Hdf5Wrapper::openGroup(hid_t fileId, char const* group)
+  std::tuple<std::optional<hid_t>, hsize_t> Hdf5Wrapper::openGroup(hid_t fileId, char const* group) const
   {
     hid_t groupId = H5Gopen2(fileId, group, H5P_DEFAULT);
     if (groupId >= 0)
@@ -73,7 +82,7 @@ namespace attpcfe {
     }
   }
 
-  std::tuple<std::optional<hid_t>, std::vector<hsize_t> > Hdf5Wrapper::openDataset(hid_t locId, char const* dataset)
+  std::tuple<std::optional<hid_t>, std::vector<hsize_t> > Hdf5Wrapper::openDataset(hid_t locId, char const* dataset) const
   {
     hid_t datasetId = H5Dopen2(locId, dataset, H5P_DEFAULT);
     if (datasetId >= 0)
@@ -169,6 +178,7 @@ namespace attpcfe {
 #ifdef UNITTEST
   void Hdf5Wrapper::test()
   {
+    gLogDebug << "Run unit test on Hdf5Wrapper" << std::endl;
     Hdf5Wrapper hdf;
     auto file = hdf.openFile("/home/nico/Desktop/perico.h5", Hdf5Wrapper::IO_MODE::READ);
     assert(file.has_value());
@@ -190,6 +200,7 @@ namespace attpcfe {
     hdf.closeFile(file.value());
 
     gLogDebug << "Closed all";
+    gLogDebug << "Unit test done" << std::endl;
   }
 #endif  
 }

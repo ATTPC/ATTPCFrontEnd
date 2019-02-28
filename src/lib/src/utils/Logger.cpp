@@ -42,11 +42,14 @@ namespace attpcfe {
 #ifdef UNITTEST
   void Logger::test()
   {
-    gLog << "Testing message log" << std::endl;
-    gLogDebug << "Testing debug log" << std::endl;
-    gLogWarning << "Testing warning log" << std::endl;
-    gLogError << "Testing error log" << std::endl;
-    gLogFatal << "Testing fatal log" << std::endl ;
+    gLogDebug << "Run unit test on Logger" << std::endl;
+    
+    gLog << "Testing message log";
+    gLogDebug << "Testing debug log";
+    gLogWarning << "Testing warning log";
+    gLogError << "Testing error log";
+    gLogFatal << "Testing fatal log";
+    gLogDebug << "Unit test done" << std::endl;
   }
 #endif
 }

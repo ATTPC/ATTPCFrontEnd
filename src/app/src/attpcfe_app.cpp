@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
   // Open input file with data handler
   DataHandler<Hdf5Wrapper> dataHandler;
   dataHandler.open("/home/nico/Desktop/perico.h5");
-  //auto nRawEvents = dataHandler.nRawEvents();
-  auto nRawEvents = std::size_t{10};
+  auto nRawEvents = dataHandler.nRawEvents();
+  //auto nRawEvents = std::size_t{1000};
 
   // Create state
   auto padplane = std::make_unique<Padplane>("/home/nico/Desktop/padplane.geom");
@@ -70,6 +70,9 @@ int main(int argc, char* argv[]) {
     state.pushRawEvent(std::move(rawEvent));
 
     // Run tasks in parallel
+    //auto fEvent = taskSystem.async_get(&PSATask::run, std::ref(psa), PSATask::MODE::BLSUB);
+    //auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, std::ref(patRec));
+    //auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, std::ref(trackRec));
     auto fEvent = taskSystem.async_get(&PSATask::run, psa, PSATask::MODE::BLSUB);
     auto fPatternEvent = taskSystem.then(fEvent, &PatRecTask::run, patRec);
     auto fTrackEvent = taskSystem.then(fPatternEvent, &TrackRecTask::run, trackRec);

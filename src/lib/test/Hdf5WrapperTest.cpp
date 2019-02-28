@@ -9,7 +9,10 @@ using namespace attpcfe;
 
 int main() {
 
-  Hdf5Wrapper hdf;  
+  Hdf5Wrapper hdf;
+
+  //UnitTestRegister::instance().register_func(&Hdf5Wrapper::openFile, hdf, std::string("/home/nico/Desktop/perico.h5"));
+  
   UnitTestRegister::instance().runUnitTests();
 
   // Need to make sure the background thread of the active object is executed

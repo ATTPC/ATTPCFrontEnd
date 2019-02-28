@@ -121,23 +121,23 @@ export(TARGETS attpcguilib FILE ATTPCGUILibConfig.cmake)
 # ========================================================
 # Unit tests
 # ========================================================
-add_executable(hdf5_wrapper
-    test/Hdf5WrapperTest.cpp)
-target_link_libraries(hdf5_wrapper
-    attpcfelib ${VTK_LIBRARIES})
-add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
+#add_executable(hdf5_wrapper
+#    test/Hdf5WrapperTest.cpp)
+#target_link_libraries(hdf5_wrapper
+#    attpcfelib ${VTK_LIBRARIES})
+#add_test(NAME hdf5_wrapper_test COMMAND hdf5_wrapper)
 
-add_executable(task_system
-    test/TaskSystemTest.cpp)
-target_link_libraries(task_system
-  attpcfelib ${VTK_LIBRARIES})
-add_test(NAME task_system_test COMMAND task_system)
+#add_executable(task_system
+#    test/TaskSystemTest.cpp)
+#target_link_libraries(task_system
+#  attpcfelib ${VTK_LIBRARIES})
+#add_test(NAME task_system_test COMMAND task_system)
 
-add_executable(logger
-    test/LoggerTest.cpp)
-target_link_libraries(logger
-  attpcfelib ${VTK_LIBRARIES})
-add_test(NAME logger_test COMMAND logger)
+#add_executable(logger
+#    test/LoggerTest.cpp)
+#target_link_libraries(logger
+#  attpcfelib ${VTK_LIBRARIES})
+#add_test(NAME logger_test COMMAND logger)
 
 add_executable(unit_test_register
     test/UnitTestRegisterTest.cpp)

@@ -11,7 +11,6 @@
 #include <core/Tpc.hpp>
 #include <core/DataHandler.hpp>
 #include <core/Hdf5Wrapper.hpp>
-
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLabel>
@@ -20,7 +19,6 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include <QtCore/QFutureWatcher>
 #include <QtCore/QFuture>
-
 #include <iostream>
 
 namespace attpcfe {

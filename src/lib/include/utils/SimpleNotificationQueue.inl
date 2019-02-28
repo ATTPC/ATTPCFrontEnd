@@ -2,6 +2,7 @@
 #define SIMPLENOTIFICATIONQUEUE_INL
 
 #ifdef UNITTEST
+#include <utils/Logger.hpp>
 #include <iostream>
 #endif
 
@@ -29,7 +30,8 @@ namespace attpcfe {
   template<typename T>
   void SimpleNotificationQueue<T>::test()
   {
-    std::cout << "> SimpleNotificationQueue::test\n";
+    gLogDebug << "Run unit test on SimpleNotificationQueue" << std::endl;
+    gLogDebug << "Unit test done" << std::endl;
   }
 #endif  
 }
