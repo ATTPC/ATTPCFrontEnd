@@ -19,14 +19,12 @@ namespace attpcfe {
     UnitTestRegister();
 
   public:
-    void register_(UnitTest unitTest);
+    void registerUnitTest(std::string const& name, UnitTest unitTest);
 
-    template<typename F, typename... Args>
-    void register_func(F&& func, Args&&... args);
-    //template <typename Base, typename F, typename I, typename... Args>
-    //void reg_(F Base::*f, I&& instance, Args&&... args);
+    template<typename T, typename F, typename... Args>
+    void registerTest(T const& name, F&& func, Args&&... args);
     
-    void runUnitTests();
+    void runRegister();
   };
 }
 #include <utils/UnitTestRegister.inl>

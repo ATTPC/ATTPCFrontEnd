@@ -2,6 +2,20 @@
 #define UNITTESTABLE_HPP
 #include <utils/UnitTestRegister.hpp>
 
+template<class>
+struct TypeName;
+
+#define REGISTER_TYPE_NAME(type, name) \
+  template<> \
+  struct TypeName<type> \
+  { \
+    static std::string const& value() \
+    { \
+      static std::string const typeName = #name ; \
+      return typeName; \
+    } \
+  };
+
 namespace attpcfe {
 
   template<class T>
@@ -13,7 +27,7 @@ namespace attpcfe {
   template<class T>
   class UnitTestable
   {
-    static void register_();
+    static void registerSelf();
 
   protected:
     UnitTestable();

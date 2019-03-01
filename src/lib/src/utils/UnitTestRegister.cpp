@@ -1,7 +1,7 @@
 #define UNITTESTREGISTER_CPP
 #include <utils/UnitTestRegister.hpp>
-
 #include <vector>
+#include <iostream>
 
 namespace attpcfe {
 
@@ -10,20 +10,23 @@ namespace attpcfe {
   public:
     UnitTestRegisterImpl() {};
 
-    std::vector<UnitTest> _unitTests;
+    std::vector<std::pair<std::string, UnitTest>> _unitTests;
   };
 
   UnitTestRegister::UnitTestRegister() : _pImpl{new UnitTestRegisterImpl{}, [](UnitTestRegisterImpl* ptr){ delete ptr; }} {}
 
+  void UnitTestRegister::registerUnitTest(std::string const& name, UnitTest unitTest)
+  {
+    _pImpl->_unitTests.emplace_back(name, std::move(unitTest));
+  }
   
-  void UnitTestRegister::register_(UnitTest unitTest)
+  void UnitTestRegister::runRegister()
   {
-    _pImpl->_unitTests.push_back(std::move(unitTest));
+    for (auto const& [name, unitTest] : _pImpl->_unitTests)
+    {
+      std::cout << "> running unit test on: " << name << '\n';
+      test(unitTest);
+    }
   }
-      
-  void UnitTestRegister::runUnitTests()
-  {
-    for (auto const& unitTest : _pImpl->_unitTests) test(unitTest);
-  }
+   
 }
-

@@ -6,17 +6,17 @@ namespace attpcfe {
   template<class T>
   UnitTestable<T>::UnitTestable()
   {
-    register_();
+    registerSelf();
   }
   
   template<class T>
-  void UnitTestable<T>::register_()
+  void UnitTestable<T>::registerSelf()
   {
     static bool first{true};
     if (first)
     {
       first = false;
-      UnitTestRegister::instance().register_(Test<T>());
+      UnitTestRegister::instance().registerUnitTest(TypeName<T>::value(), Test<T>());
     }
   }
 }
