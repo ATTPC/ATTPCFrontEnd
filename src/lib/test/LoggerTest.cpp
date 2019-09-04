@@ -9,7 +9,7 @@ using namespace attpcfe;
 int main() {
 
   Logger::instance();
-  UnitTestRegister::instance().runUnitTests();
+  UnitTestRegister::instance().runRegister();
 
   // Need to make sure the background thread of the active object is executed
   // before the Logger::dtor is called. Should not be a problem in production code.

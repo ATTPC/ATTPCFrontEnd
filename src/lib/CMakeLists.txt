@@ -133,11 +133,11 @@ export(TARGETS attpcguilib FILE ATTPCGUILibConfig.cmake)
 #  attpcfelib ${VTK_LIBRARIES})
 #add_test(NAME task_system_test COMMAND task_system)
 
-#add_executable(logger
-#    test/LoggerTest.cpp)
-#target_link_libraries(logger
-#  attpcfelib ${VTK_LIBRARIES})
-#add_test(NAME logger_test COMMAND logger)
+add_executable(logger
+    test/LoggerTest.cpp)
+target_link_libraries(logger
+  attpcfelib ${VTK_LIBRARIES})
+add_test(NAME logger_test COMMAND logger)
 
 add_executable(unit_test_register
     test/UnitTestRegisterTest.cpp)
